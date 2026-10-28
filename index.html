@@ -38,16 +38,11 @@
    <p class="hero-date" id="heroDate">As of October 27, 2026</p>
    <h1 class="display">MIAA Football Power Rankings</h1>
    <p class="lede" id="headlineSub">Use this tool to predict the power rankings after Week 8, the final week of the regular season, and see who makes each division's top-16 tournament field.</p>
-   <ol class="hero-steps">
-    <li>Choose a division</li>
-    <li>Enter Week 8 scores yourself, or predict them from ratings and common opponents</li>
-    <li>Watch the rankings and brackets update</li>
-   </ol>
    <div class="hero-actions">
-    <button class="bttn primary bttn-lg" id="heroPredict" type="button">Predict Week 8</button>
-    <button class="bttn bttn-lg bttn-on-turf" id="weekJump" type="button">Enter scores myself</button>
+    <button class="bttn bttn-lg bttn-flag" id="heroPredict" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Predict Week 8</button>
+    <button class="bttn bttn-lg bttn-white" id="weekJump" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Enter scores myself</button>
    </div>
-   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Reset to official</button></div>
+   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Reset to official</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
   </div>
   <div class="hero-line" id="heroLine" aria-live="polite"></div>
   </section>
@@ -91,7 +86,7 @@
       </label>
       <div class="weekFilters" id="weekFilters"></div>
       <div class="predictionTools">
-       <button type="button" id="predictWeek8" class="bttn primary predictButton" title="Fill all unentered Week 8 games across every division">
+       <button type="button" id="predictWeek8" class="bttn bttn-flag predictButton" title="Fill all unentered Week 8 games across every division">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Predict Week 8
        </button>
@@ -195,6 +190,25 @@
 <datalist id="teamsList"></datalist>
 <footer class="footer"><span>An independent scenario calculator using results through October 27, 2026. Not affiliated with the MIAA.</span></footer>
 </div>
+<dialog class="intro" id="intro" aria-labelledby="introTitle">
+ <div class="intro-head">
+  <p class="intro-date" id="introDate"></p>
+  <h2 id="introTitle">Predict the final MIAA power rankings</h2>
+  <p>Week 8 is the last week before the tournament, and the top 16 in each division make the field. Choose how to fill in <span id="introCount">Week 8</span>.</p>
+  <button class="intro-close" type="button" data-intro="browse" aria-label="Close">×</button>
+ </div>
+ <div class="intro-choices">
+  <button class="choice choice-predict" type="button" data-intro="predict" autofocus>
+   <strong>Predict Week 8 for me</strong>
+   <span>Fill in every game from team ratings, points scored and allowed, and results against common opponents. You can change any score afterward.</span>
+  </button>
+  <button class="choice" type="button" data-intro="enter">
+   <strong>Enter scores myself</strong>
+   <span>Type scores into the Week 8 matchups. Rankings, the playoff line and brackets update as you type.</span>
+  </button>
+ </div>
+ <div class="intro-foot"><button class="bttn ghost sml" type="button" data-intro="browse">Just view the official rankings</button><span>Scores you enter stay in this browser.</span></div>
+</dialog>
 <div class="alert" id="alert" role="status" aria-live="polite"></div>
 <script src="data/season-2026.js" defer></script>
 <script src="app.js" defer></script>

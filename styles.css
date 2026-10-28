@@ -137,11 +137,13 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}
 .hero-date{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;font-size:14px;font-weight:650;color:#fff}
 .hero-date::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--flag);box-shadow:0 0 0 4px rgba(232,180,0,.25)}
 .hero-copy{max-width:680px}
-.hero-steps{display:flex;flex-wrap:wrap;gap:8px 22px;margin:20px 0 0;padding:0;list-style:none;counter-reset:step;font-size:14px;color:rgba(255,255,255,.92)}
-.hero-steps li{display:flex;align-items:center;gap:9px;counter-increment:step}
-.hero-steps li::before{content:counter(step);display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);font-size:12px;font-weight:800;flex-shrink:0}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.bttn-lg{height:46px;padding:0 20px;font-size:15px;border-radius:8px}
+.bttn-lg{height:52px;padding:0 22px;font-size:16px;border-radius:9px}
+.bttn-flag{background:var(--flag);border-color:var(--flag);color:#2a2000;font-weight:750;box-shadow:0 8px 24px -8px rgba(232,180,0,.7)}
+.bttn-flag:hover:not(:disabled){background:#f5c400;border-color:#f5c400}
+.bttn-white{background:#fff;border-color:#fff;color:var(--turf);font-weight:750;box-shadow:0 8px 24px -10px rgba(0,0,0,.45)}
+.bttn-white:hover:not(:disabled){background:#eef5f1;border-color:#eef5f1}
+.bttn-lg svg{flex-shrink:0}
 .bttn-on-turf{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);color:#fff}
 .bttn-on-turf:hover:not(:disabled){background:rgba(255,255,255,.18);border-color:#fff}
 .field .hero-status{margin-top:16px}
@@ -202,7 +204,7 @@ input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none}
 .col-team .team-button{max-width:100%}
 .col-rank{width:80px;padding-left:20px!important;position:relative}
 .rank{display:inline-block;min-width:28px;font-size:19px;font-weight:800;font-stretch:125%;letter-spacing:-.04em;color:var(--faint)}
-.playoff-zone .rank,.statewide .rank{color:var(--ink)}
+.playoff-zone .rank{color:var(--ink)}
 .playoff-zone .col-rank::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--turf)}
 .move{display:inline-flex;align-items:center;gap:1px;margin-left:6px;font-size:11px;font-weight:700;vertical-align:3px}
 .move::before{font-size:7px}
@@ -417,6 +419,31 @@ button.slot:hover{background:var(--surface-2)}
 .sourceLinks strong{width:100%;font-size:14px}
 
 /* ==========================================================================
+   First-visit chooser
+   ========================================================================== */
+.intro{width:min(660px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:0;border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.55);overflow:auto}
+.intro::backdrop{background:rgba(8,24,15,.6);backdrop-filter:blur(3px)}
+.intro[open]{animation:intro-in .32s cubic-bezier(.2,.8,.2,1)}
+@keyframes intro-in{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.intro-head{position:relative;padding:28px 28px 26px;color:#fff;background:repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 2px,transparent 2px 120px) -1px 0/120px 100%,repeating-linear-gradient(90deg,#1f7049 0 120px,#1a6441 120px 240px) 0 0/240px 100%}
+.intro-date{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;font-size:14px;font-weight:650}
+.intro-date::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--flag);box-shadow:0 0 0 4px rgba(232,180,0,.25)}
+.intro-head h2{font-size:clamp(26px,4vw,34px);font-weight:850;font-stretch:125%;line-height:1;letter-spacing:-.03em;max-width:16ch}
+.intro-head p:not(.intro-date){margin:12px 0 0;font-size:15px;line-height:1.5;color:rgba(255,255,255,.88);max-width:52ch}
+.intro-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:8px;color:#fff;font-size:22px;line-height:1;background:rgba(255,255,255,.12)}
+.intro-close:hover{background:rgba(255,255,255,.22)}
+.intro-choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:20px 20px 8px}
+.choice{display:flex;flex-direction:column;gap:8px;padding:18px;border-radius:10px;border:1.5px solid var(--line-strong);background:var(--surface);text-align:left;transition:border-color .15s,transform .15s}
+.choice:hover{border-color:var(--ink);transform:translateY(-1px)}
+.choice strong{font-size:18px;font-weight:800;font-stretch:112%;letter-spacing:-.02em}
+.choice span{font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+.choice-predict{background:var(--flag);border-color:var(--flag);color:#2a2000}
+.choice-predict span{color:#4a3a00}
+.choice-predict:hover{border-color:#2a2000}
+.intro-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:8px 20px 18px;font-size:12.5px;color:var(--muted)}
+@media (max-width:560px){.intro-choices{grid-template-columns:1fr}.intro-head{padding:24px 20px 22px}}
+
+/* ==========================================================================
    Footer, toast
    ========================================================================== */
 .subtle{margin:20px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:var(--muted)}
@@ -425,7 +452,7 @@ button.slot:hover{background:var(--surface-2)}
 .alert{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:calc(100vw - 32px);padding:11px 16px;border-radius:8px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:550;box-shadow:0 10px 30px -8px rgba(0,0,0,.35);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
 .alert.show{opacity:1;transform:translate(-50%,0)}
 
-@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 
 /* ==========================================================================
    Responsive
