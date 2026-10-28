@@ -43,70 +43,57 @@ function deltaTag(c){return Math.abs(c)<0.00001?'<span class="delta-none">—</s
 function standings(d){return divTeams[d].map(t=>MODEL.teams[t]).sort((a,b)=>b.rating-a.rating||a.team.localeCompare(b.team)).map((v,i)=>({...v,rank:i+1,eligible:v.w>=3&&v.gp-v.forfeitLosses>=7}))}
 function listAll(){const divRanks={};for(let d=1;d<=8;d++){divRanks[d]=Object.fromEntries(standings(d).map(t=>[t.team,t.rank]));}
 return Object.keys(DIV).map(t=>({...MODEL.teams[t],divisionRank:divRanks[DIV[t]][t],eligible:MODEL.teams[t].w>=3&&MODEL.teams[t].gp-MODEL.teams[t].forfeitLosses>=7})).sort((a,b)=>b.rating-a.rating||a.team.localeCompare(b.team)).map((x,i)=>({...x,rank:i+1}));}
-function recalc(){MODEL=derive(compute(records()));renderRankings();renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateWeek8States();}
+function recalc(){MODEL=derive(compute(records()));renderRankings(true);renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateWeek8States();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(edits));localStorage.setItem(PRED_STORE,JSON.stringify([...predictedKeys]))}catch{}recalc()}
 function renderDivisionTabs(){el('divisions').innerHTML=[0,1,2,3,4,5,6,7,8].map(d=>`<button type="button" class="division ${selectedDiv===d?'selected':''}" data-div="${d}" aria-pressed="${selectedDiv===d}">${d===0?'All':`D${d}`}</button>`).join('')}
 
-/* School logos: published MIAA school directory, never algorithm-generated mascot art. */
-const FIXED_LOGOS={
- 'Abington':'https://www.miaa.net/sites/default/files/logos/abingtonhs_logo_small.jpg',
- 'Mahar Regional':''
-};
-const LOGO_STORE='miaa-football-official-logos-v7';
-let SCHOOL_LOGOS={...FIXED_LOGOS};
-try{const cache=JSON.parse(localStorage.getItem(LOGO_STORE)||'{}');if(cache&&typeof cache==='object')for(const [team,url] of Object.entries(cache)){if(DIV[team]&&/^https:\/\/(www\.miaa\.net|miaa\.net)\/sites\/default\/files\//.test(url))SCHOOL_LOGOS[team]=url}}catch{}
-function teamMark(name){const tag=String(name||'').replace(/[^A-Za-z0-9 ]/g,'').split(/\s+/).filter(Boolean).slice(0,2).map(x=>x[0]).join('').toUpperCase();const url=SCHOOL_LOGOS[name]||'';return `<span class="schoolmark${url?' has-logo':''}" data-schoolmark="${esc(name)}" aria-hidden="true"><img alt="" loading="lazy" ${url?`src="${esc(url)}"`:''}/><span class="schoolmark-fallback">${esc(tag||'—')}</span></span>`}
-function refreshMarks(){for(const el of document.querySelectorAll('[data-schoolmark]')){const name=el.dataset.schoolmark,url=SCHOOL_LOGOS[name];const img=el.querySelector('img');if(url){if(img.getAttribute('src')!==url)img.setAttribute('src',url);el.classList.add('has-logo')}else{el.classList.remove('has-logo');img.removeAttribute('src')}}}
-document.addEventListener('error',e=>{const el=e.target;if(el&&el.tagName==='IMG'&&el.closest('.schoolmark'))el.closest('.schoolmark').classList.remove('has-logo')},true);
-const _logoWords=name=>String(name||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9 ]/g,' ').replace(/\b(?:high|middle|school|schools|regional|reg|memorial|jr|sr|the)\b/g,' ').replace(/\btechnical\b/g,'tech').replace(/\bvocational\b/g,'voc').replace(/\s+/g,' ').trim();
-const _logoAliases={'Mahar Regional':'mahar','Franklin County Tech':'franklin county tech','Lynn Vo-Tech':'lynn voc','McCann Tech':'mccann','Nashoba Valley Tech':'nashoba valley tech','Smith Vo-Tech':'smith voc','Pathfinder RVT':'pathfinder','Cape Cod RVT':'cape cod','KIPP Academy Lynn Coll.':'kipp academy lynn','Upper Cape Cod RVT':'upper cape cod','Old Colony RVT':'old colony','Springfield Int\'l Charter':'springfield international charter','Ayer Shirley':'ayer shirley','Abby Kelley Foster':'abby kelley foster'};
-function logoTeamMatch(school){const label=_logoWords(school);if(!label)return '';const candidates=[];for(const team of Object.keys(DIV)){
- const t=_logoAliases[team]||_logoWords(team);
- if(!t)continue;
- let v=0;
- if(t===label)v=1;
- else if(label.startsWith(t+' ')||t.startsWith(label+' '))v=Math.min(t.length,label.length)>=6?.95:0;
- else if(label.includes(' '+t+' ')||label.endsWith(' '+t))v=t.length>5?.91:0;
- else {const tt=t.split(' '),ss=label.split(' '),overlap=tt.filter(x=>ss.includes(x));if(overlap.length>=2&&overlap.length===tt.length)v=.80+(Math.min(tt.length,ss.length)/Math.max(tt.length,ss.length))*.15}
- if(v>.75)candidates.push([team,v]);
- }
- candidates.sort((a,b)=>b[1]-a[1]);return candidates.length&&candidates[0][1]>=.80&&(!candidates[1]||candidates[0][1]===1&&candidates[1][1]<1||candidates[0][1]-candidates[1][1]>=.055)?candidates[0][0]:'';
-}
-async function loadSchoolLogos(){
- // Small cached batches avoid one large crawl and keep the user-facing rankings responsive.
- let discovered=0;
- for(let start=0;start<72;start+=8){
-  try{const r=await fetch(`/api/school-logos?start=${start}`,{cache:'force-cache'});if(!r.ok)break;const d=await r.json();if(!Array.isArray(d.schools))break;
-   let changed=false;for(const item of d.schools){const team=logoTeamMatch(item.name);if(team&&item.url&&!SCHOOL_LOGOS[team]&&/^https:\/\/(www\.miaa\.net|miaa\.net)\/sites\/default\/files\//.test(item.url)){SCHOOL_LOGOS[team]=item.url;changed=true;discovered++}}
-   if(changed){refreshMarks();try{localStorage.setItem(LOGO_STORE,JSON.stringify(Object.fromEntries(Object.entries(SCHOOL_LOGOS).filter(([,v])=>v.includes('miaa.net/sites/default/files/')))))}catch{}}
-  }catch{break}
-  await new Promise(ok=>setTimeout(ok,80));
+// After a recalculation, slide rows from their old positions so teams visibly move past each other,
+// and flash rows whose rating changed. Skipped for filter changes and for reduced-motion users.
+const reduceMotion=matchMedia('(prefers-reduced-motion: reduce)');
+function flipRows(containers,render){
+ const before=new Map();
+ for(const c of containers)for(const n of c.querySelectorAll('[data-row]'))before.set(c.id+n.dataset.row,{top:n.getBoundingClientRect().top,rating:n.dataset.rating});
+ render();
+ if(reduceMotion.matches)return;
+ for(const c of containers)for(const n of c.querySelectorAll('[data-row]')){
+  const b=before.get(c.id+n.dataset.row);if(!b)continue;
+  if(b.rating!==n.dataset.rating)n.classList.add('is-bumped');
+  const dy=b.top-n.getBoundingClientRect().top;
+  if(Math.abs(dy)>1)n.animate([{transform:`translateY(${dy}px)`},{transform:'none'}],{duration:520,easing:'cubic-bezier(.2,.8,.2,1)'});
  }
 }
-
-function renderRankings(){renderDivisionTabs();const all=selectedDiv===0;let rows=all?listAll():standings(selectedDiv);const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q)||(all&&String(t.division)===q));
+function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody'),el('mobileRankingsBody')],()=>renderRankings());return}renderDivisionTabs();const all=selectedDiv===0;let rows=all?listAll():standings(selectedDiv);const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q)||(all&&String(t.division)===q));
  const showCut=!all&&!q;
  el('tableMeta').textContent=all?`${rows.length} ${rows.length===1?'team':'teams'} statewide`:`${rows.length} ${rows.length===1?'team':'teams'} in Division ${selectedDiv}`;
  el('rankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=!all&&r.rank<=16?'playoff-zone':'',move=moveTag(r.rank,all?baseStateRank[r.team]:baseDivRank[r.team]);
-  return `${showCut&&r.rank===17?'<tr class="cutrow"><td colspan="7"><div class="cutline-label"><span>Playoff line</span></div></td></tr>':''}<tr class="${zone}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-label"><span class="team-name">${esc(r.team)}</span>${all?`<span class="team-sub">#${r.divisionRank} in D${r.division}</span>`:''}</span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
+  return `${showCut&&r.rank===17?'<tr class="cutrow"><td colspan="7"><div class="cutline-label"><span>Playoff line</span></div></td></tr>':''}<tr class="${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span>${all?`<span class="team-sub">#${r.divisionRank} in D${r.division}</span>`:''}</span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
  el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=!all&&r.rank<=16?'playoff-zone':'',move=moveTag(r.rank,all?baseStateRank[r.team]:baseDivRank[r.team]);
-  return `${showCut&&r.rank===17?'<div class="mcut"><span>Playoff line</span></div>':''}<div class="mrow ${zone}"><span class="mrank"><span class="rank">${r.rank}</span>${move}</span><button type="button" class="mteam" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-label"><span class="team-name">${esc(r.team)}</span><span class="team-sub"><span>${rec(r)}</span>${all?`<span>#${r.divisionRank} in D${r.division}</span>`:''}<span>Margin ${signed(r.mov,1)}</span><span>Opp ${signed(r.opp,1)}</span></span></span></button><span class="mrating"><b>${signed(r.rating)}</b>${deltaTag(r.change)}</span></div>`}).join(''):'<div class="empty">No teams match your search.</div>';
+  return `${showCut&&r.rank===17?'<div class="mcut"><span>Playoff line</span></div>':''}<div class="mrow ${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><span class="mrank"><span class="rank">${r.rank}</span>${move}</span><button type="button" class="mteam" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span><span class="team-sub"><span>${rec(r)}</span>${all?`<span>#${r.divisionRank} in D${r.division}</span>`:''}<span>Margin ${signed(r.mov,1)}</span><span>Opp ${signed(r.opp,1)}</span></span></span></button><span class="mrating"><b>${signed(r.rating)}</b>${deltaTag(r.change)}</span></div>`}).join(''):'<div class="empty">No teams match your search.</div>';
+ renderHeroLine();
  el('rankingsBody').classList.toggle('statewide',all);el('mobileRankingsBody').classList.toggle('statewide',all);
- refreshMarks();
+ 
  el('resetSearch').classList.toggle('hidden',!q);
  el('tableFootText').textContent=all?'Statewide order by model rating. Select a team to see its games.':'Teams below the playoff line are outside the top 16. Teams also need 3 wins and 7 games.';
- el('scenarioBadge').classList.toggle('is-active',edits.length>0);el('scenarioBadge').innerHTML=edits.length?`<strong>${edits.length} scenario ${edits.length===1?'score':'scores'}</strong> applied`:'Official Oct 27 baseline';
- el('headlineSub').textContent=all?'Week 8 is the last week of the regular season, and the top 16 in each division make the tournament. Enter scores to see who gets in.':`${divTeams[selectedDiv].length} Division ${selectedDiv} teams are playing for 16 tournament spots. Each score you enter also updates ratings in every other division.`;
+ const scored=WEEK8.filter(r=>{const g=wkScore(r);return g&&g[3]!==null&&g[4]!==null}).length;
+ el('scenarioBadge').classList.toggle('is-active',edits.length>0);el('scenarioBadge').innerHTML=edits.length?`<strong>Your projection: ${scored} of ${WEEK8.length} Week 8 games entered</strong>`:'Showing official rankings';el('heroReset').classList.toggle('hidden',!edits.length);
+ el('heroDate').textContent=edits.length?'Projected after Week 8':'As of October 27, 2026';
+}
+// Hero card: the 16th and 17th teams on either side of the line, for the chosen division or the closest one statewide.
+function renderHeroLine(){
+ const lines=(selectedDiv?[selectedDiv]:[1,2,3,4,5,6,7,8]).map(d=>{const s=standings(d);return {d,a:s[15],b:s[16]}}).filter(x=>x.a&&x.b).map(x=>({...x,gap:x.a.rating-x.b.rating}));
+ if(!lines.length){el('heroLine').innerHTML='';return}
+ const t=lines.reduce((m,x)=>x.gap<m.gap?x:m),row=(r,n,cls)=>`<button type="button" class="hl-row${cls}" data-team="${esc(r.team)}"><span class="hl-rank">${n}</span><span class="hl-name">${esc(r.team)}</span><span class="hl-rate">${signed(r.rating,2)}</span></button>`;
+ el('heroLine').innerHTML=`<p class="hl-title">${selectedDiv?`The line in Division ${t.d}`:`Closest line: Division ${t.d}`}</p>${row(t.a,16,'')}<div class="hl-chalk" aria-hidden="true"></div>${row(t.b,17,' is-out')}<p class="hl-gap">${t.gap.toFixed(2)} rating points apart</p>`;
 }
 function renderEdits(){el('editCount').textContent=`(${edits.length})`;el('editBadge').textContent=edits.length;el('editBadge').classList.toggle('on',edits.length>0);el('editSub').textContent=edits.length?'Saved in this browser only':'No changes applied';el('editList').innerHTML=edits.length?edits.slice().sort((a,b)=>b[0].localeCompare(a[0])).map(g=>`<div class="editrow"><div class="editrow-main"><span class="editrow-teams">${esc(g[1])}<span class="score">${g[3]}–${g[4]}</span>${esc(g[2])}</span><small>${new Date(g[0]+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}${predictedKeys.has(pairKey(g))?' <span class="tag-pred">Prediction</span>':''}</small></div><div class="editrow-actions">${WEEK8_KEYS.has(pairKey(g))?`<button type="button" class="bttn sml ghost" data-load="${esc(pairKey(g))}">Edit</button>`:''}<button type="button" class="bttn sml ghost danger" data-remove="${esc(pairKey(g))}" aria-label="Remove">×</button></div></div>`).join(''):'<div class="edit-empty">No scenario scores yet.<br>Enter a Week 8 score or test a custom game.</div>'}
 function showTeam(name){selectedTeam=name;el('teamSearch').value=name;el('teamSelect').value=name;switchPage('team')}
 function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails').innerHTML='<div class="empty">Choose a team to view its schedule.</div>';return}const myGames=records().filter(g=>g[1]===selectedTeam||g[2]===selectedTeam).sort((a,b)=>a[0].localeCompare(b[0]));const row=x.division?standings(x.division).find(r=>r.team===selectedTeam):null,curRank=row?row.rank:null;
  const editKeys=new Set(edits.map(pairKey)),cls=n=>n>0.00001?'pos':n<-0.00001?'neg':'';
- el('teamDetails').innerHTML=`<div class="details"><div class="team-hero"><div class="team-id">${teamMark(x.team)}<div><p class="eyebrow">${x.division?`Division ${x.division}`:'Out-of-state opponent'}${curRank?`, ranked ${curRank} of ${divTeams[x.division].length}`:''}</p><h2>${esc(x.team)}</h2><div class="team-facts"><span class="chip"><strong>${rec(x)}</strong></span><span class="chip">${x.gp} games</span>${row?`<span class="chip ${curRank<=16?'ok':'no'}">${curRank<=16?'Inside top 16':'Outside top 16'}</span>`:''}</div></div></div><button type="button" class="bttn" id="returnRankings">Back to rankings</button></div>
+ el('teamDetails').innerHTML=`<div class="details"><div class="team-hero"><div class="team-id"><div><p class="eyebrow">${x.division?`Division ${x.division}`:'Out-of-state opponent'}${curRank?`, ranked ${curRank} of ${divTeams[x.division].length}`:''}</p><h2>${esc(x.team)}</h2><div class="team-facts"><span class="chip"><strong>${rec(x)}</strong></span><span class="chip">${x.gp} games</span>${row?`<span class="chip ${curRank<=16?'ok':'no'}">${curRank<=16?'Inside top 16':'Outside top 16'}</span>`:''}</div></div></div><button type="button" class="bttn" id="returnRankings">Back to rankings</button></div>
  <div class="metrics"><div class="metric"><small>Power rating</small><b>${signed(x.rating,2)}</b></div><div class="metric"><small>Avg capped margin</small><b>${signed(x.mov,2)}</b></div><div class="metric"><small>Opponent rating</small><b>${signed(x.opp,2)}</b></div><div class="metric"><small>Scenario change</small><b class="${cls(x.change)}">${signed(x.change,2)}</b></div></div>
  <div class="section-head"><h3>Schedule &amp; results</h3><span>Margins capped at ±14</span></div><div class="table-scroll"><table class="gameTable"><thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th class="num">Margin</th><th class="num">Opp rating</th></tr></thead><tbody>${myGames.map(g=>{const own=g[1]===selectedTeam,opp=own?g[2]:g[1],my=own?g[3]:g[4],their=own?g[4]:g[3],k=pairKey(g),wl=my===null?'u':my>their?'w':my<their?'l':'t',margin=my===null?'—':signed(Math.max(-14,Math.min(14,my-their)),0);
   const tag=g[5]?'<span class="gtag ff">Forfeit</span>':editKeys.has(k)?(predictedKeys.has(k)?'<span class="gtag pred">Prediction</span>':'<span class="gtag scen">Scenario</span>'):'';
-  return `<tr><td class="date">${new Date(g[0]+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td><td><button type="button" class="team-button" data-team="${esc(opp)}">${teamMark(opp)}<span class="team-name">${esc(opp)}</span></button></td><td><span class="result"><span class="wl ${wl}">${wl==='u'?'–':wl.toUpperCase()}</span>${my===null?'Unplayed':my+'–'+their}</span>${tag}</td><td class="num">${margin}</td><td class="num">${signed(MODEL.teams[opp]?.rating,2)}</td></tr>`}).join('')}</tbody></table></div></div>`;refreshMarks();}
+  return `<tr><td class="date">${new Date(g[0]+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td><td><button type="button" class="team-button" data-team="${esc(opp)}"><span class="team-name">${esc(opp)}</span></button></td><td><span class="result"><span class="wl ${wl}">${wl==='u'?'–':wl.toUpperCase()}</span>${my===null?'Unplayed':my+'–'+their}</span>${tag}</td><td class="num">${margin}</td><td class="num">${signed(MODEL.teams[opp]?.rating,2)}</td></tr>`}).join('')}</tbody></table></div></div>`;}
 function switchPage(page){activePage=page;document.querySelectorAll('.page').forEach(e=>e.classList.toggle('hidden',e.id!==page+'Page'));document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.page===page));if(page==='team')renderTeam();if(page==='bracket'){if(selectedDiv)bracketDiv=selectedDiv;renderBracket()}window.scrollTo(0,0)}
 function reset(){if(edits.length&&!confirm('Remove all scenario changes?'))return;edits=[];predictedKeys.clear();save();toast('Returned to the October 27 baseline')}
 /* Projected brackets: top 16 by rating in each division, standard 1–16 seeding.
@@ -118,30 +105,29 @@ function renderBracket(){
  const rows=standings(bracketDiv),seed=Object.fromEntries(rows.slice(0,16).map(r=>[r.rank,r]));
  const slot=(s,fav,proj)=>{const r=seed[s];if(!r)return `<div class="slot is-empty"><span class="seed">${s}</span><span class="slot-name">No team</span></div>`;
   const warn=r.eligible?'':`<span class="slot-warn" title="${r.w<3?'Fewer than 3 wins':'Fewer than 7 games'} so far">!</span>`;
-  return `<button type="button" class="slot${fav?' is-fav':''}${proj?' is-proj':''}" data-team="${esc(r.team)}"><span class="seed">${s}</span>${teamMark(r.team)}<span class="slot-name">${esc(r.team)}</span>${warn}<span class="slot-rate">${signed(r.rating,2)}</span></button>`};
+  return `<button type="button" class="slot${fav?' is-fav':''}${proj?' is-proj':''}" data-team="${esc(r.team)}"><span class="seed">${s}</span><span class="slot-name">${esc(r.team)}</span>${warn}<span class="slot-rate">${signed(r.rating,2)}</span></button>`};
  let round=ROUND_OF_16;const rounds=[round];
  while(round.length>1){round=Array.from({length:round.length/2},(_,i)=>[Math.min(...round[2*i]),Math.min(...round[2*i+1])].sort((a,b)=>a-b));rounds.push(round)}
  el('bracket').innerHTML=rounds.map((rd,i)=>{const pairs=rd.length>1?Array.from({length:rd.length/2},(_,k)=>rd.slice(2*k,2*k+2)):[rd];
   return `<section class="round"><h3>${ROUND_NAMES[i]}</h3><div class="round-body">${pairs.map(p=>`<div class="pair${p.length===1?' is-single':''}">${p.map(([a,b])=>`<div class="match-wrap"><div class="match">${slot(a,true,i>0)}${slot(b,false,i>0)}</div></div>`).join('')}</div>`).join('')}</div></section>`}).join('');
  const r16=rows[15],r17=rows[16];
- const item=(r,gap)=>`<li><span class="bubble-rank">${r.rank}</span><button type="button" class="team-button" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-name">${esc(r.team)}</span></button><span class="bubble-gap">${gap}</span></li>`;
+ const item=(r,gap)=>`<li><span class="bubble-rank">${r.rank}</span><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="bubble-gap">${gap}</span></li>`;
  const lastIn=r17?rows.slice(12,16).map(r=>item(r,'+'+(r.rating-r17.rating).toFixed(2))).join(''):'',firstOut=r16?rows.slice(16,20).map(r=>item(r,'−'+(r16.rating-r.rating).toFixed(2))).join(''):'';
  const moved=rows.filter(r=>(r.rank<=16)!==(baseDivRank[r.team]<=16));
- el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Rating ahead of the 17th team</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Rating behind the 16th team</p><ol>${firstOut}</ol></div>${moved.length?`<div class="bubble-col bubble-moves"><h3>Changed by your scores</h3><p>Compared with the October 27 field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.rank<=16?'is-in':'is-out'}">${r.rank<=16?'Now in':'Now out'}, was ${baseDivRank[r.team]}</span></li>`).join('')}</ul></div>`:''}`;
+ el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Rating ahead of the 17th team</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Rating behind the 16th team</p><ol>${firstOut}</ol></div>${moved.length?`<div class="bubble-col bubble-moves"><h3>Changed by your scores</h3><p>Compared with the October 27 field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.rank<=16?'is-in':'is-out'}">${r.rank<=16?'Now in':'Now out'}, was ${baseDivRank[r.team]}</span></li>`).join('')}</ul></div>`:''}`;
  el('bracketSub').textContent=`Division ${bracketDiv} has ${rows.length} teams and the top 16 make the tournament. ${edits.length?`This field includes your ${edits.length} entered ${edits.length===1?'score':'scores'}.`:'This field uses results through October 27. Enter Week 8 scores to see it change.'}`;
- refreshMarks();
+ 
 }
-function init(){loadSchoolLogos().catch(()=>{});el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
+function init(){el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
- for(const id of ['bracket','bubble'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
+ for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
  document.querySelector('.navigation').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)switchPage(b.dataset.page)});
- el('divisions').addEventListener('click',e=>{const b=e.target.closest('[data-div]');if(b){selectedDiv=Number(b.dataset.div);weekDiv=selectedDiv;renderRankings();renderWeek8()}});el('rankingSearch').oninput=renderRankings;el('resetSearch').onclick=()=>{el('rankingSearch').value='';renderRankings()};
+ el('divisions').addEventListener('click',e=>{const b=e.target.closest('[data-div]');if(b){selectedDiv=Number(b.dataset.div);weekDiv=selectedDiv;renderRankings();renderWeek8()}});el('rankingSearch').oninput=()=>renderRankings();el('resetSearch').onclick=()=>{el('rankingSearch').value='';renderRankings()};
  el('rankingsBody').addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(b)showTeam(b.dataset.team)});
  el('mobileRankingsBody').addEventListener('click',e=>{const b=e.target.closest('[data-team]');if(b)showTeam(b.dataset.team)});
  el('resetAll').onclick=reset;
  el('editList').addEventListener('click',e=>{const remove=e.target.closest('[data-remove]');const load=e.target.closest('[data-load]');if(remove){edits=edits.filter(g=>pairKey(g)!==remove.dataset.remove);predictedKeys.delete(remove.dataset.remove);save();toast('Scenario removed')}else if(load)focusFixture(load.dataset.load)});
  el('openTeam').onclick=()=>{const t=el('teamSearch').value.trim();if(!TEAMS.includes(t)){toast('Choose a listed team');return}showTeam(t)};el('teamSelect').addEventListener('change',e=>{if(TEAMS.includes(e.target.value))showTeam(e.target.value)});el('teamSearch').addEventListener('change',e=>{const t=e.target.value.trim();if(TEAMS.includes(t))showTeam(t)});el('teamSearch').addEventListener('keydown',e=>{if(e.key==='Enter')el('openTeam').click()});
- el('themeToggle').addEventListener('click',()=>{const root=document.documentElement,dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches,next=dark?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('miaa-theme',next)}catch{}});
  el('teamDetails').addEventListener('click',e=>{if(e.target.closest('#returnRankings'))switchPage('rankings');const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
 }
 
@@ -223,7 +209,7 @@ function renderWeek8(){
  const filters=el('weekFilters');if(!filters)return;
  filters.innerHTML=[0,1,2,3,4,5,6,7,8].map(d=>`<button type="button" data-wdiv="${d}" class="weekFilter ${weekDiv===d?'selected':''}">${d===0?'All':`D${d}`}</button>`).join('');
  const games=wkGames();
- const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}">${teamMark(name)}<span class="fixture-name">${esc(name)}</span></button>${wkTeamData(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win 14–0">MAX</button></div></div>`;
+ const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}"><span class="fixture-name">${esc(name)}</span></button>${wkTeamData(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win 14–0">MAX</button></div></div>`;
  el('fixtureList').innerHTML=games.length?games.map(r=>{
  const [date,a,b,time]=r;
  return `<article class="fixture" data-fixture="${esc(wkKey(r))}">
@@ -231,7 +217,7 @@ function renderWeek8(){
    ${line('a',a)}${line('b',b)}
  </article>`;
  }).join(''):'<div class="empty">No matchups match your search.</div>';
- refreshMarks();updateWeek8States();
+ updateWeek8States();
 }
 function updateWeek8States(){
  const list=el('fixtureList');if(!list)return;let n=0;
@@ -255,7 +241,9 @@ function updateWeek8States(){
  el('weekMeta').textContent=`${n} of ${wkGames().length} matchups scored`;el('clearPredictions').disabled=!predictedKeys.size;
 }
  function initWeek8(){
- el('weekJump').onclick=()=>{document.querySelector('[data-side-tab=week8]').click();el('week8View').scrollIntoView({behavior:'auto',block:'start'})};
+ el('weekJump').onclick=()=>{document.querySelector('[data-side-tab=week8]').click();const open=[...el('fixtureList').querySelectorAll('.fixture-score')].find(x=>!x.value);
+   el('week8View').scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'start'});if(open)setTimeout(()=>open.focus({preventScroll:true}),350)};
+ el('heroPredict').addEventListener('click',predictAllWeek8);el('heroReset').addEventListener('click',reset);
  const tabs=document.querySelector('.sideTabs');tabs.addEventListener('click',e=>{const b=e.target.closest('[data-side-tab]');if(!b)return;const name=b.dataset.sideTab;tabs.querySelectorAll('.sideTab').forEach(x=>x.classList.toggle('selected',x===b));for(const n of ['week8','changes'])el(n+'View').classList.toggle('hidden',name!==n)});
  el('predictWeek8').addEventListener('click',predictAllWeek8);el('clearPredictions').addEventListener('click',clearAllPredictions);
  el('weekSearch').addEventListener('input',renderWeek8);
