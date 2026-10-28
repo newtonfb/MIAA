@@ -32,13 +32,21 @@ const BASE=compute(DATA.games);
 const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Object.keys(OFF).length;
 function derive(m){for(const [t,v] of Object.entries(m.teams)){const b=BASE.teams[t];const anchor=OFF[t]?OFF[t][1]:b.raw+offset;v.rating=anchor+(v.raw-b.raw);v.change=v.rating-anchor}return m}
 let MODEL=derive(compute(records()));
+// October 27 ranks, used to show how far a team moves under the user's scenario.
+const BASELINE=derive(compute(DATA.games)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
+const baseDivRank={},baseStateRank={};
+for(let d=1;d<=8;d++)divTeams[d].map(t=>BASELINE.teams[t]).sort(byRating).forEach((v,i)=>baseDivRank[v.team]=i+1);
+Object.keys(DIV).map(t=>BASELINE.teams[t]).sort(byRating).forEach((v,i)=>baseStateRank[v.team]=i+1);
+function rec(r){return `${r.w}–${r.l}${r.ties?'–'+r.ties:''}`}
+function moveTag(now,before){const d=before-now;return d?`<span class="move ${d>0?'up':'down'}" title="${d>0?'Up':'Down'} ${Math.abs(d)} since Oct 27">${Math.abs(d)}</span>`:''}
+function deltaTag(c){return Math.abs(c)<0.00001?'<span class="delta-none">—</span>':`<span class="delta ${c>0?'pos':'neg'}">${signed(c)}</span>`}
 function standings(d){return divTeams[d].map(t=>MODEL.teams[t]).sort((a,b)=>b.rating-a.rating||a.team.localeCompare(b.team)).map((v,i)=>({...v,rank:i+1,eligible:v.w>=3&&v.gp-v.forfeitLosses>=7}))}
 function listAll(){const divRanks={};for(let d=1;d<=8;d++){divRanks[d]=Object.fromEntries(standings(d).map(t=>[t.team,t.rank]));}
 return Object.keys(DIV).map(t=>({...MODEL.teams[t],divisionRank:divRanks[DIV[t]][t],eligible:MODEL.teams[t].w>=3&&MODEL.teams[t].gp-MODEL.teams[t].forfeitLosses>=7})).sort((a,b)=>b.rating-a.rating||a.team.localeCompare(b.team)).map((x,i)=>({...x,rank:i+1}));}
 function recalc(){MODEL=derive(compute(records()));renderRankings();renderEdits();if(activePage==='team')renderTeam();updateWeek8States();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(edits));localStorage.setItem(PRED_STORE,JSON.stringify([...predictedKeys]))}catch{}recalc()}
 const PRESETS=[['2026-10-30','Mahar Regional','Franklin County Tech'],['2026-10-29','Ware','Lee'],['2026-10-30','Wareham','Stoughton'],['2026-10-30','Frontier Regional','Ludlow']];
-function renderDivisionTabs(){el('divisions').innerHTML=[0,1,2,3,4,5,6,7,8].map(d=>`<button class="division ${selectedDiv===d?'selected':''}" data-div="${d}">${d===0?'All divisions':`D${d} <span style="font-weight:500;color:inherit;opacity:.65">${divTeams[d].length}</span>`}</button>`).join('')}
+function renderDivisionTabs(){el('divisions').innerHTML=[0,1,2,3,4,5,6,7,8].map(d=>`<button type="button" class="division ${selectedDiv===d?'selected':''}" data-div="${d}" aria-pressed="${selectedDiv===d}">${d===0?'All':`D${d}`}</button>`).join('')}
 
 /* School logos: published MIAA school directory, never algorithm-generated mascot art. */
 const FIXED_LOGOS={
@@ -78,22 +86,33 @@ async function loadSchoolLogos(){
 }
 
 function renderRankings(){renderDivisionTabs();const all=selectedDiv===0;let rows=all?listAll():standings(selectedDiv);const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q)||(all&&String(t.division)===q));
- el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} shown · ${all?'statewide table':`Division ${selectedDiv} rankings`}`;
- el('rankingsBody').innerHTML=rows.length?rows.map((r,i)=>`<tr class="${!all&&r.rank===17?'cutline':''} ${!all&&r.rank<=16?'playoff-zone':''}"><td class="num rank">${r.rank}</td><td><span class="tag">D${r.division}</span>${all?`<div class="subrank">#${r.divisionRank} in D${r.division}</div>`:''}</td><td><button class="team-button" data-team="${esc(r.team)}">${teamMark(r.team)}${esc(r.team)}</button></td><td>${r.w}–${r.l}${r.ties?'–'+r.ties:''}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num rate ${r.rating>=0?'rating-positive':'rating-negative'}">${signed(r.rating)}</td><td class="num delta ${r.change>0.00001?'pos':r.change<-.00001?'neg':''}">${Math.abs(r.change)<0.00001?'—':signed(r.change)}</td></tr>`).join(''):'<tr><td colspan="8" class="empty">No teams match your search.</td></tr>';
- el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>`<div class="mobileRankRow ${(!all&&r.rank===17)?'cutline':''} ${!all&&r.rank<=16?'playoff-zone':''}"><div class="mobileRankTop"><span class="mobileRankNumber">${r.rank}</span><button class="mobileRankTeam" data-team="${esc(r.team)}">${teamMark(r.team)}<span>${esc(r.team)}</span></button><strong class="mobileRankRating ${r.rating>=0?'rating-positive':'rating-negative'}">${signed(r.rating)}</strong></div><div class="mobileRankInfo"><span>D${r.division}${all?' · #'+r.divisionRank:''}</span><span>${r.w}–${r.l}${r.ties?'–'+r.ties:''}</span><span>MOV ${signed(r.mov)}</span></div><div class="mobileRankInfo secondary"><span>Opp. ${signed(r.opp)}</span><span>Change <b class="${r.change>0.00001?'pos':r.change<-.00001?'neg':''}">${Math.abs(r.change)<0.00001?'—':signed(r.change)}</b></span></div></div>`).join(''):'<div class="empty">No teams match your search.</div>';
+ const showCut=!all&&!q;
+ el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} · ${all?'Statewide':`Division ${selectedDiv}`}`;
+ el('rankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=!all&&r.rank<=16?'playoff-zone':'',move=moveTag(r.rank,all?baseStateRank[r.team]:baseDivRank[r.team]);
+  return `${showCut&&r.rank===17?'<tr class="cutrow"><td colspan="7"><div class="cutline-label">Top-16 cutoff</div></td></tr>':''}<tr class="${zone}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-label"><span class="team-name">${esc(r.team)}</span>${all?`<span class="team-sub">D${r.division} · #${r.divisionRank} in division</span>`:''}</span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
+ el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=!all&&r.rank<=16?'playoff-zone':'',move=moveTag(r.rank,all?baseStateRank[r.team]:baseDivRank[r.team]);
+  return `${showCut&&r.rank===17?'<div class="mcut">Top-16 cutoff</div>':''}<div class="mrow ${zone}"><span class="mrank"><span class="rank">${r.rank}</span>${move}</span><button type="button" class="mteam" data-team="${esc(r.team)}">${teamMark(r.team)}<span class="team-label"><span class="team-name">${esc(r.team)}</span><span class="team-sub">${rec(r)} · ${all?`D${r.division} #${r.divisionRank} · `:''}MOV ${signed(r.mov,1)} · OPP ${signed(r.opp,1)}</span></span></button><span class="mrating"><b>${signed(r.rating)}</b>${deltaTag(r.change)}</span></div>`}).join(''):'<div class="empty">No teams match your search.</div>';
+ el('rankingsBody').classList.toggle('statewide',all);el('mobileRankingsBody').classList.toggle('statewide',all);
  refreshMarks();
- el('tableFootText').textContent=all?'Statewide ranking by model rating · click any team to see its games.':'Rank #17 begins below the top-16 cutoff. Eligibility also requires 3 wins and 7 games.';
- el('scenarioBadge').classList.toggle('is-active',edits.length>0);el('scenarioBadge').innerHTML=edits.length?`<strong>${edits.length} scenario ${edits.length===1?'change':'changes'} active</strong> · rankings recalculated`:'October 27 score baseline · no scenarios';
- el('headlineSub').textContent=all?'All 262 teams, ranked together. Select a division or enter a score to test an outcome.':`All ${divTeams[selectedDiv].length} Division ${selectedDiv} teams. Every score still recalculates the statewide ratings.`;
+ el('resetSearch').classList.toggle('hidden',!q);
+ el('tableFootText').textContent=all?'Statewide order by model rating. Select a team to see its games.':'Rank 17 and below fall outside the top-16 cutoff. Eligibility also requires 3 wins and 7 games.';
+ el('scenarioBadge').classList.toggle('is-active',edits.length>0);el('scenarioBadge').innerHTML=edits.length?`<strong>${edits.length} scenario ${edits.length===1?'score':'scores'}</strong> applied`:'Official Oct 27 baseline';
+ el('headlineSub').textContent=all?'All 262 Massachusetts teams ranked together. Pick a division, or enter Week 8 scores to see how the playoff picture shifts.':`All ${divTeams[selectedDiv].length} Division ${selectedDiv} teams. Every score you enter still recalculates the full statewide network.`;
+ el('statGames').textContent=MODEL.played;el('statWeek').textContent=WEEK8.filter(r=>{const g=wkScore(r);return g&&g[3]!==null&&g[4]!==null}).length;
 }
-function renderPresets(){el('presets').innerHTML=PRESETS.map((p,i)=>`<button class="preset" data-preset="${i}"><b>${esc(p[1])} <span>vs.</span> ${esc(p[2])}</b><span>${p[0].slice(5)} →</span></button>`).join('')}
+function renderPresets(){el('presets').innerHTML=PRESETS.map((p,i)=>`<button type="button" class="preset" data-preset="${i}"><b>${esc(p[1])} <span>vs</span> ${esc(p[2])}</b><span>${p[0].slice(5).replace('-','/')}</span></button>`).join('')}
 function fillGame(g){el('gameDate').value=g[0];el('gameA').value=g[1];el('gameB').value=g[2];el('scoreA').value=g[3]??'';el('scoreB').value=g[4]??'';switchPage('rankings');el('scoreA').focus()}
 function clearGame(){el('gameDate').value='2026-10-30';el('gameA').value='';el('gameB').value='';el('scoreA').value='';el('scoreB').value=''}
 function addGame(){const date=el('gameDate').value,a=el('gameA').value.trim(),b=el('gameB').value.trim(),sa=el('scoreA').value.trim(),sb=el('scoreB').value.trim();if(!/^2026-\d\d-\d\d$/.test(date)){toast('Select a date in 2026.');return}if(!TEAMS.includes(a)||!TEAMS.includes(b)||a===b){toast('Choose two different teams from the list.');return}if(sa===''||sb===''){toast('Enter both scores.');return}const x=Number(sa),y=Number(sb);if(!validScore(x)||!validScore(y)){toast('Scores must be whole numbers from 0 to 999.');return}const g=[date,a,b,x,y,0],key=pairKey(g);const old=source.get(key);if(old&&old[5])g[5]=old[5];edits=edits.filter(row=>pairKey(row)!==key);edits.push(g);predictedKeys.delete(key);save();toast('Result applied. All eight divisions recalculated.');}
-function renderEdits(){el('editCount').textContent=`(${edits.length})`;el('editSub').textContent=edits.length?'Local to this browser':'No changes applied';el('editList').innerHTML=edits.length?edits.slice().sort((a,b)=>b[0].localeCompare(a[0])).map(g=>`<div class="editrow"><div><strong>${esc(g[1])} ${g[3]}–${g[4]} ${esc(g[2])}</strong><br><small>${g[0].slice(5)}</small></div><div><button class="bttn sml" data-load="${esc(pairKey(g))}">Edit</button> <button class="bttn sml danger" data-remove="${esc(pairKey(g))}">×</button></div></div>`).join(''):'<div class="note" style="padding:14px 16px">No simulated results. Select a matchup or enter one above.</div>'}
+function renderEdits(){el('editCount').textContent=`(${edits.length})`;el('editBadge').textContent=edits.length;el('editBadge').classList.toggle('on',edits.length>0);el('editSub').textContent=edits.length?'Saved in this browser only':'No changes applied';el('editList').innerHTML=edits.length?edits.slice().sort((a,b)=>b[0].localeCompare(a[0])).map(g=>`<div class="editrow"><div class="editrow-main"><span class="editrow-teams">${esc(g[1])}<span class="score">${g[3]}–${g[4]}</span>${esc(g[2])}</span><small>${g[0].slice(5).replace('-','/')}${predictedKeys.has(pairKey(g))?' · <span class="tag-pred">Prediction</span>':''}</small></div><div class="editrow-actions"><button type="button" class="bttn sml ghost" data-load="${esc(pairKey(g))}">Edit</button><button type="button" class="bttn sml ghost danger" data-remove="${esc(pairKey(g))}" aria-label="Remove">×</button></div></div>`).join(''):'<div class="edit-empty">No scenario scores yet.<br>Enter a Week 8 score or test a custom game.</div>'}
 function showTeam(name){selectedTeam=name;el('teamSearch').value=name;el('teamSelect').value=name;switchPage('team')}
-function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails').innerHTML='<div class="empty">Choose a team to view its schedule.</div>';return}const myGames=records().filter(g=>g[1]===selectedTeam||g[2]===selectedTeam).sort((a,b)=>a[0].localeCompare(b[0]));const curRank=x.division?standings(x.division).find(r=>r.team===selectedTeam).rank:null;
- el('teamDetails').innerHTML=`<div class="details"><div class="detailsHead"><div><div class="eyebrow">${x.division?'Division '+x.division:'Out-of-state opponent'}${curRank?' · Rank #'+curRank:''}</div><div class="detailsName">${teamMark(x.team)}<h3>${esc(x.team)}</h3></div><p>${x.w}–${x.l}${x.ties?'–'+x.ties:''} · ${x.gp} games${x.division?' · D'+x.division:''}</p></div><button class="bttn" id="returnRankings">← Rankings</button></div><div class="metrics"><div class="metric"><small>Power rating</small><b>${signed(x.rating,2)}</b></div><div class="metric"><small>Avg. margin</small><b>${signed(x.mov,2)}</b></div><div class="metric"><small>Opponent rating</small><b>${signed(x.opp,2)}</b></div><div class="metric"><small>Scenario change</small><b>${signed(x.change,2)}</b></div></div><h3 style="font-size:14px">Schedule & results</h3><div class="table-scroll"><table class="gameTable"><thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Margin (capped)</th><th>Opponent rating</th></tr></thead><tbody>${myGames.map(g=>{const own=g[1]===selectedTeam,opp=own?g[2]:g[1],my=own?g[3]:g[4],their=own?g[4]:g[3],margin=my===null?'—':signed(Math.max(-14,Math.min(14,my-their)),0);return `<tr><td>${g[0].slice(5)}</td><td><button class="team-button" data-team="${esc(opp)}">${esc(opp)}</button></td><td>${my===null?'Unplayed':my+'–'+their}</td><td>${margin}</td><td>${signed(MODEL.teams[opp]?.rating,2)}</td></tr>`}).join('')}</tbody></table></div></div>`;refreshMarks();}
+function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails').innerHTML='<div class="empty">Choose a team to view its schedule.</div>';return}const myGames=records().filter(g=>g[1]===selectedTeam||g[2]===selectedTeam).sort((a,b)=>a[0].localeCompare(b[0]));const row=x.division?standings(x.division).find(r=>r.team===selectedTeam):null,curRank=row?row.rank:null;
+ const editKeys=new Set(edits.map(pairKey)),cls=n=>n>0.00001?'pos':n<-0.00001?'neg':'';
+ el('teamDetails').innerHTML=`<div class="details"><div class="team-hero"><div class="team-id">${teamMark(x.team)}<div><p class="eyebrow">${x.division?'Division '+x.division:'Out-of-state opponent'}${curRank?` · #${curRank} of ${divTeams[x.division].length}`:''}</p><h2>${esc(x.team)}</h2><div class="team-facts"><span class="chip"><strong>${rec(x)}</strong></span><span class="chip">${x.gp} games</span>${row?`<span class="chip ${curRank<=16?'ok':'no'}">${curRank<=16?'Inside top 16':'Outside top 16'}</span>`:''}</div></div></div><button type="button" class="bttn" id="returnRankings">← Rankings</button></div>
+ <div class="metrics"><div class="metric"><small>Power rating</small><b>${signed(x.rating,2)}</b></div><div class="metric"><small>Avg capped margin</small><b>${signed(x.mov,2)}</b></div><div class="metric"><small>Opponent rating</small><b>${signed(x.opp,2)}</b></div><div class="metric"><small>Scenario change</small><b class="${cls(x.change)}">${signed(x.change,2)}</b></div></div>
+ <div class="section-head"><h3>Schedule &amp; results</h3><span>Margins capped at ±14</span></div><div class="table-scroll"><table class="gameTable"><thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th class="num">Margin</th><th class="num">Opp rating</th></tr></thead><tbody>${myGames.map(g=>{const own=g[1]===selectedTeam,opp=own?g[2]:g[1],my=own?g[3]:g[4],their=own?g[4]:g[3],k=pairKey(g),wl=my===null?'u':my>their?'w':my<their?'l':'t',margin=my===null?'—':signed(Math.max(-14,Math.min(14,my-their)),0);
+  const tag=g[5]?'<span class="gtag ff">Forfeit</span>':editKeys.has(k)?(predictedKeys.has(k)?'<span class="gtag pred">Prediction</span>':'<span class="gtag scen">Scenario</span>'):'';
+  return `<tr><td class="date">${new Date(g[0]+'T12:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</td><td><button type="button" class="team-button" data-team="${esc(opp)}">${teamMark(opp)}<span class="team-name">${esc(opp)}</span></button></td><td><span class="result"><span class="wl ${wl}">${wl==='u'?'–':wl.toUpperCase()}</span>${my===null?'Unplayed':my+'–'+their}</span>${tag}</td><td class="num">${margin}</td><td class="num">${signed(MODEL.teams[opp]?.rating,2)}</td></tr>`}).join('')}</tbody></table></div></div>`;refreshMarks();}
 function switchPage(page){activePage=page;document.querySelectorAll('.page').forEach(e=>e.classList.toggle('hidden',e.id!==page+'Page'));document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.page===page));if(page==='team')renderTeam()}
 function reset(){if(edits.length&&!confirm('Remove all scenario changes?'))return;edits=[];predictedKeys.clear();save();toast('Returned to the October 27 baseline')}
 function init(){loadSchoolLogos().catch(()=>{});el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderPresets();renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
@@ -105,6 +124,7 @@ function init(){loadSchoolLogos().catch(()=>{});el('teamsList').innerHTML=TEAMS.
  el('addGame').onclick=addGame;el('resetEntry').onclick=clearGame;el('resetAll').onclick=reset;
  el('editList').addEventListener('click',e=>{const remove=e.target.closest('[data-remove]');const load=e.target.closest('[data-load]');if(remove){edits=edits.filter(g=>pairKey(g)!==remove.dataset.remove);predictedKeys.delete(remove.dataset.remove);save();toast('Scenario removed')}else if(load){const g=edits.find(g=>pairKey(g)===load.dataset.load);if(g)fillGame(g)}});
  el('openTeam').onclick=()=>{const t=el('teamSearch').value.trim();if(!TEAMS.includes(t)){toast('Choose a listed team');return}showTeam(t)};el('teamSelect').addEventListener('change',e=>{if(TEAMS.includes(e.target.value))showTeam(e.target.value)});el('teamSearch').addEventListener('change',e=>{const t=e.target.value.trim();if(TEAMS.includes(t))showTeam(t)});el('teamSearch').addEventListener('keydown',e=>{if(e.key==='Enter')el('openTeam').click()});
+ el('themeToggle').addEventListener('click',()=>{const root=document.documentElement,dark=root.dataset.theme?root.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches,next=dark?'light':'dark';root.dataset.theme=next;try{localStorage.setItem('miaa-theme',next)}catch{}});
  el('teamDetails').addEventListener('click',e=>{if(e.target.closest('#returnRankings'))switchPage('rankings');const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
 }
 
@@ -156,44 +176,44 @@ function clearAllPredictions(){
 function wkTeamData(name){
  const m=MODEL.teams[name], div=DIV[name];
  // Out-of-state opponents have only their games versus MA schools in our ledger.
- const record=div&&m?`${m.w}–${m.l}${m.ties?'–'+m.ties:''}`:'—';
- const rating=div&&m?signed(m.rating):'—';
- return `<span class="fixture-data" data-meta-team="${esc(name)}"><span class="fixture-rec">${record}</span><span class="fixture-div">${div?'D'+div:'—'}</span><span class="fixture-rate">${rating}</span></span>`;
+ const record=div&&m?rec(m):'—';
+ const rating=div&&m?signed(m.rating,2):'—';
+ return `<span class="fixture-data" data-meta-team="${esc(name)}"><span class="fixture-rec">${record}</span><span class="fixture-div">${div?'D'+div:'Non-MA'}</span><span class="fixture-rate">${rating}</span></span>`;
 }
 function renderWeek8(){
  const filters=el('weekFilters');if(!filters)return;
  filters.innerHTML=[0,1,2,3,4,5,6,7,8].map(d=>`<button type="button" data-wdiv="${d}" class="weekFilter ${weekDiv===d?'selected':''}">${d===0?'All':`D${d}`}</button>`).join('');
- const games=wkGames();el('weekMeta').textContent=`${games.length} matchups · ${games.filter(r=>{const g=wkScore(r);return g&&validScore(g[3])&&validScore(g[4])&&g[3]!==null&&g[4]!==null}).length} scores entered`;
- el('fixtureList').innerHTML=games.map(r=>{
- const [date,a,b,time]=r, k=wkKey(r),g=wkScore(r),has=!!(g&&g[3]!==null&&g[4]!==null);
- const edited=edits.some(x=>pairKey(x)===k),status=edited?(predictedKeys.has(k)?'Model prediction':'Scenario applied'):has?'Final score':'Not entered';
- return `<div class="fixture ${edited?'fixture-edited':''}" data-fixture="${esc(k)}">
-   <div class="fixturetop"><span class="fixture-date">${date==='2026-10-29'?'THU':date==='2026-10-30'?'FRI':'SAT'} · OCT ${date.slice(-2)} · ${wkTime(time)}</span><span class="fixture-cols"><span>W–L</span><span>DIV</span><span>RATING</span></span><span class="fixture-pts-heading">PTS / MAX</span></div>
-   <div class="fixtureline"><div class="fixtureteam"><span class="place">A</span><button type="button" class="fixture-team-link" data-team="${esc(a)}" title="View ${esc(a)} team details">${teamMark(a)}${esc(a)}</button></div>${wkTeamData(a)}<div class="score-actions"><input class="fixture-score" data-side="a" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(a)}" value="${has?g[3]:''}" placeholder="—"><button type="button" class="max-win" data-max="a" title="Set ${esc(a)} to win 14–0">MAX</button></div></div>
-   <div class="fixtureline"><div class="fixtureteam"><span class="place">B</span><button type="button" class="fixture-team-link" data-team="${esc(b)}" title="View ${esc(b)} team details">${teamMark(b)}${esc(b)}</button></div>${wkTeamData(b)}<div class="score-actions"><input class="fixture-score" data-side="b" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(b)}" value="${has?g[4]:''}" placeholder="—"><button type="button" class="max-win" data-max="b" title="Set ${esc(b)} to win 14–0">MAX</button></div></div>
-   <div class="fixturebottom ${has?'has-score':''}"><span class="fixtureStatus ${edited?'saved':''}">${status}</span><button type="button" class="fixtureClear" data-clear="${esc(k)}" ${edited?'':'disabled'}>Remove score</button></div>
- </div>`;
- }).join('');el('clearPredictions').disabled=!predictedKeys.size;refreshMarks();
+ const games=wkGames();
+ const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}">${teamMark(name)}<span class="fixture-name">${esc(name)}</span></button>${wkTeamData(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win 14–0">MAX</button></div></div>`;
+ el('fixtureList').innerHTML=games.length?games.map(r=>{
+ const [date,a,b,time]=r;
+ return `<article class="fixture" data-fixture="${esc(wkKey(r))}">
+   <div class="fixturetop"><span class="fixture-date">${date==='2026-10-29'?'Thu':date==='2026-10-30'?'Fri':'Sat'} ${date.slice(5).replace('-','/')} · ${wkTime(time)}</span><div class="fixture-meta"><span class="fixtureStatus"></span><button type="button" class="fixtureClear" data-clear="${esc(wkKey(r))}" title="Remove score" aria-label="Remove score">×</button></div></div>
+   ${line('a',a)}${line('b',b)}
+ </article>`;
+ }).join(''):'<div class="empty">No matchups match your search.</div>';
+ refreshMarks();updateWeek8States();
 }
 function updateWeek8States(){
  const list=el('fixtureList');if(!list)return;let n=0;
  for(const card of list.querySelectorAll('[data-fixture]')){
- const entered=edits.find(g=>pairKey(g)===card.dataset.fixture),base=source.get(card.dataset.fixture), g=entered||base;
- const has=!!(g&&g[3]!==null&&g[4]!==null);if(has)n++;
- const lab=card.querySelector('.fixtureStatus');lab.textContent=entered?(predictedKeys.has(card.dataset.fixture)?'Model prediction':'Scenario entered'):has?'Final':'Not entered';lab.classList.toggle('saved',!!entered);
- for(const [side,index] of [['a',3],['b',4]]){const input=card.querySelector(`[data-side=${side}]`);if(input!==document.activeElement){const target=has?String(g[index]):'';if(input.value!==target)input.value=target;}}
- card.classList.toggle('fixture-edited',!!entered);
- card.querySelector('.fixturebottom').classList.toggle('has-score',!!has);
+ const k=card.dataset.fixture,entered=edits.find(g=>pairKey(g)===k),base=source.get(k), g=entered||base;
+ const has=!!(g&&g[3]!==null&&g[4]!==null),pred=!!entered&&predictedKeys.has(k);if(has)n++;
+ const lab=card.querySelector('.fixtureStatus');lab.textContent=entered?(pred?'Prediction':'Scenario'):has?'Final':'';lab.classList.toggle('saved',!!entered&&!pred);lab.classList.toggle('pred',pred);lab.classList.remove('warn');
+ for(const [side,index] of [['a',3],['b',4]]){const input=card.querySelector(`[data-side=${side}]`);if(input!==document.activeElement){const target=has?String(g[index]):'';if(input.value!==target)input.value=target;}
+   card.querySelector(`[data-line=${side}]`).classList.toggle('is-win',has&&g[index]>g[index===3?4:3]);}
+ card.classList.toggle('fixture-edited',!!entered);card.classList.toggle('is-pred',pred);
+ card.classList.toggle('has-result',has&&g[3]!==g[4]);
  // Never replace the score inputs: the user may be in the middle of typing.
  for(const row of card.querySelectorAll('[data-meta-team]')){
    const name=row.dataset.metaTeam, m=MODEL.teams[name], div=DIV[name];
-   row.querySelector('.fixture-rec').textContent=div&&m?`${m.w}–${m.l}${m.ties?'–'+m.ties:''}`:'—';
-   row.querySelector('.fixture-div').textContent=div?'D'+div:'—';
-   row.querySelector('.fixture-rate').textContent=div&&m?signed(m.rating):'—';
+   row.querySelector('.fixture-rec').textContent=div&&m?rec(m):'—';
+   row.querySelector('.fixture-div').textContent=div?'D'+div:'Non-MA';
+   row.querySelector('.fixture-rate').textContent=div&&m?signed(m.rating,2):'—';
  }
  card.querySelector('.fixtureClear').disabled=!entered;
  }
- el('weekMeta').textContent=`${wkGames().length} matchups · ${n} scores entered`;el('clearPredictions').disabled=!predictedKeys.size;
+ el('weekMeta').textContent=`${wkGames().length} matchups · ${n} with scores`;el('clearPredictions').disabled=!predictedKeys.size;
 }
  function initWeek8(){
  el('weekJump').onclick=()=>{document.querySelector('[data-side-tab=week8]').click();el('week8View').scrollIntoView({behavior:'auto',block:'start'})};
@@ -204,8 +224,8 @@ function updateWeek8States(){
  el('fixtureList').addEventListener('input',e=>{
    const inp=e.target.closest('.fixture-score');if(!inp)return;
    let card=inp.closest('[data-fixture]');let a=card.querySelector('[data-side=a]').value.trim(),b=card.querySelector('[data-side=b]').value.trim();
-   if((a&&!/^\d{1,3}$/.test(a))||(b&&!/^\d{1,3}$/.test(b))){card.querySelector('.fixtureStatus').textContent='Whole-number scores only';return}
-   if(!a||!b){card.querySelector('.fixtureStatus').textContent='Enter both scores';return}
+   if((a&&!/^\d{1,3}$/.test(a))||(b&&!/^\d{1,3}$/.test(b))){const st=card.querySelector('.fixtureStatus');st.textContent='Numbers only';st.classList.add('warn');return}
+   if(!a||!b){const st=card.querySelector('.fixtureStatus');st.textContent='Enter both scores';st.classList.add('warn');return}
    const r=WEEK8.find(r=>wkKey(r)===card.dataset.fixture);if(!r)return;
    const g=[r[0],r[1],r[2],Number(a),Number(b),0];
    const prev=edits.find(x=>pairKey(x)===card.dataset.fixture);if(prev&&prev[3]===g[3]&&prev[4]===g[4])return;
