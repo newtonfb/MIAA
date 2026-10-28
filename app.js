@@ -2,7 +2,7 @@
 
 'use strict';
 const KEY='miaa-scenario-lab-2026-oct27-v1';
-const DIV=DATA.divisions, OFF=DATA.officialD8;
+const DIV=DATA.divisions, OFF=DATA.official;  // MIAA's published Oct 27 ratings, all divisions
 const TEAMS=[...new Set(DATA.games.flatMap(g=>[g[1],g[2]]))].sort((a,b)=>a.localeCompare(b));
 const IND=Object.fromEntries(TEAMS.map((t,i)=>[t,i]));
 const divTeams=Object.fromEntries(Array.from({length:8},(_,i)=>[i+1,Object.keys(DIV).filter(x=>DIV[x]===i+1)]));

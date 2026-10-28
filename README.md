@@ -29,14 +29,14 @@ To test the actual logo endpoint too, use the Vercel CLI's `vercel dev` after li
 - `index.html` — HTML structure / navigation.
 - `styles.css` — complete site appearance, desktop and mobile breakpoints.
 - `app.js` — scenario engine, controls, rankings, team details and game cards.
-- `data/season-2026.js` — embedded October 27, 2026 score data, divisions, official D8 baselines and Week 8 schedule. **Avoid changing official data without verifying sources.**
+- `data/season-2026.js` — embedded October 27, 2026 score data, divisions, official October 27 ratings for all 262 teams (from MIAA's division PDFs) and Week 8 schedule. **Avoid changing official data without verifying sources.**
 - `api/school-logos.js` — cached, best-effort lookup of public school logos from MIAA's directory.
 
 ## Scenarios and accuracy
 
 Scores entered in the app are saved in each user's browser `localStorage`; users' scenarios do not affect one another. `MAX` gives a team a 14–0 win. `Predict Week 8` creates deterministic statistical predictions, not predictions from a hosted AI service.
 
-Division 8 starts from the official October 27 ratings. Other divisions and all changes after entering predicted scores are derived from an iterative statewide model. The exact MIAA iteration procedure has not been reproduced to four decimals. The model handles capped point margins and special forfeit adjustments, but **projected cutoff positions are not official**.
+Every team starts from MIAA's official October 27 rating. Changes after entering scores are derived from an iterative statewide model and added to those official ratings. The exact MIAA iteration procedure has not been reproduced to four decimals. The model handles capped point margins and special forfeit adjustments, but **projected cutoff positions are not official**.
 
 ## Publishing changes
 
