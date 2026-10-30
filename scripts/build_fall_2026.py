@@ -99,15 +99,38 @@ def scores(slug,official):
     # into one result just because the date and teams are the same.
     extras=[]
     doubleheaders=[]
+    # First, read the unique-game baseline's win/loss/tie totals.
+    counts={}
+    def bump(g,sign):
+        _,a,b,sa,sb,_=g
+        for team,own,opp in [(a,sa,sb),(b,sb,sa)]:
+            counts.setdefault(team,[0,0,0])[0 if own>opp else 1 if own<opp else 2]+=sign
+    for g in games.values():bump(g,1)
+    def count_error(g):
+        _,a,b,sa,sb,_=g
+        error=0
+        for team,own,opp in [(a,sa,sb),(b,sb,sa)]:
+            if team not in official:continue
+            expected=[official[team][4],official[team][5],official[team][6]]
+            current=counts.get(team,[0,0,0])
+            slot=0 if own>opp else 1 if own<opp else 2
+            error+=sum(abs(current[i]-expected[i]) for i in range(3))
+            trial=current[:];trial[slot]+=1
+            error-=sum(abs(trial[i]-expected[i]) for i in range(3))
+        return error
     for key,records in observed.items():
         by_source={}
         for g in records:by_source.setdefault(g[1],[]).append(g)
         source=max(by_source.values(),key=len)
         if len(source)>1:
-            games[key]=source[0]
-            extras.extend(source[1:])
-            doubleheaders.append([key[0],key[1],key[2],len(source)])
-    if doubleheaders:print("Same-day multiple-match fixtures:",repr(doubleheaders[:20]))
+            used=0
+            for extra in source[1:]:
+                # A legitimate same-day doubleheader increases the published
+                # game count. A duplicate reporting line does not.
+                if count_error(extra)>0:
+                    extras.append(extra);bump(extra,1);used+=1
+            if used:doubleheaders.append([key[0],key[1],key[2],used+1])
+    if doubleheaders:print("Confirmed same-day multiple-match fixtures:",repr(doubleheaders[:20]))
     # Resolve inconsistent non-capped scores against the published average
     # capped margin; do not silently assume either team's entry is correct.
     def fitted_margin(team, candidate, lookup_key):
