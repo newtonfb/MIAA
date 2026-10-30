@@ -58,6 +58,34 @@ git push origin main
 
 Vercel should deploy commits to `main`. If it does not, check the Vercel project's Git integration and deployment status; a GitHub push alone cannot confirm the production build was successful.
 
+
+## Other Fall 2026 Sports
+
+Open `/fall.html` for a separate, responsive sport selector with **Field Hockey, Boys Soccer, Girls Soccer, and Volleyball** (linked from the football app's *Sports* tab). Each sport has independent division rankings, records, school details, and a manual statewide what-if score form. Football stays at `/`.
+
+The source is the **October 30, 2026 MIAA official division PDFs and 4 a.m. score export**, not MaxPreps estimates. The shared high-precision rating solver accepts a sport-specific margin cap. These four sports all cap margins at **3 goals/sets**; volleyball scores are *sets won*, not rally points. The importer preserves confirmed same-day doubleheaders and checks the parsed results against every published team's win-loss-tie record and capped average margin.
+
+### Independent October 30 reconciliation
+
+These are **independently calculated** ratings aligned to the MIAA scale using one **shared offset per sport**, rather than copying individual published ratings:
+
+| Sport | Official teams | Completed games | Correct rank positions | Maximum absolute rating error |
+| --- | ---: | ---: | ---: | ---: |
+| Field hockey | 197 | 1,695 | 197/197 | 0.002035 |
+| Boys soccer | 332 | 2,722 | 326/332 | 0.003417 |
+| Girls soccer | 319 | 2,603 | 317/319 | 0.003774 |
+| Volleyball | 309 | 2,832 | 305/309 | 0.005821 |
+
+All four imported datasets reconcile every published team's record and average capped margin within the four-decimal publishing tolerance. A few exceptionally close teams still swap order, so **this is not a guarantee of exact MIAA seeding**. Independent calculation accuracy is distinct from forecasting accuracy. New simulated games start from the exact **October 30 official ratings** and add independently solved rating changes.
+
+Source files: `data/fall-2026.js` (published rankings and game ledger), `scripts/build_fall_2026.py` (PDF ingestion and reconciliation), `fall.html` / `fall.js` / `fall.css` (frontend), and `tests/fall-sports.test.cjs` (sport-specific benchmark gates). The importer workflow creates reviewable snapshots in the feature branch and does not automatically substitute new snapshots for the published cutoff.
+
+Run the independent checks with:
+
+```bash
+node --test tests/fall-sports.test.cjs
+```
+
 ## Sources
 
 - [MIAA power-ranking releases](https://www.miaa.net/game-day/tournament-central/power-rankings)
