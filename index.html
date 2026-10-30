@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#1d6b45" name="theme-color"/>
-<meta content="MIAA football power rankings as of October 27, 2026, with a predictor for how Week 8 results change every division and the top-16 tournament field." name="description"/>
+<meta content="MIAA football power-ranking projections from the October 27 baseline, including locked October 29 final scores and Week 8 scenarios for all divisions." name="description"/>
 <title>MIAA Football Power Rankings and Week 8 Predictor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
    <button class="tab" data-page="about" type="button">About</button>
   </nav>
   <div class="appbar-tools">
-   <span class="chip chip-quiet hide-sm"><span class="dot"></span>Official results through Oct 27</span>
+   <span class="chip chip-quiet hide-sm"><span class="dot"></span>Oct 27 ratings + Oct 29 finals</span>
   </div>
  </div>
 </header>
@@ -42,7 +42,7 @@
     <button class="bttn bttn-lg bttn-flag" id="heroPredict" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Predict Week 8</button>
     <button class="bttn bttn-lg bttn-white" id="weekJump" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Enter scores myself</button>
    </div>
-   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Reset to official</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
+   <div class="hero-status"><span class="chip" id="scenarioBadge">14 Thursday finals applied</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Clear scenarios</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
   </div>
   <div class="hero-line" id="heroLine" aria-live="polite"></div>
   </section>
@@ -79,7 +79,7 @@
 
     <div class="sideView" id="week8View">
      <div class="weekTools">
-      <div class="weekhead"><div><h2>Week 8 scores</h2><p>Enter scores yourself, or select <strong>Predict Week 8</strong> to fill in every game based on team ratings and common opponents.</p></div></div>
+      <div class="weekhead"><div><h2>Week 8 scores</h2><p>Thursday finals are already entered and locked. Enter remaining scores, or select <strong>Predict Week 8</strong> to estimate the rest.</p></div></div>
       <label class="search search-sm">
        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
        <input aria-label="Search Week 8 matchups" class="input" id="weekSearch" placeholder="Search matchups" type="search"/>
@@ -92,11 +92,11 @@
        </button>
        <button type="button" id="clearPredictions" class="bttn" disabled>Clear predictions</button>
       </div>
-      <p class="predictHelp">Games are Oct 29–31. Scores you type yourself are never overwritten by predictions.</p>
+      <p class="predictHelp">Confirmed October 29 scores are locked for everyone. Only unplayed games can be predicted or edited.</p>
      </div>
      <div class="weekMeta" id="weekMeta"></div>
      <div class="fixtureList" id="fixtureList"></div>
-     <div class="status-bar">Schedule from <a href="https://www.maxpreps.com/ma/massachusetts/football/scores/?date=10%2F30%2F2026" rel="noopener noreferrer" target="_blank">MaxPreps</a>. Times may change; McCann–Belchertown has conflicting listings. Scenarios save in this browser only.</div>
+     <div class="status-bar">Scores checked against <a href="https://www.maxpreps.com/ma/massachusetts/football/scores/?date=10%2F29%2F2026" rel="noopener noreferrer" target="_blank">MaxPreps</a> and published game reports. 🔒 means confirmed final. Other scores save in your browser only.</div>
     </div>
 
     <div class="sideView hidden" id="changesView">
@@ -112,7 +112,7 @@
   </aside>
  </div>
 
- <p class="subtle"><b>How to read this.</b> October 27 Arbiter results are the starting point. This is an independent scenario calculator, not an official MIAA release. Scores recalculate across all eight divisions, with forfeits excluded from opponent strength and official adjusted ratings used where published. Every team starts from MIAA's published October 27 rating.</p>
+ <p class="subtle"><b>How to read this.</b> MIAA's published October 27 ratings are the starting point. Confirmed Thursday, October 29 results are already included. This is an independent projection, not a new official MIAA ranking. Scores recalculate across all eight divisions, with forfeits excluded from opponent strength and official adjusted ratings used where published. Every team starts from MIAA's published October 27 rating.</p>
 </div>
 
 <div class="page hidden" id="bracketPage">
@@ -172,14 +172,14 @@
 
   <h2>What the calculator uses</h2>
   <p>The starting score data is MIAA's October 27, 2026 statewide Arbiter report: <strong>905 completed games, six forfeits, and three matchups without scores</strong>. The model includes 262 Massachusetts schools in Divisions 1–8, along with out-of-state opponents appearing on the schedule.</p>
-  <p>Every division starts from MIAA's published October 27 ratings, so before you enter any scores the numbers match the official rankings exactly. When you enter a score, the calculator works out how much each team's rating changes and adds that to its official rating. Scores entered under Week 8 are hypothetical until MIAA publishes new results. Every entered score updates records and ratings throughout the state.</p>
+  <p>Every division starts from MIAA's published October 27 ratings. Confirmed October 29 final scores are already applied statewide, so the current projections will differ from the October 27 official rankings even before you enter a scenario. When you enter an unplayed game's score, the calculator estimates how much each team's rating changes and adds that change to its October 27 official rating. The resulting ratings remain unofficial projections until MIAA publishes a new update.</p>
 
   <h2>Accuracy and playoff rankings</h2>
   <p>This is an <strong>independent projection</strong>, not MIAA's official calculator. The published rating formula is known, but MIAA's precise iteration implementation has not been reproduced to the final decimal. This model uses an iterative estimate with a four-decimal stopping threshold and a maximum of 1,000 iterations. Very close teams may change order in official releases.</p>
   <p>The top 16 positions in each division indicate the usual tournament ranking cutoff, <strong>not a guaranteed playoff berth</strong>. Teams also generally need three wins and seven eligible games; forfeits may affect eligibility. Official bracket decisions and other exceptions are not determined by this page.</p>
 
   <h2>Using scenarios</h2>
-  <p>Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>MAX</strong> sets the selected team to win 14–0, which gives the maximum positive football margin for rating purposes. <strong>Predict Week 8</strong> fills unentered games across all divisions with deterministic estimates based on October 27 team ratings, points scored, and points allowed. These are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Predictions weigh each team's rating most, then its points scored and allowed, then how both teams did against common opponents. Existing manually entered scores are preserved. <strong>Clear predictions</strong> removes only the estimates still marked as predictions.</p>
+  <p>Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>MAX</strong> sets the selected team to win 14–0, which gives the maximum positive football margin for rating purposes. <strong>Predict Week 8</strong> fills unentered games across all divisions with deterministic estimates based on October 27 team ratings, points scored, and points allowed. These are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Predictions weigh each team's rating most, then its points scored and allowed, then how both teams did against common opponents. Existing manually entered scores and locked final results are preserved. <strong>Clear predictions</strong> removes only the estimates still marked as predictions. A 🔒 marks a played game that cannot be edited in the simulator.</p>
   <p><strong>Brackets</strong> seed the top 16 teams in each division by rating, 1 against 16, 8 against 9, and so on. Later rounds show the higher seed advancing. A warning mark means the team has fewer than 3 wins or 7 games so far.</p>
   <p>Select a team's name or open <strong>Teams</strong> to view all its games and opponents. Results you enter are saved in this browser and can be cleared under <strong>Entered</strong>; they do not sync between devices.</p>
 
@@ -188,7 +188,7 @@
 </div>
 
 <datalist id="teamsList"></datalist>
-<footer class="footer"><span>An independent scenario calculator using results through October 27, 2026. Not affiliated with the MIAA.</span></footer>
+<footer class="footer"><span>Independent statewide projections from October 27 MIAA ratings and October 29 confirmed results. Not affiliated with the MIAA.</span></footer>
 </div>
 <dialog class="intro" id="intro" aria-labelledby="introTitle">
  <div class="intro-head">
@@ -200,14 +200,14 @@
  <div class="intro-choices">
   <button class="choice choice-predict" type="button" data-intro="predict" autofocus>
    <strong>Predict Week 8 for me</strong>
-   <span>Fill in every game from team ratings, points scored and allowed, and results against common opponents. You can change any score afterward.</span>
+   <span>Estimate the remaining games from ratings and team performance. You can change predictions; confirmed final scores remain locked.</span>
   </button>
   <button class="choice" type="button" data-intro="enter">
    <strong>Enter scores myself</strong>
    <span>Type scores into the Week 8 matchups. Rankings, the playoff line and brackets update as you type.</span>
   </button>
  </div>
- <div class="intro-foot"><button class="bttn ghost sml" type="button" data-intro="browse">Just view the official rankings</button><span>Scores you enter stay in this browser.</span></div>
+ <div class="intro-foot"><button class="bttn ghost sml" type="button" data-intro="browse">Just view projected rankings</button><span>Scores you enter stay in this browser.</span></div>
 </dialog>
 <div class="alert" id="alert" role="status" aria-live="polite"></div>
 <script src="data/season-2026.js" defer></script>
