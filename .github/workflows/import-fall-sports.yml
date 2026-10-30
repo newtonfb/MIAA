@@ -5,6 +5,10 @@ on:
     paths:
       - scripts/build_fall_2026.py
       - .github/workflows/import-fall-sports.yml
+  pull_request:
+    paths:
+      - scripts/build_fall_2026.py
+      - .github/workflows/import-fall-sports.yml
   workflow_dispatch:
 permissions:
   contents: write
@@ -22,7 +26,13 @@ jobs:
         run: python -m pip install 'pdfplumber>=0.11,<0.13' 'requests>=2.31,<3'
       - name: Import MIAA October 30 rankings and scores
         run: python scripts/build_fall_2026.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fall-2026-dataset
+          path: data/fall-2026.js
+          retention-days: 7
       - name: Verify dataset and commit back to feature branch
+        if: github.event_name == 'push'
         run: |
           test -s data/fall-2026.js
           git config user.name "github-actions[bot]"
