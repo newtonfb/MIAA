@@ -56,7 +56,7 @@ def rankings(slug,ndiv):
 def scores(slug):
     pdf,url=fetch(f"{slug}-scores")
     games={}
-    bad=[]; date_matches=0
+    bad=[]; date_matches=0; conflicting_capped=[]
     with pdf:
         for page in pdf.pages:
             mid=page.width/2
@@ -81,25 +81,34 @@ def scores(slug):
                         old=games[k]
                         if old[1]==a and old[2]==b:ok=(old[3]==sa and old[4]==sb)
                         else:ok=(old[3]==sb and old[4]==sa)
-                        if not ok:raise ValueError(f"Conflicting scores: {old} versus {g}")
+                        if not ok:
+                            # MIAA occasionally reports a different raw blowout in the
+                            # two team schedules. Both are equivalent if the cap is 3.
+                            diff1=old[3]-old[4]
+                            diff2=(sa-sb) if old[1]==a else (sb-sa)
+                            cap=lambda x:max(-3,min(3,x))
+                            if cap(diff1)==cap(diff2):
+                                conflicting_capped.append([old,g]);continue
+                            raise ValueError(f"Conflicting capped scores: {old} versus {g}")
                         old[5]=max(old[5],g[5])
                     else:games[k]=g
-    print(f" {slug} scores: {date_matches} PDF rows, {len(games)} unique games; {len(bad)} unscored/unclear lines")
+    print(f" {slug} scores: {date_matches} PDF rows, {len(games)} unique games; {len(bad)} unscored/unclear lines; {len(conflicting_capped)} equivalent-score discrepancies")
     if len(games)<400:raise ValueError(f"{slug} contains only {len(games)} games; scoring PDF parse failed")
     if bad:print(" sample unmatched:",repr(bad[:8]))
-    return sorted(games.values()),url,len(bad)
+    if conflicting_capped: print(" capped-equivalent discrepancies:",repr(conflicting_capped[:6]))
+    return sorted(games.values()),url,len(bad),len(conflicting_capped)
 
 def main():
     snap={"date":DATE,"generatedAt":datetime.now(timezone.utc).isoformat(),"sports":{}}
     for slug,(title,count) in SPORTS.items():
         ranks,divisions,rank_urls=rankings(slug,count)
-        games,scores_url,unknown=scores(slug)
+        games,scores_url,unknown,discrepant=scores(slug)
         if len(ranks)<100:raise ValueError(f"{slug}: low rank count {len(ranks)}")
         # Official ratings are the baseline; the independent solver's error
         # is separately validated by test scripts. Never assert all 4 decimals match.
         snap["sports"][slug]={"title":title,"cap":3,"divisions":divisions,
             "official":ranks,"games":games,"urls":{"rankings":rank_urls,"scores":scores_url},
-            "unmatchedScoreLines":unknown}
+            "unmatchedScoreLines":unknown,"equivalentScoreDiscrepancies":discrepant}
         print(" Total:",slug,len(ranks),"teams,",len(games),"games")
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text("const FALL_DATA="+json.dumps(snap,separators=(",",":"),ensure_ascii=False)+";\n",encoding="utf8")
