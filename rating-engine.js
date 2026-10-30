@@ -6,7 +6,8 @@
 // The ratings are defined only up to a common constant, set by the caller's
 // dated official MIAA reference. Forfeits are applied AFTER the opponent network.
 'use strict';
-function calculateRatings(games, teamNames, divisions) {
+function calculateRatings(games, teamNames, divisions, marginCap=14) {
+  if(!Number.isFinite(marginCap)||marginCap<=0)throw new Error('Invalid sport margin cap');
   const N=teamNames.length, index=new Map(teamNames.map((t,i)=>[t,i]));
   const degrees=new Float64Array(N), rhs=new Float64Array(N);
   const marginSum=new Float64Array(N), count=new Int32Array(N);
@@ -17,7 +18,7 @@ function calculateRatings(games, teamNames, divisions) {
     if(!Number.isInteger(sa)||!Number.isInteger(sb)||sa<0||sb<0||sa>999||sb>999) continue;
     const i=index.get(a), j=index.get(b);
     if(i===undefined||j===undefined||i===j) continue;
-    const margin=Math.max(-14,Math.min(14,sa-sb));
+    const margin=Math.max(-marginCap,Math.min(marginCap,sa-sb));
     played++; count[i]++; count[j]++;
     marginSum[i]+=margin; marginSum[j]-=margin;
     if(sa>sb) { wins[i]++; losses[j]++; }
