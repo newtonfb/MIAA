@@ -40,5 +40,6 @@ jobs:
           git add data/fall-2026.js
           if ! git diff --staged --quiet; then
             git commit -m "Import official Oct 30 field hockey, soccer and volleyball data"
-            git push
+            git pull --rebase origin feature/fall-2026-multisport
+            git push origin feature/fall-2026-multisport
           fi
