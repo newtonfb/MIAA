@@ -34,13 +34,13 @@ To test the actual logo endpoint too, use the Vercel CLI's `vercel dev` after li
 
 ## Scenarios and accuracy
 
-Scores entered in the app are saved in each user's browser `localStorage`; users' scenarios do not affect one another. `MAX` gives a team a 14–0 win. `Predict Week 8` creates deterministic statistical predictions, not predictions from a hosted AI service.
+**14 confirmed Thursday, October 29 game results are published in `app.js` and applied for all visitors across Divisions 1–8.** They display a 🔒 Final label and are locked against editing, clearing, or prediction. Two games originally scheduled on Friday have their dates corrected to Thursday to avoid double-counting. All other what-if scores are saved in each visitor's browser `localStorage`; individual scenarios do not affect one another. `MAX` gives a team a 14–0 win. `Predict Week 8` creates deterministic statistical predictions, not predictions from a hosted AI service.
 
 Every team starts from MIAA's official October 27 rating. Changes after entering scores are derived from an iterative statewide model and added to those official ratings. The exact MIAA iteration procedure has not been reproduced to four decimals. The model handles capped point margins and special forfeit adjustments, but **projected cutoff positions are not official**.
 
 ## Publishing changes
 
-Changes you make locally will **not automatically update** https://miaa-football-scenarios.vercel.app until the existing Vercel project is connected to this repository for Git-based deploys. Before enabling auto-deploy, verify the Vercel project settings and that its production branch is `main`.
+The Vercel production site is linked to GitHub repository `newtonfb/MIAA`, branch `main`. Pushing commits to `main` automatically creates a production deployment at https://miaa-football-scenarios.vercel.app.
 
 After you modify the source, commit and push with:
 
@@ -50,4 +50,4 @@ git commit -m "Describe my changes"
 git push origin main
 ```
 
-The current production website was historically deployed directly to Vercel, independent of this GitHub repository.
+**Score verification:** The October 29 finals were cross-checked against published game reports including MaxPreps and the Boston Globe on October 30. These are not an official updated MIAA power-rating release. New weekly MIAA rankings should be verified separately; power ratings calculated after these finals remain projections.
