@@ -56,6 +56,7 @@ def rankings(slug,ndiv):
 def scores(slug,official):
     pdf,url=fetch(f"{slug}-scores")
     games={}
+    observed={}
     bad=[]; date_matches=0; conflicting_capped=[]; conflicts=[]
     with pdf:
         for page in pdf.pages:
@@ -77,6 +78,7 @@ def scores(slug,official):
                     if not a or not b or a==b:raise ValueError("Bad matchup "+line)
                     k=(d,)+tuple(sorted((a,b)))
                     g=[d,a,b,sa,sb,1 if flag else 0]
+                    observed.setdefault(k,[]).append(g)
                     if k in games:
                         old=games[k]
                         if old[1]==a and old[2]==b:ok=(old[3]==sa and old[4]==sb)
@@ -92,10 +94,24 @@ def scores(slug,official):
                             conflicts.append((k,old,g));continue
                         old[5]=max(old[5],g[5])
                     else:games[k]=g
+    # IMPORTANT: one team can play the same opponent *twice on the same date*.
+    # The PDFs list each match under both schools. Don't collapse a doubleheader
+    # into one result just because the date and teams are the same.
+    extras=[]
+    doubleheaders=[]
+    for key,records in observed.items():
+        by_source={}
+        for g in records:by_source.setdefault(g[1],[]).append(g)
+        source=max(by_source.values(),key=len)
+        if len(source)>1:
+            games[key]=source[0]
+            extras.extend(source[1:])
+            doubleheaders.append([key[0],key[1],key[2],len(source)])
+    if doubleheaders:print("Same-day multiple-match fixtures:",repr(doubleheaders[:20]))
     # Resolve inconsistent non-capped scores against the published average
     # capped margin; do not silently assume either team's entry is correct.
     def fitted_margin(team, candidate, lookup_key):
-        season=[candidate if k==lookup_key else g for k,g in games.items()]
+        season=[candidate if k==lookup_key else g for k,g in games.items()]+extras
         played=[g for g in season if g[1]==team or g[2]==team]
         if not played:return None
         margins=[max(-3,min(3,g[3]-g[4]))*(1 if g[1]==team else -1) for g in played]
@@ -124,23 +140,23 @@ def scores(slug,official):
             margin_errors.append([team,round(actual-row[2],4)])
     margin_errors.sort(key=lambda x:abs(x[1]),reverse=True)
     print(" MOV errors >0.001:",len(margin_errors),"largest:",margin_errors[:12])
-    print(f" {slug} scores: {date_matches} PDF rows, {len(games)} unique games; {len(bad)} unscored/unclear lines; {len(conflicting_capped)} equivalent-score discrepancies")
-    if len(games)<400:raise ValueError(f"{slug} contains only {len(games)} games; scoring PDF parse failed")
+    print(f" {slug} scores: {date_matches} PDF rows, {len(games)+len(extras)} unique games; {len(bad)} unscored/unclear lines; {len(conflicting_capped)} equivalent-score discrepancies")
+    if len(games)+len(extras)<400:raise ValueError(f"{slug} contains only {len(games)} games; scoring PDF parse failed")
     if bad:print(" sample unmatched:",repr(bad[:8]))
     if conflicting_capped: print(" capped-equivalent discrepancies:",repr(conflicting_capped[:6]))
-    return sorted(games.values()),url,len(bad),len(conflicting_capped),unresolved,margin_errors
+    return sorted(list(games.values())+extras),url,len(bad),len(conflicting_capped),unresolved,margin_errors,doubleheaders
 
 def main():
     snap={"date":DATE,"generatedAt":datetime.now(timezone.utc).isoformat(),"sports":{}}
     for slug,(title,count) in SPORTS.items():
         ranks,divisions,rank_urls=rankings(slug,count)
-        games,scores_url,unknown,discrepant,conflicts,margin_errors=scores(slug,ranks)
+        games,scores_url,unknown,discrepant,conflicts,margin_errors,doubleheaders=scores(slug,ranks)
         if len(ranks)<100:raise ValueError(f"{slug}: low rank count {len(ranks)}")
         # Official ratings are the baseline; the independent solver's error
         # is separately validated by test scripts. Never assert all 4 decimals match.
         snap["sports"][slug]={"title":title,"cap":3,"divisions":divisions,
             "official":ranks,"games":games,"urls":{"rankings":rank_urls,"scores":scores_url},
-            "unmatchedScoreLines":unknown,"equivalentScoreDiscrepancies":discrepant,"scoreConflicts":conflicts,"marginErrors":margin_errors}
+            "unmatchedScoreLines":unknown,"equivalentScoreDiscrepancies":discrepant,"scoreConflicts":conflicts,"marginErrors":margin_errors,"sameDayMultipleMatches":doubleheaders}
         print(" Total:",slug,len(ranks),"teams,",len(games),"games")
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text("const FALL_DATA="+json.dumps(snap,separators=(",",":"),ensure_ascii=False)+";\n",encoding="utf8")
