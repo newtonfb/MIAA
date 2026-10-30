@@ -34,7 +34,7 @@ function derive(){
   }
 }
 function loadSport(slug){
-  if(!window.FALL_DATA||!FALL_DATA.sports?.[slug])return;
+  if(typeof FALL_DATA==='undefined'||!FALL_DATA.sports?.[slug])return;
   sport=slug;data=FALL_DATA.sports[slug];official=data.official;
   names=[...new Set(data.games.flatMap(g=>[g[1],g[2]]).concat(Object.keys(official)))].sort((a,b)=>a.localeCompare(b));
   try{let p=JSON.parse(localStorage.getItem(origin(slug))||'[]');scenarios=Array.isArray(p)?p.filter(g=>Array.isArray(g)&&g.length===6&&names.includes(g[1])&&names.includes(g[2])&&Number.isInteger(g[3])&&Number.isInteger(g[4])&&!data.games.some(h=>h[0]===g[0]&&[h[1],h[2]].sort().join('|')===[g[1],g[2]].sort().join('|'))):[]}catch{scenarios=[];}
@@ -106,7 +106,7 @@ function error(text){
   const el=$('error');el.className='notice warn';el.textContent=text;
 }
 function boot(){
-  if(!window.FALL_DATA||!FALL_DATA.sports){
+  if(typeof FALL_DATA==='undefined'||!FALL_DATA.sports){
     error('Fall-sports data has not been imported yet. Football is available from the sport bar.');
     $('sportTitle').textContent='Data unavailable';return;
   }
