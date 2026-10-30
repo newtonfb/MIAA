@@ -4,6 +4,7 @@ on:
     branches: [main, 'fix/**']
     paths:
       - 'rating-engine.js'
+      - 'fall.js'
       - 'app.js'
       - 'data/**'
       - 'tests/**'
@@ -28,3 +29,5 @@ jobs:
       - run: node --check rating-engine.js
       - run: node --check app.js
       - run: node --test tests/rating-engine.test.cjs
+      - run: node --check fall.js
+      - run: node --test tests/fall-sports.test.cjs
