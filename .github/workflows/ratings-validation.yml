@@ -1,0 +1,30 @@
+name: Validate football ratings
+on:
+  push:
+    branches: [main, 'fix/**']
+    paths:
+      - 'rating-engine.js'
+      - 'app.js'
+      - 'data/**'
+      - 'tests/**'
+      - '.github/workflows/ratings-validation.yml'
+  pull_request:
+    paths:
+      - 'rating-engine.js'
+      - 'app.js'
+      - 'data/**'
+      - 'tests/**'
+      - '.github/workflows/ratings-validation.yml'
+jobs:
+  ratings:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check rating-engine.js
+      - run: node --check app.js
+      - run: node --test tests/rating-engine.test.cjs

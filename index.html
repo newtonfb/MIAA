@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#1d6b45" name="theme-color"/>
-<meta content="MIAA football power-ranking projections from the October 27 baseline, including locked October 29 final scores and Week 8 scenarios for all divisions." name="description"/>
+<meta content="MIAA football power-ranking projections from the October 30 baseline, including the October 29 results and Week 8 scenarios and Week 8 scenarios for all divisions." name="description"/>
 <title>MIAA Football Power Rankings and Week 8 Predictor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +25,7 @@
    <button class="tab" data-page="about" type="button">About</button>
   </nav>
   <div class="appbar-tools">
-   <span class="chip chip-quiet hide-sm"><span class="dot"></span>Oct 27 ratings + Oct 29 finals</span>
+   <span class="chip chip-quiet hide-sm"><span class="dot"></span>Oct 30 official ratings + new finals</span>
   </div>
  </div>
 </header>
@@ -35,7 +35,7 @@
 <div class="page" id="rankingsPage">
  <section class="hero field">
   <div class="hero-copy">
-   <p class="hero-date" id="heroDate">As of October 27, 2026</p>
+   <p class="hero-date" id="heroDate">As of October 30, 2026</p>
    <h1 class="display">MIAA Football Power Rankings</h1>
    <p class="lede" id="headlineSub">Use this tool to predict the power rankings after Week 8, the final week of the regular season, and see who makes each division's top-16 tournament field.</p>
    <div class="hero-actions">
@@ -112,7 +112,7 @@
   </aside>
  </div>
 
- <p class="subtle"><b>How to read this.</b> MIAA's published October 27 ratings are the starting point. Confirmed Thursday, October 29 results are already included. This is an independent projection, not a new official MIAA ranking. Scores recalculate across all eight divisions, with forfeits excluded from opponent strength and official adjusted ratings used where published. Every team starts from MIAA's published October 27 rating.</p>
+ <p class="subtle"><b>How to read this.</b> The October 30 official MIAA ratings are the starting point. Two additional confirmed Thursday results are included as projections because they missed MIAA's 4 a.m. cutoff. This is an independent projection, not a new official MIAA ranking. Scores recalculate across all eight divisions, with forfeits excluded from opponent strength and official adjusted ratings used where published. Every team starts from MIAA's published October 30 rating.</p>
 </div>
 
 <div class="page hidden" id="bracketPage">
@@ -164,22 +164,22 @@
    <div><dt>Average margin</dt><dd>Each result counts at no more than a 14-point win or 14-point loss. A 35–7 win is treated as +14; a 14–21 loss is −7.</dd></div>
    <div><dt>Opponent rating</dt><dd>The average rating of the teams played. Opponent strength is calculated from the connected statewide schedule, including games against teams from other divisions.</dd></div>
    <div><dt>Power rating</dt><dd>The two values combined. A higher rating means a stronger set of results after adjusting for schedule strength.</dd></div>
-   <div><dt>Change</dt><dd>The difference from that team's October 27 baseline after your entered scores are included.</dd></div>
+   <div><dt>Change</dt><dd>The difference from that team's October 30 baseline after your entered scores are included.</dd></div>
   </dl>
 
   <h2>Forfeits</h2>
   <p>A forfeit counts in the team's win/loss record and capped average margin. For opponent-strength calculations, MIAA instead uses a separate <strong>forfeit-adjusted rating</strong> that excludes the forfeited game's margin. The standings rank the team using its regular rating, <strong>not</strong> its forfeit-adjusted rating. This distinction is applied in this calculator.</p>
 
   <h2>What the calculator uses</h2>
-  <p>The score ledger starts with MIAA's October 27 Arbiter report. Three October 23 results missing at that cutoff were verified later, and one spurious 6–6 result was removed, leaving <strong>907 completed games dated through October 27, including six forfeits</strong>. The October 27 published ratings remain the frozen baseline for calculating changes. The model includes 262 Massachusetts schools in Divisions 1–8, along with out-of-state opponents appearing on the schedule.</p>
-  <p>Every division starts from MIAA's published October 27 ratings. Confirmed October 29 final scores are already applied statewide, so the current projections will differ from the October 27 official rankings even before you enter a scenario. When you enter an unplayed game's score, the calculator estimates how much each team's rating changes and adds that change to its October 27 official rating. The resulting ratings remain unofficial projections until MIAA publishes a new update.</p>
+  <p>The baseline uses all <strong>919 completed results</strong> from the MIAA October 30, 4 a.m. Arbiter report, including seven classified forfeits. It includes every official October 30 rating across 262 Massachusetts football teams in Divisions 1–8, as well as their qualifying out-of-state opponents. The updated release corrected Nashoba Valley Tech–KIPP to 41–6 and identified the Quabbin–Tyngsborough result as a forfeit. Two further confirmed Thursday finals (South Shore–Upper Cape and Winthrop–Salem) are applied to the live projections, but not to the frozen official baseline.</p>
+  <p>Every division starts from the <strong>official October 30 ratings</strong>. The model recomputes the entire statewide opponent network whenever a result changes, and adds those changes to the team's published rating. The two supplemental finals are already projected, so the default view may differ slightly from the published sheet. The resulting projections remain unofficial until MIAA releases the tournament brackets.</p>
 
   <h2>Accuracy and playoff rankings</h2>
-  <p>This is an <strong>independent projection</strong>, not MIAA's official calculator. The published rating formula is known, but MIAA's precise iteration implementation has not been reproduced to the final decimal. This model uses an iterative estimate with a four-decimal stopping threshold and a maximum of 1,000 iterations. Very close teams may change order in official releases.</p>
+  <p>This is an <strong>independent projection</strong>, not MIAA's official calculator. A high-precision conjugate-gradient solver calculates the interconnected power ratings. Against all 262 published October 30 football ratings, the independently computed results differ by no more than <strong>0.0021 rating points</strong> after fitting one shared offset. It reproduces 260 of 262 rank positions; Ware and Wareham are the extremely close exception (0.0006 apart officially). The default official numbers are imported exactly, but scenario results are estimates and especially close rankings can change.</p>
   <p>The top 16 positions in each division indicate the usual tournament ranking cutoff, <strong>not a guaranteed playoff berth</strong>. Teams also generally need three wins and seven eligible games; forfeits may affect eligibility. Official bracket decisions and other exceptions are not determined by this page.</p>
 
   <h2>Using scenarios</h2>
-  <p>Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>MAX</strong> sets the selected team to win 14–0, which gives the maximum positive football margin for rating purposes. <strong>Predict Week 8</strong> fills unentered games across all divisions with deterministic estimates based on October 27 team ratings, points scored, and points allowed. These are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Small differences from the MIAA's iterative calculation may affect extremely close playoff positions. Predictions weigh each team's rating most, then its points scored and allowed, then how both teams did against common opponents. Existing manually entered scores and locked final results are preserved. <strong>Clear predictions</strong> removes only the estimates still marked as predictions. A 🔒 marks a played game that cannot be edited in the simulator.</p>
+  <p>Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>MAX</strong> sets the selected team to win 14–0, which gives the maximum positive football margin for rating purposes. <strong>Predict Week 8</strong> fills unentered games across all divisions with deterministic estimates based on October 30 team ratings, points scored, and points allowed. These are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Very small differences from the MIAA's published figures may affect extremely close playoff positions. Predictions weigh each team's rating most, then its points scored and allowed, then how both teams did against common opponents. Existing manually entered scores and locked final results are preserved. <strong>Clear predictions</strong> removes only the estimates still marked as predictions. A 🔒 marks a played game that cannot be edited in the simulator.</p>
   <p><strong>Brackets</strong> seed the top 16 teams in each division by rating, 1 against 16, 8 against 9, and so on. Later rounds show the higher seed advancing. A warning mark means the team has fewer than 3 wins or 7 games so far.</p>
   <p>Select a team's name or open <strong>Teams</strong> to view all its games and opponents. Results you enter are saved in this browser and can be cleared under <strong>Entered</strong>; they do not sync between devices.</p>
 
@@ -188,7 +188,7 @@
 </div>
 
 <datalist id="teamsList"></datalist>
-<footer class="footer"><span>Independent statewide projections from October 27 MIAA ratings and October 29 confirmed results. Not affiliated with the MIAA.</span></footer>
+<footer class="footer"><span>Independent statewide projections from official October 30 MIAA ratings and two additional October 29 finals. Not affiliated with the MIAA.</span></footer>
 </div>
 <dialog class="intro" id="intro" aria-labelledby="introTitle">
  <div class="intro-head">
@@ -211,6 +211,7 @@
 </dialog>
 <div class="alert" id="alert" role="status" aria-live="polite"></div>
 <script src="data/season-2026.js" defer></script>
+<script src="rating-engine.js" defer></script>
 <script src="app.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,1066 @@
+{
+  "date": "2026-10-30",
+  "source": "MIAA official 2026-10-30 4am release",
+  "official": {
+    "St. John's Prep": [
+      1,
+      27.6303
+    ],
+    "Saint John's": [
+      2,
+      25.8845
+    ],
+    "Central Catholic": [
+      3,
+      22.7329
+    ],
+    "Springfield Central": [
+      4,
+      20.523
+    ],
+    "Wachusett Regional": [
+      5,
+      20.258
+    ],
+    "Xaverian Brothers": [
+      6,
+      17.6253
+    ],
+    "Andover": [
+      7,
+      16.4629
+    ],
+    "Franklin": [
+      8,
+      16.1097
+    ],
+    "Leominster": [
+      9,
+      15.4103
+    ],
+    "Haverhill": [
+      10,
+      11.6167
+    ],
+    "Brockton": [
+      11,
+      11.0588
+    ],
+    "Natick": [
+      12,
+      10.8907
+    ],
+    "New Bedford": [
+      13,
+      10.8038
+    ],
+    "Everett": [
+      14,
+      10.437
+    ],
+    "Methuen": [
+      15,
+      9.0005
+    ],
+    "Shrewsbury": [
+      16,
+      8.5116
+    ],
+    "Boston College High": [
+      17,
+      8.0621
+    ],
+    "Newton North": [
+      18,
+      7.0492
+    ],
+    "Weymouth": [
+      19,
+      6.9392
+    ],
+    "Lowell": [
+      20,
+      6.4335
+    ],
+    "Framingham": [
+      21,
+      4.4971
+    ],
+    "Taunton": [
+      22,
+      4.2144
+    ],
+    "Durfee": [
+      23,
+      4.0199
+    ],
+    "Attleboro": [
+      24,
+      3.2639
+    ],
+    "Acton-Boxborough": [
+      25,
+      3.1493
+    ],
+    "Needham": [
+      26,
+      2.8244
+    ],
+    "Arlington": [
+      27,
+      0.2825
+    ],
+    "Brookline": [
+      28,
+      -1.6157
+    ],
+    "Lawrence": [
+      29,
+      -3.5252
+    ],
+    "Braintree": [
+      30,
+      -5.3698
+    ],
+    "Newton South": [
+      31,
+      -6.7996
+    ],
+    "Belmont": [
+      32,
+      -10.1764
+    ],
+    "Lexington": [
+      33,
+      -13.4369
+    ],
+    "Catholic Memorial": [
+      1,
+      24.1141
+    ],
+    "Bridgewater-Raynham": [
+      2,
+      17.6349
+    ],
+    "Billerica Memorial": [
+      3,
+      15.8424
+    ],
+    "Chelmsford": [
+      4,
+      15.8384
+    ],
+    "Westford Academy": [
+      5,
+      14.6982
+    ],
+    "North Quincy": [
+      6,
+      14.6224
+    ],
+    "Peabody Veterans": [
+      7,
+      13.8791
+    ],
+    "Bishop Feehan": [
+      8,
+      13.6236
+    ],
+    "North Andover": [
+      9,
+      13.3893
+    ],
+    "Quincy": [
+      10,
+      11.1128
+    ],
+    "Lincoln-Sudbury": [
+      11,
+      10.508
+    ],
+    "Winchester": [
+      12,
+      8.9495
+    ],
+    "Algonquin": [
+      13,
+      8.0535
+    ],
+    "Beverly": [
+      14,
+      4.3823
+    ],
+    "Westborough": [
+      15,
+      3.8932
+    ],
+    "Concord-Carlisle": [
+      16,
+      3.8471
+    ],
+    "Woburn Memorial": [
+      17,
+      1.3791
+    ],
+    "Plymouth North": [
+      18,
+      -0.8077
+    ],
+    "Waltham": [
+      19,
+      -2.1077
+    ],
+    "Cambridge Rindge & Lat.": [
+      20,
+      -5.615
+    ],
+    "Wellesley": [
+      21,
+      -5.7315
+    ],
+    "Hopkinton": [
+      22,
+      -6.9895
+    ],
+    "Mansfield": [
+      1,
+      22.6709
+    ],
+    "Milford": [
+      2,
+      20.6159
+    ],
+    "Marshfield": [
+      3,
+      19.669
+    ],
+    "King Philip Regional": [
+      4,
+      19.391
+    ],
+    "Barnstable": [
+      5,
+      16.7228
+    ],
+    "Melrose": [
+      6,
+      16.6352
+    ],
+    "North Attleborough": [
+      7,
+      16.0285
+    ],
+    "Milton": [
+      8,
+      15.4222
+    ],
+    "Minnechaug": [
+      9,
+      9.9633
+    ],
+    "Hingham": [
+      10,
+      9.3817
+    ],
+    "Doherty Memorial": [
+      11,
+      9.2708
+    ],
+    "Silver Lake Regional": [
+      12,
+      8.7123
+    ],
+    "Reading Memorial": [
+      13,
+      8.1233
+    ],
+    "Plymouth South": [
+      14,
+      8.1014
+    ],
+    "Malden Catholic": [
+      15,
+      7.5395
+    ],
+    "Masconomet Regional": [
+      16,
+      6.524
+    ],
+    "Somerville": [
+      17,
+      4.9448
+    ],
+    "Oliver Ames": [
+      18,
+      3.8114
+    ],
+    "Lynn English": [
+      19,
+      1.6019
+    ],
+    "Revere": [
+      20,
+      1.1996
+    ],
+    "Malden": [
+      21,
+      1.1525
+    ],
+    "Whitman-Hanson Reg.": [
+      22,
+      -0.7102
+    ],
+    "Sharon": [
+      23,
+      -2.628
+    ],
+    "Stoughton": [
+      24,
+      -4.4113
+    ],
+    "Lynn Classical": [
+      25,
+      -5.0167
+    ],
+    "West Springfield": [
+      26,
+      -6.6963
+    ],
+    "Boston Latin": [
+      27,
+      -8.1597
+    ],
+    "Agawam": [
+      28,
+      -11.4082
+    ],
+    "Chicopee Comp.": [
+      29,
+      -18.5597
+    ],
+    "Scituate": [
+      1,
+      24.9524
+    ],
+    "Tewksbury Memorial": [
+      2,
+      20.9172
+    ],
+    "Danvers": [
+      3,
+      20.0075
+    ],
+    "Duxbury": [
+      4,
+      18.5949
+    ],
+    "Walpole": [
+      5,
+      14.7501
+    ],
+    "Tantasqua Regional": [
+      6,
+      13.147
+    ],
+    "Grafton": [
+      7,
+      11.3761
+    ],
+    "Shepherd Hill Regional": [
+      8,
+      9.5641
+    ],
+    "Wayland": [
+      9,
+      8.7635
+    ],
+    "Canton": [
+      10,
+      8.5604
+    ],
+    "South High Community": [
+      11,
+      7.714
+    ],
+    "Nashoba Regional": [
+      12,
+      7.3815
+    ],
+    "Westfield": [
+      13,
+      6.966
+    ],
+    "Marblehead": [
+      14,
+      6.466
+    ],
+    "Bedford": [
+      15,
+      5.526
+    ],
+    "Ashland": [
+      16,
+      5.0585
+    ],
+    "Holliston": [
+      17,
+      3.752
+    ],
+    "East Longmeadow": [
+      18,
+      3.6983
+    ],
+    "Wakefield Memorial": [
+      19,
+      3.6554
+    ],
+    "Westwood": [
+      20,
+      1.885
+    ],
+    "Norwood": [
+      21,
+      1.5146
+    ],
+    "Diman RVT": [
+      22,
+      1.0457
+    ],
+    "Whittier RVT": [
+      23,
+      0.5345
+    ],
+    "Burlington": [
+      24,
+      0.1425
+    ],
+    "Middleborough": [
+      25,
+      -0.1832
+    ],
+    "Dartmouth": [
+      26,
+      -0.5193
+    ],
+    "Longmeadow": [
+      27,
+      -1.2511
+    ],
+    "Somerset Berkley Reg.": [
+      28,
+      -4.9932
+    ],
+    "Bristol-Plymouth RVT": [
+      29,
+      -5.0086
+    ],
+    "Essex North Shore": [
+      30,
+      -5.124
+    ],
+    "Amherst-Pelham Reg.": [
+      31,
+      -5.3895
+    ],
+    "Greater New Bedford": [
+      32,
+      -6.9898
+    ],
+    "Newburyport": [
+      33,
+      -8.4177
+    ],
+    "Fitchburg": [
+      34,
+      -8.454
+    ],
+    "Southeastern RVT": [
+      35,
+      -12.1175
+    ],
+    "Northampton": [
+      36,
+      -13.3616
+    ],
+    "Medford": [
+      37,
+      -13.461
+    ],
+    "Shawsheen Valley Tech": [
+      1,
+      17.7198
+    ],
+    "Gloucester": [
+      2,
+      15.7101
+    ],
+    "Watertown": [
+      3,
+      14.7244
+    ],
+    "Swampscott": [
+      4,
+      14.1355
+    ],
+    "St. Mary's": [
+      5,
+      10.3368
+    ],
+    "Northeast Metro RVT": [
+      6,
+      9.1086
+    ],
+    "Greater Lawrence Tech": [
+      7,
+      9.0188
+    ],
+    "Foxborough": [
+      8,
+      8.4564
+    ],
+    "Auburn": [
+      9,
+      7.8391
+    ],
+    "Norton": [
+      10,
+      7.7182
+    ],
+    "Apponequet Regional": [
+      11,
+      6.6748
+    ],
+    "Hanover": [
+      12,
+      5.5103
+    ],
+    "Medfield": [
+      13,
+      5.4148
+    ],
+    "North Reading": [
+      14,
+      4.5908
+    ],
+    "Blackstone Valley RVT": [
+      15,
+      3.8952
+    ],
+    "Pembroke": [
+      16,
+      3.1161
+    ],
+    "Oakmont Regional": [
+      17,
+      1.9829
+    ],
+    "Archbishop Williams": [
+      18,
+      1.6868
+    ],
+    "Greater Lowell Tech": [
+      19,
+      1.646
+    ],
+    "Salem": [
+      20,
+      0.5336
+    ],
+    "Dracut": [
+      21,
+      0.4602
+    ],
+    "Dighton-Rehoboth": [
+      22,
+      -0.3927
+    ],
+    "Weston": [
+      23,
+      -2.1686
+    ],
+    "Marlborough": [
+      24,
+      -3.2108
+    ],
+    "Nauset Regional": [
+      25,
+      -3.9435
+    ],
+    "Dover-Sherborn": [
+      26,
+      -5.0222
+    ],
+    "Groton-Dunstable": [
+      27,
+      -6.6653
+    ],
+    "Bishop Stang": [
+      28,
+      -6.6959
+    ],
+    "Falmouth": [
+      29,
+      -9.2902
+    ],
+    "Holyoke": [
+      30,
+      -11.5696
+    ],
+    "Worcester Tech": [
+      31,
+      -16.0302
+    ],
+    "Montachusett RVT": [
+      32,
+      -17.1036
+    ],
+    "Martha's Vineyard Reg.": [
+      33,
+      -17.5397
+    ],
+    "Chicopee": [
+      34,
+      -18.7156
+    ],
+    "Saugus": [
+      35,
+      -19.2329
+    ],
+    "Ludlow": [
+      36,
+      -23.7558
+    ],
+    "Hudson": [
+      1,
+      16.0891
+    ],
+    "Norwell": [
+      2,
+      14.6531
+    ],
+    "Abington": [
+      3,
+      12.1116
+    ],
+    "Bellingham": [
+      4,
+      10.1239
+    ],
+    "Stoneham": [
+      5,
+      8.2764
+    ],
+    "Fairhaven": [
+      6,
+      6.1894
+    ],
+    "Old Rochester Regional": [
+      7,
+      5.1915
+    ],
+    "Lynnfield": [
+      8,
+      4.6523
+    ],
+    "Dennis-Yarmouth": [
+      9,
+      4.3385
+    ],
+    "Bay Path RVT": [
+      10,
+      1.2849
+    ],
+    "Joseph Case": [
+      11,
+      1.0637
+    ],
+    "Medway": [
+      12,
+      0.6438
+    ],
+    "Wilmington": [
+      13,
+      0.0306
+    ],
+    "Winthrop": [
+      14,
+      -0.2212
+    ],
+    "Belchertown": [
+      15,
+      -5.0056
+    ],
+    "Bishop Fenwick": [
+      16,
+      -5.7101
+    ],
+    "Triton Regional": [
+      17,
+      -6.2969
+    ],
+    "Sandwich": [
+      18,
+      -6.7166
+    ],
+    "Nipmuc Regional": [
+      19,
+      -6.9877
+    ],
+    "Pentucket Regional": [
+      20,
+      -7.8159
+    ],
+    "Assabet Valley RVT": [
+      21,
+      -8.4573
+    ],
+    "East Bridgewater": [
+      22,
+      -9.5107
+    ],
+    "Maynard": [
+      23,
+      -10.1784
+    ],
+    "Nantucket": [
+      24,
+      -11.7045
+    ],
+    "Tri-County RVT": [
+      25,
+      -13.0722
+    ],
+    "Millis": [
+      26,
+      -14.1442
+    ],
+    "Putnam Vo-Tech": [
+      27,
+      -14.4266
+    ],
+    "Cardinal Spellman": [
+      28,
+      -15.4196
+    ],
+    "Arlington Catholic": [
+      29,
+      -15.7788
+    ],
+    "Monomoy": [
+      30,
+      -16.7057
+    ],
+    "Quabbin Regional": [
+      31,
+      -18.8031
+    ],
+    "HS of Commerce": [
+      32,
+      -28.4625
+    ],
+    "Cohasset": [
+      1,
+      7.9126
+    ],
+    "Tyngsborough": [
+      2,
+      5.3758
+    ],
+    "St. Bernard's": [
+      3,
+      4.9594
+    ],
+    "Northbridge": [
+      4,
+      3.2305
+    ],
+    "Rockland": [
+      5,
+      2.2264
+    ],
+    "Wahconah Regional": [
+      6,
+      2.0868
+    ],
+    "Blue Hills RVT": [
+      7,
+      1.2886
+    ],
+    "Leicester": [
+      8,
+      1.2358
+    ],
+    "Millbury": [
+      9,
+      0.7469
+    ],
+    "Mashpee": [
+      10,
+      0.0555
+    ],
+    "Amesbury": [
+      11,
+      -0.6512
+    ],
+    "South Hadley": [
+      12,
+      -0.7203
+    ],
+    "Easthampton": [
+      13,
+      -1.1729
+    ],
+    "West Bridgewater": [
+      14,
+      -2.3571
+    ],
+    "Taconic": [
+      15,
+      -2.7955
+    ],
+    "Gardner": [
+      16,
+      -3.3903
+    ],
+    "South Shore Vo-Tech": [
+      17,
+      -5.3898
+    ],
+    "Burncoat": [
+      18,
+      -6.8782
+    ],
+    "Uxbridge": [
+      19,
+      -7.3381
+    ],
+    "Carver": [
+      20,
+      -8.5573
+    ],
+    "East Boston": [
+      21,
+      -9.236
+    ],
+    "Clinton": [
+      22,
+      -9.5243
+    ],
+    "Seekonk": [
+      23,
+      -9.605
+    ],
+    "Hamilton-Wenham": [
+      24,
+      -9.8293
+    ],
+    "Lowell Catholic": [
+      25,
+      -10.3127
+    ],
+    "Monument Mountain": [
+      26,
+      -11.7175
+    ],
+    "Lunenburg": [
+      27,
+      -13.1345
+    ],
+    "Boston Latin Academy": [
+      28,
+      -14.0598
+    ],
+    "O'Bryant": [
+      29,
+      -16.0791
+    ],
+    "Manchester Essex": [
+      30,
+      -16.5762
+    ],
+    "Chelsea": [
+      31,
+      -18.1247
+    ],
+    "Lee": [
+      1,
+      6.2582
+    ],
+    "Randolph": [
+      2,
+      5.819
+    ],
+    "Nashoba Valley Tech": [
+      3,
+      4.8833
+    ],
+    "Cape Cod RVT": [
+      4,
+      2.2951
+    ],
+    "Hull": [
+      5,
+      -0.349
+    ],
+    "KIPP Academy Lynn Coll.": [
+      6,
+      -1.7714
+    ],
+    "West Boylston": [
+      7,
+      -1.793
+    ],
+    "Blackstone-Millville": [
+      8,
+      -1.9439
+    ],
+    "Lynn Vo-Tech": [
+      9,
+      -2.8041
+    ],
+    "English High": [
+      10,
+      -4.0121
+    ],
+    "Franklin County Tech": [
+      11,
+      -4.3838
+    ],
+    "Oxford": [
+      12,
+      -4.746
+    ],
+    "Keefe Tech": [
+      13,
+      -5.3751
+    ],
+    "Springfield Int'l Charter": [
+      14,
+      -5.9946
+    ],
+    "Bartlett": [
+      15,
+      -6.7836
+    ],
+    "Ware": [
+      16,
+      -8.9958
+    ],
+    "Wareham": [
+      17,
+      -8.9964
+    ],
+    "Cathedral": [
+      18,
+      -9.4159
+    ],
+    "Frontier Regional": [
+      19,
+      -10.1162
+    ],
+    "Narragansett Regional": [
+      20,
+      -10.6139
+    ],
+    "Pathfinder RVT": [
+      21,
+      -11.3788
+    ],
+    "Ayer Shirley": [
+      22,
+      -12.567
+    ],
+    "Upper Cape Cod RVT": [
+      23,
+      -13.1658
+    ],
+    "Smith Vo-Tech": [
+      24,
+      -13.3725
+    ],
+    "Murdock": [
+      25,
+      -13.4974
+    ],
+    "North High": [
+      26,
+      -13.6478
+    ],
+    "Hoosac Valley": [
+      27,
+      -15.0235
+    ],
+    "Old Colony RVT": [
+      28,
+      -15.2043
+    ],
+    "Greenfield": [
+      29,
+      -16.7922
+    ],
+    "Minuteman Regional": [
+      30,
+      -16.8124
+    ],
+    "Tech Boston Academy": [
+      31,
+      -16.954
+    ],
+    "David Prouty": [
+      32,
+      -17.3451
+    ],
+    "Mahar Regional": [
+      33,
+      -17.7727
+    ],
+    "McCann Tech": [
+      34,
+      -17.952
+    ],
+    "Brighton": [
+      35,
+      -18.2929
+    ],
+    "Atlantis Charter": [
+      36,
+      -19.3483
+    ],
+    "Bourne": [
+      37,
+      -19.637
+    ],
+    "Abby Kelley Foster": [
+      38,
+      -23.3015
+    ],
+    "Athol": [
+      39,
+      -25.1035
+    ],
+    "Quaboag Regional": [
+      40,
+      -26.654
+    ],
+    "Southbridge": [
+      41,
+      -28.9415
+    ],
+    "Holbrook": [
+      42,
+      -29.8905
+    ]
+  },
+  "forfeitOpponentAdjustment": {
+    "Gloucester": 15.0434,
+    "Malden": -0.657,
+    "Bellingham": 9.6477,
+    "Millis": -13.1918,
+    "Quabbin Regional": -18.3269,
+    "Winchester": 7.2829,
+    "Tyngsborough": 5.3092,
+    "Taconic": -4.8907,
+    "Monument Mountain": -15.2889,
+    "Manchester Essex": -16.3857
+  }
+}
