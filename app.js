@@ -11,10 +11,15 @@ const divTeams=Object.fromEntries(Array.from({length:8},(_,i)=>[i+1,Object.keys(
 // These are POST-October 27 results; do not fold them into DATA.games or the official baseline.
 const PUBLISHED_FINALS=[["2026-10-29","Lee","Ware",14,46,0],["2026-10-29","Hoosac Valley","Holyoke",8,27,0],["2026-10-29","Quaboag Regional","Smith Vo-Tech",0,36,0],["2026-10-29","Lynn English","Medford",48,21,0],["2026-10-29","Chelsea","Minuteman Regional",23,22,0],["2026-10-29","Upper Cape Cod RVT","South Shore Vo-Tech",8,45,0],["2026-10-29","Winthrop","Salem",42,22,0],["2026-10-29","Cathedral","Archbishop Williams",26,47,0],["2026-10-29","Haverhill","Central Catholic",36,43,0],["2026-10-29","Quincy","Pembroke",41,14,0],["2026-10-29","Blue Hills RVT","Tri-County RVT",30,7,0],["2026-10-29","Milton","Weymouth",27,20,0],["2026-10-29","McCann Tech","Belchertown",0,54,0],["2026-10-29","Springfield Int'l Charter","HS of Commerce",49,6,0]];
 const LOCKED_KEYS=new Set(PUBLISHED_FINALS.map(pairKey));
+const LOCKED_MATCHUPS=new Set(PUBLISHED_FINALS.map(g=>[g[1],g[2]].sort().join('|')));
+function isPublishedWeek8Game(g){return g[0]>='2026-10-27'&&g[0]<='2026-10-31'&&LOCKED_MATCHUPS.has([g[1],g[2]].sort().join('|'))}
+function isPublishedWeek8Key(k){const parts=k.split('|');return parts.length===3&&parts[0]>='2026-10-27'&&parts[0]<='2026-10-31'&&LOCKED_MATCHUPS.has(parts.slice(1).join('|'))}
 const source=new Map(DATA.games.map(g=>[pairKey(g),g]));
+// Remove outdated unplayed Friday placeholders for games completed Thursday.
+for(const [k,g] of source)if(g[3]===null&&g[4]===null&&isPublishedWeek8Game(g))source.delete(k);
 for(const g of PUBLISHED_FINALS)source.set(pairKey(g),g);
 let edits=[];
-try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edits=s.filter(g=>Array.isArray(g)&&g.length===6&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])&&!LOCKED_KEYS.has(pairKey(g)));}catch{}
+try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edits=s.filter(g=>Array.isArray(g)&&g.length===6&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])&&!isPublishedWeek8Game(g));}catch{}
 let selectedDiv=1, activePage='rankings', selectedTeam=Object.keys(DIV).sort((a,b)=>a.localeCompare(b))[0], weekDiv=1;
 function pairKey(g){return g[0]+'|'+[g[1],g[2]].sort().join('|')}
 function validScore(n){return n===null||(Number.isInteger(n)&&n>=0&&n<=999)}
@@ -24,7 +29,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
 const el=id=>document.getElementById(id);
 let alertTimer;
 function toast(s){const x=el('alert');x.textContent=s;x.classList.add('show');clearTimeout(alertTimer);alertTimer=setTimeout(()=>x.classList.remove('show'),3000)}
-function records(){const m=new Map(source);for(const g of edits)if(!LOCKED_KEYS.has(pairKey(g)))m.set(pairKey(g),g);return [...m.values()]}
+function records(){const m=new Map(source);for(const g of edits)if(!isPublishedWeek8Game(g))m.set(pairKey(g),g);return [...m.values()]}
 function compute(games){const N=TEAMS.length, degrees=new Float64Array(N), sums=new Float64Array(N), sumsAll=new Float64Array(N), countAll=new Int32Array(N), forfeitLosses=new Int32Array(N), ws=new Int32Array(N),ls=new Int32Array(N),ties=new Int32Array(N),neighbors=Array.from({length:N},()=>[]),played=[];
 for(const g of games){const [date,a,b,sa,sb,f]=g;if(sa===null||sb===null||!validScore(sa)||!validScore(sb))continue;const ai=IND[a],bi=IND[b];if(ai===undefined||bi===undefined)continue;const m=Math.max(-14,Math.min(14,sa-sb));countAll[ai]++;countAll[bi]++;sumsAll[ai]+=m;sumsAll[bi]-=m;if(sa>sb){ws[ai]++;ls[bi]++}else if(sa<sb){ws[bi]++;ls[ai]++}else{ties[ai]++;ties[bi]++}played.push(g);if(f){if(sa<sb)forfeitLosses[ai]++;else if(sb<sa)forfeitLosses[bi]++;}
 if(!f){degrees[ai]++;degrees[bi]++;sums[ai]+=m;sums[bi]-=m;neighbors[ai].push(bi);neighbors[bi].push(ai)}}
@@ -150,7 +155,7 @@ function wkTime(t){let [h,m]=t.split(':').map(Number);return `${h%12||12}:${Stri
 // This is a transparent ratings model, NOT an online generative AI prediction service.
 const PRED_STORE='miaa-week8-auto-picks-2026-v1';
 let predictedKeys=new Set();
-try{const arr=JSON.parse(localStorage.getItem(PRED_STORE)||'[]');if(Array.isArray(arr))predictedKeys=new Set(arr.filter(x=>typeof x==='string'&&!LOCKED_KEYS.has(x)));}catch{}
+try{const arr=JSON.parse(localStorage.getItem(PRED_STORE)||'[]');if(Array.isArray(arr))predictedKeys=new Set(arr.filter(x=>typeof x==='string'&&!isPublishedWeek8Key(x)));}catch{}
 const seasonPoints={},seasonMargins={};
 for(const g of DATA.games){if(g[3]===null||g[4]===null||!validScore(g[3])||!validScore(g[4])||g[5])continue;
  for(const [team,opp,scored,allowed] of [[g[1],g[2],g[3],g[4]],[g[2],g[1],g[4],g[3]]]){
