@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#153b31"><meta name="description" content="Unofficial MIAA Fall 2026 Power Rankings and What-If Scenarios for field hockey, boys and girls soccer, and volleyball.">
+<title>2026 MIAA Fall Sports Power Rankings</title>
+<link rel="stylesheet" href="fall.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="brand" href="./">MA <b>POWER</b><span>RANKINGS</span></a>
+    <span class="top-right">2026 FALL SEASON <span class="dot"></span> UNOFFICIAL</span>
+  </div>
+</header>
+<main class="shell">
+ <div class="eyebrow">MASSACHUSETTS HIGH SCHOOL ATHLETICS</div>
+ <section class="lead">
+  <div><h1>Fall Sports <span>Power Rankings.</span></h1><p>Official MIAA ratings, independently calculated scenarios. Choose a sport, explore divisions, and see how a new result could change the rankings.</p></div>
+  <div class="asof"><small>OFFICIAL SNAPSHOT</small><b>OCT 30, 2026</b><span>Arbiter 4:00 AM cutoff</span></div>
+ </section>
+ <nav class="sport-nav" aria-label="Select sport">
+  <a class="sport-pill" href="./">🏈 <span>Football</span></a>
+  <button class="sport-pill" data-sport="field-hockey">🏑 <span>Field Hockey</span></button>
+  <button class="sport-pill" data-sport="boys-soccer">⚽ <span>Boys Soccer</span></button>
+  <button class="sport-pill" data-sport="girls-soccer">⚽ <span>Girls Soccer</span></button>
+  <button class="sport-pill" data-sport="volleyball">🏐 <span>Volleyball</span></button>
+ </nav>
+ <div id="error" class="notice hidden" role="alert"></div>
+ <section class="summary-grid" id="summary"></section>
+ <div class="body-grid">
+  <section class="surface">
+   <div class="section-head"><div><p class="section-overline">OFFICIAL RATINGS + SCENARIOS</p><h2 id="sportTitle">Power Rankings</h2></div><label class="switcher-label">Division<select id="division" aria-label="Division"></select></label></div>
+   <div id="warning" class="notice" role="status"></div>
+   <div class="filterbar"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Find a school" aria-label="Search schools"></label><button id="reset" class="small-action" type="button">Clear scenarios</button></div>
+   <div class="table-head"><span>RANK / SCHOOL</span><span>RECORD</span><span>RATING</span></div>
+   <div id="standings" class="standings"></div>
+   <p id="rowsCount" class="fineprint"></p>
+  </section>
+  <aside class="side-stack">
+   <section class="surface aside-surface">
+    <div class="section-head"><div><p class="section-overline">SCENARIO LAB</p><h2>What if they win?</h2></div><span class="beta">PROJECTION</span></div>
+    <p class="small-desc">Enter an upcoming matchup. Both teams and the entire statewide strength-of-schedule network recalculate.</p>
+    <form id="whatif" class="form-stack">
+     <label>Team 1<select id="teamA" required></select></label>
+     <label>Team 2<select id="teamB" required></select></label>
+     <div class="scores"><label>Team 1 score<input id="scoreA" type="number" min="0" max="99" required inputmode="numeric" value="3"></label><label>Team 2 score<input id="scoreB" type="number" min="0" max="99" required inputmode="numeric" value="0"></label></div>
+     <div class="button-row"><button type="submit" class="cta">Add result &amp; recalculate</button><button type="button" id="max" class="small-action">MAX</button></div>
+    </form>
+    <div class="fineprint">MAX sets the score to the sport's margin cap. A 3–0 volleyball result means three sets to none, not points.</div>
+    <div id="scenarios" class="scenario-list"></div>
+   </section>
+   <section class="surface aside-surface">
+    <div class="section-head"><div><p class="section-overline">TEAM DETAILS</p><h2 id="teamTitle">Select a school</h2></div></div>
+    <div id="teamDetails" class="team-details"><p class="small-desc">Tap any school to see its season scores and opponents.</p></div>
+   </section>
+   <section class="source-note"><b>Important:</b> Independent forecasts are not official tournament seeds. The top 32 are generally automatic qualifiers for these sports, with additional .500 or better teams eligible for play-in qualification. Verify cutoffs and corrections with MIAA.<p><a href="https://www.miaa.net/game-day/tournament-central/power-rankings" target="_blank" rel="noopener">Official rankings ↗</a> · <a href="https://www.miaa.net/about-power-ratings" target="_blank" rel="noopener">Formula ↗</a></p></section>
+  </aside>
+ </div>
+</main>
+<footer class="site-footer shell">MA POWER RANKINGS · Independent community tool · Not affiliated with MIAA</footer>
+<script src="data/fall-2026.js" defer></script><script src="rating-engine.js" defer></script><script src="fall.js" defer></script>
+</body>
+</html>
