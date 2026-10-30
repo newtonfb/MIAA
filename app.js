@@ -39,12 +39,21 @@ const shift=total/totalDegree;maxDelta=0;for(let i=0;i<N;i++){if(degrees[i])next
 const out={};for(let i=0;i<N;i++){const own=countAll[i]?sumsAll[i]/countAll[i]:0;const opp=ratings[i]-mean[i];const adjOwn=degrees[i]?mean[i]:own;const adjusted=adjOwn+opp;out[TEAMS[i]]={team:TEAMS[i],division:DIV[TEAMS[i]]||null,w:ws[i],l:ls[i],ties:ties[i],gp:countAll[i],mov:own,opp,raw:own+opp,adjusted,rating:own+opp,nonforfeit:degrees[i],forfeitLosses:forfeitLosses[i]}}
 return {teams:out,iter,played:played.length,convergence:maxDelta}}
 
-const BASE=compute(DATA.games);
+// MIAA's published October 27 ratings reflect only the results Arbiter had at 4 a.m.
+// Three October 23 games were confirmed later. Include them in current records(),
+// but do NOT retroactively include them in the model we compare to the Oct 27 baseline.
+const LATE_RESULTS=new Set([
+  '2026-10-23|Lee|South Hadley',
+  '2026-10-23|Bishop Fenwick|Cathedral',
+  '2026-10-23|KIPP Academy Lynn Coll.|Nashoba Valley Tech'
+]);
+const OFFICIAL_BASE_GAMES=DATA.games.filter(g=>!LATE_RESULTS.has(pairKey(g)));
+const BASE=compute(OFFICIAL_BASE_GAMES);
 const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Object.keys(OFF).length;
 function derive(m){for(const [t,v] of Object.entries(m.teams)){const b=BASE.teams[t];const anchor=OFF[t]?OFF[t][1]:b.raw+offset;v.rating=anchor+(v.raw-b.raw);v.change=v.rating-anchor}return m}
 let MODEL=derive(compute(records()));
 // October 27 ranks, used to show how far a team moves under the user's scenario.
-const BASELINE=derive(compute(DATA.games)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
+const BASELINE=derive(compute(OFFICIAL_BASE_GAMES)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
 const baseDivRank={};
 for(let d=1;d<=8;d++)divTeams[d].map(t=>BASELINE.teams[t]).sort(byRating).forEach((v,i)=>baseDivRank[v.team]=i+1);
 function rec(r){return `${r.w}–${r.l}${r.ties?'–'+r.ties:''}`}
