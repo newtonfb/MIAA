@@ -1,6 +1,6 @@
 # MIAA Football Rankings — 2026
 
-A mobile-friendly, statewide Massachusetts football power-ratings calculator with Week 8 scenario entry. The October 27 data includes 262 Massachusetts schools in Divisions 1–8, plus opponents outside Massachusetts. This is an independent scenario model, **not an official MIAA rankings service**.
+A mobile-friendly, statewide Massachusetts football power-ratings calculator with Week 8 scenario entry. The October 27 data includes 262 Massachusetts schools in Divisions 1–8, plus opponents outside Massachusetts. Three October 23 scores missing from the original Arbiter export were independently verified and added: Lee 52–6 South Hadley, Cathedral 32–28 Bishop Fenwick, and Nashoba Valley Tech 40–12 KIPP Academy Lynn Collegiate. This brings the October 27 baseline to 908 completed games. This is an independent scenario model, **not an official MIAA rankings service**.
 
 ## Open in VS Code (Mac)
 
