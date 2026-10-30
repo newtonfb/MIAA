@@ -53,10 +53,10 @@ def rankings(slug,ndiv):
             print(f" {slug} D{division}: {len(found)} teams")
     return result,divisions,urls
 
-def scores(slug):
+def scores(slug,official):
     pdf,url=fetch(f"{slug}-scores")
     games={}
-    bad=[]; date_matches=0; conflicting_capped=[]
+    bad=[]; date_matches=0; conflicting_capped=[]; conflicts=[]
     with pdf:
         for page in pdf.pages:
             mid=page.width/2
@@ -89,26 +89,58 @@ def scores(slug):
                             cap=lambda x:max(-3,min(3,x))
                             if cap(diff1)==cap(diff2):
                                 conflicting_capped.append([old,g]);continue
-                            raise ValueError(f"Conflicting capped scores: {old} versus {g}")
+                            conflicts.append((k,old,g));continue
                         old[5]=max(old[5],g[5])
                     else:games[k]=g
+    # Resolve inconsistent non-capped scores against the published average
+    # capped margin; do not silently assume either team's entry is correct.
+    def fitted_margin(team, candidate, lookup_key):
+        season=[candidate if k==lookup_key else g for k,g in games.items()]
+        played=[g for g in season if g[1]==team or g[2]==team]
+        if not played:return None
+        margins=[max(-3,min(3,g[3]-g[4]))*(1 if g[1]==team else -1) for g in played]
+        return sum(margins)/len(margins)
+    unresolved=[]
+    for k,old,new in conflicts:
+        trial=[]
+        for proposed in [old,new]:
+            score=0;used=0
+            for t in {old[1],old[2]}:
+                if t not in official:continue
+                predicted=fitted_margin(t,proposed,k)
+                score+=(predicted-official[t][2])**2
+                used+=1
+            trial.append(score if used else float('inf'))
+        if trial[1]<trial[0]:games[k]=new
+        unresolved.append({"date":k[0],"teams":[k[1],k[2]],"candidates":[[old[3],old[4]],[new[3],new[4]]],
+            "chosen":"second" if trial[1]<trial[0] else "first","marginResidual":[round(x,6) if x!=float('inf') else None for x in trial]})
+    if unresolved:print("Non-equivalent reported score conflicts:",repr(unresolved[:12]))
+    # Margin-of-victory consistency is a more meaningful data-quality check
+    # than team count or PDF size. Capture all mismatches for independent audit.
+    margin_errors=[]
+    for team,row in official.items():
+        actual=fitted_margin(team,None,("unmatched",))
+        if actual is not None and abs(actual-row[2])>0.001:
+            margin_errors.append([team,round(actual-row[2],4)])
+    margin_errors.sort(key=lambda x:abs(x[1]),reverse=True)
+    print(" MOV errors >0.001:",len(margin_errors),"largest:",margin_errors[:12])
     print(f" {slug} scores: {date_matches} PDF rows, {len(games)} unique games; {len(bad)} unscored/unclear lines; {len(conflicting_capped)} equivalent-score discrepancies")
     if len(games)<400:raise ValueError(f"{slug} contains only {len(games)} games; scoring PDF parse failed")
     if bad:print(" sample unmatched:",repr(bad[:8]))
     if conflicting_capped: print(" capped-equivalent discrepancies:",repr(conflicting_capped[:6]))
-    return sorted(games.values()),url,len(bad),len(conflicting_capped)
+    return sorted(games.values()),url,len(bad),len(conflicting_capped),unresolved,margin_errors
 
 def main():
     snap={"date":DATE,"generatedAt":datetime.now(timezone.utc).isoformat(),"sports":{}}
     for slug,(title,count) in SPORTS.items():
         ranks,divisions,rank_urls=rankings(slug,count)
-        games,scores_url,unknown,discrepant=scores(slug)
+        games,scores_url,unknown,discrepant,conflicts,margin_errors=scores(slug,ranks)
         if len(ranks)<100:raise ValueError(f"{slug}: low rank count {len(ranks)}")
         # Official ratings are the baseline; the independent solver's error
         # is separately validated by test scripts. Never assert all 4 decimals match.
         snap["sports"][slug]={"title":title,"cap":3,"divisions":divisions,
             "official":ranks,"games":games,"urls":{"rankings":rank_urls,"scores":scores_url},
-            "unmatchedScoreLines":unknown,"equivalentScoreDiscrepancies":discrepant}
+            "unmatchedScoreLines":unknown,"equivalentScoreDiscrepancies":discrepant,"scoreConflicts":conflicts,"marginErrors":margin_errors}
         print(" Total:",slug,len(ranks),"teams,",len(games),"games")
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text("const FALL_DATA="+json.dumps(snap,separators=(",",":"),ensure_ascii=False)+";\n",encoding="utf8")
