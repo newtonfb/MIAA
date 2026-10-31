@@ -44,7 +44,12 @@ const source=new Map();
 for(const g of SD.games){let k=pairKey(g);if(source.has(k)){let i=2;while(source.has(k+'#'+i))i++;k+='#'+i}source.set(k,g)}
 // Remove outdated unplayed placeholders for games completed Thursday.
 for(const [k,g] of source)if(g[3]===null&&g[4]===null&&isPublishedWeek8Game(g))source.delete(k);
-for(const g of PUBLISHED_FINALS){const cur=source.get(pairKey(g));if(!cur||cur[3]===null)source.set(pairKey(g),g)}
+// Hand-entered finals fill gaps only. Once a synced MIAA release has the same two teams within three days
+// (it may log a Friday game as Saturday), MIAA's result is the one that counts.
+const officialPlayed=new Map();
+for(const g of SD.games)if(g[3]!==null){const m=[g[1],g[2]].sort().join('|');(officialPlayed.get(m)||officialPlayed.set(m,[]).get(m)).push(Date.parse(g[0]))}
+const inOfficialLedger=g=>(officialPlayed.get([g[1],g[2]].sort().join('|'))||[]).some(t=>Math.abs(t-Date.parse(g[0]))<=3*864e5);
+for(const g of PUBLISHED_FINALS){const cur=source.get(pairKey(g));if((!cur||cur[3]===null)&&!inOfficialLedger(g))source.set(pairKey(g),g)}
 // A game is locked once a final score exists: MIAA's ledger or a confirmed Thursday final.
 const isLocked=k=>{const g=source.get(k);return !!(g&&g[3]!==null)};
 const PUBLISHED_FINAL_KEYS=new Set(PUBLISHED_FINALS.map(pairKey));

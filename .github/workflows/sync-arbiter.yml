@@ -1,8 +1,11 @@
 name: Sync scores from MIAA Arbiter export
-# Started by the site's Admin > Sync button (api/sync.js) or by hand from the Actions tab.
+# Runs every morning after MIAA's 4 a.m. export, and on demand from the site's Admin > Sync button
+# (api/sync.js) or the Actions tab.
 # Downloads MIAA's newest Arbiter-based PDFs for every sport, validates them, runs the
 # tests, and commits to main only if results changed. Vercel deploys the commit.
 on:
+  schedule:
+    - cron: '15 11 * * *'   # 6:15 a.m. Eastern (7:15 a.m. while daylight time lasts)
   workflow_dispatch:
 concurrency:
   group: sync-arbiter
