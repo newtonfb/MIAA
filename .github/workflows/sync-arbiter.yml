@@ -38,10 +38,13 @@ jobs:
         run: node --test tests/*.test.cjs
       - name: Measure our projection against any new MIAA release
         run: node scripts/accuracy_report.cjs /tmp/previous
+      - name: Archive the release for formula calibration
+        run: python scripts/archive_releases.py --current
       - name: Commit and push if anything changed
         run: |
           git add data/season-2026.js data/fall-2026.js data/live-2026.js
           if [ -f data/accuracy-log.json ]; then git add data/accuracy-log.json; fi
+          git add data/releases
           if git diff --staged --quiet; then
             echo "No new results since the last sync."
             exit 0

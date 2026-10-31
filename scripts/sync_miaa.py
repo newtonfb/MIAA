@@ -79,7 +79,10 @@ def fetch_pdf(url):
 
 
 def as_of_date(text, url):
+    """The release date, or None for an end-of-season release ("FINAL: ... verified by MIAA"), which has no date."""
     m = AS_OF.search(text or "")
+    if not m and re.search(r"\bFINAL\b", text or ""):
+        return None
     if not m:
         raise SyncError("No 'as of' date found in " + url)
     return f"{SEASON}-{MONTHS[m.group(1).lower()]:02d}-{int(m.group(2)):02d}"
@@ -149,7 +152,7 @@ def scores(slug, cap, official, url, cutoff):
                     day, a, sa, b, sb, flag = m.groups()
                     month, dom = map(int, day.split("/"))
                     d = f"{SEASON}-{month:02d}-{dom:02d}"
-                    if d > cutoff:
+                    if cutoff and d > cutoff:
                         continue
                     sa, sb = int(sa), int(sb)
                     if sa > 999 or sb > 999 or not a or not b or a == b:
@@ -168,7 +171,8 @@ def scores(slug, cap, official, url, cutoff):
                         equivalent.append([old, g])  # different raw blowouts, same capped margin
                     else:
                         conflicts.append((k, old, g))
-    if ledger_date != cutoff:
+    # A final release has no date and covers the whole ledger; otherwise the two files must match.
+    if cutoff and ledger_date != cutoff:
         raise SyncError(f"{slug}: score ledger is as of {ledger_date} but rankings are as of {cutoff}")
 
     counts = {}
