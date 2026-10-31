@@ -25,6 +25,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install 'pdfplumber>=0.11,<0.13' 'requests>=2.31,<3'
+      - name: Keep the current release for the accuracy report
+        run: mkdir -p /tmp/previous && cp data/season-2026.js data/fall-2026.js /tmp/previous/
       - name: Download and validate MIAA's newest release
         run: python scripts/sync_miaa.py
       - name: Pull live results from MIAA's scoreboard
@@ -34,9 +36,12 @@ jobs:
           node-version: '22'
       - name: Test the synced data
         run: node --test tests/*.test.cjs
+      - name: Measure our projection against any new MIAA release
+        run: node scripts/accuracy_report.cjs /tmp/previous
       - name: Commit and push if anything changed
         run: |
           git add data/season-2026.js data/fall-2026.js data/live-2026.js
+          if [ -f data/accuracy-log.json ]; then git add data/accuracy-log.json; fi
           if git diff --staged --quiet; then
             echo "No new results since the last sync."
             exit 0

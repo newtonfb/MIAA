@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
-const {calculateRatings}=require('../rating-engine.js');
+const {calculateRatings,miaaLevel}=require('../rating-engine.js');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const DATA=JSON.parse(read('data/season-2026.js').trim().replace(/^const DATA=/,'').replace(/;$/,''));
@@ -42,7 +42,7 @@ test('published finals are applied once, locked, and displace stale local predic
  assert.match(app,/gtag locked">FINAL</);
  assert.match(read('index.html'),/data\/confirmed-final-scores-2026\.js/);
  app=app.replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,'\nglobalThis.__audit={source,BASE,MODEL,PUBLISHED_FINALS,LOCKED_KEYS,POSTPONED_KEYS,edits,isLocked,pairKey,records};');
- const sandbox={DATA,CONFIRMED_FINALS,FALL_DATA:{sports:{}},calculateRatings,
+ const sandbox={DATA,CONFIRMED_FINALS,FALL_DATA:{sports:{}},calculateRatings,miaaLevel,
   location:{search:''},localStorage,URLSearchParams,matchMedia:()=>({matches:true})};
  vm.runInNewContext(app,sandbox,{timeout:60000});
  const state=sandbox.__audit;
@@ -106,7 +106,7 @@ test('historical Hoosac–Hudson NY result is counted once without artificial Ma
  assert.equal(DATA.games.some(g=>key(g)===key(historical[0])),false,'Frozen MIAA snapshot should remain independent');
  const app=read('app.js').replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,'\nglobalThis.__audit={source,BASE,MODEL,PUBLISHED_FINALS,LOCKED_KEYS,isLocked,pairKey,records};');
  function snapshot(data){
-  const context={DATA,CONFIRMED_FINALS:data,FALL_DATA:{sports:{}},calculateRatings,
+  const context={DATA,CONFIRMED_FINALS:data,FALL_DATA:{sports:{}},calculateRatings,miaaLevel,
    location:{search:''},localStorage:{getItem:()=>null,setItem(){}},
    URLSearchParams,matchMedia:()=>({matches:true})};
   vm.runInNewContext(app,context,{timeout:60000});

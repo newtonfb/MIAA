@@ -98,20 +98,24 @@ function records(){const m=new Map(source);for(const g of edits)if(!isPublishedW
 function compute(games){return calculateRatings(games,TEAMS,DIV,CAP)}
 const BASE=compute(SD.games);
 const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Object.keys(OFF).length;
-function derive(m){
- // The Laplacian ratings have an arbitrary additive constant. Adding a previously
- // isolated out-of-state team can shift that constant without changing any actual
- // Massachusetts ratings. Anchor scenario *deltas* to the mean of all published MA
- // teams so a one-game non-MA opponent doesn't create a fictitious statewide swing.
- const officialNames=Object.keys(OFF);
- const gauge=officialNames.reduce((sum,t)=>sum+(m.teams[t].raw-BASE.teams[t].raw),0)/officialNames.length;
+// MIAA's iteration keeps the games-weighted total of adjusted (opponent-use) ratings at zero, so its whole scale
+// moves as results are added. Projections follow that scale: on Oct 27 → Oct 30 football every team landed within
+// 0.0028 of MIAA's release, against 0.032 when the old level was carried forward (and 0.035 holding the MA average).
+// Games MIAA's ledger is known to omit (HISTORICAL_FINALS, e.g. Hoosac–Hudson NY) are left out of the level, so a
+// one-game outside opponent corrects a record without moving anyone's rating.
+const HISTORICAL_DEGREE={};
+for(const g of HISTORICAL_FINALS)if(!g[5])for(const t of [g[1],g[2]])HISTORICAL_DEGREE[t]=(HISTORICAL_DEGREE[t]||0)+1;
+const BASE_LEVEL=miaaLevel(BASE);
+const historicalInSource=()=>HISTORICAL_FINALS.some(g=>source.get(pairKey(g))===g);
+function derive(m,withHistorical=false){
+ const shift=miaaLevel(m,withHistorical?HISTORICAL_DEGREE:{})-BASE_LEVEL;
  for(const [t,v] of Object.entries(m.teams)){
   const b=BASE.teams[t];const anchor=OFF[t]?OFF[t][1]:b.raw+offset;
-  v.rating=anchor+(v.raw-b.raw)-gauge;v.change=v.rating-anchor;
+  v.rating=anchor+(v.raw-b.raw)+shift;v.change=v.rating-anchor;
  }
  return m;
 }
-let MODEL=derive(compute(records()));
+let MODEL=derive(compute(records()),historicalInSource());
 // Official ranks, used to show how far a team moves under the viewer's scenario.
 const BASELINE=derive(compute(SD.games)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
 const baseDivRank={},baseDivSeed={};
@@ -134,7 +138,7 @@ const playoffField=d=>standings(d).filter(r=>r.qualified);
 const ineligibleReason=r=>r.w<3?'Fewer than 3 wins':'Fewer than 7 games';
 // Only ineligible football teams get a note; the playoff-zone bar and the playoff line show everything else.
 const eligibilityTag=r=>FOOTBALL&&!r.eligible?`<span class="team-qualifier is-ineligible" title="${ineligibleReason(r)}">Ineligible for playoffs</span>`:'';
-function recalc(){MODEL=derive(compute(records()));renderRankings(true);renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateFixtureStates();}
+function recalc(){MODEL=derive(compute(records()),historicalInSource());renderRankings(true);renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateFixtureStates();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(edits));localStorage.setItem(PRED_STORE,JSON.stringify([...predictedKeys]));if(!FOOTBALL)localStorage.setItem(FIXTURE_STORE,JSON.stringify(addedFixtures))}catch{}recalc()}
 function renderDivisionTabs(){el('divisions').innerHTML=DIVISIONS.map(d=>`<button type="button" class="division ${selectedDiv===d?'selected':''}" data-div="${d}" aria-pressed="${selectedDiv===d}">D${d}</button>`).join('')}
 

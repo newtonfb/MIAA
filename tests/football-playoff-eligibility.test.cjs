@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
-const {calculateRatings}=require('../rating-engine.js');
+const {calculateRatings,miaaLevel}=require('../rating-engine.js');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const parse=p=>JSON.parse(read(p).trim().replace(/^.*?const (?:DATA|CONFIRMED_FINALS)=/s,'').replace(/;$/,''));
@@ -27,7 +27,7 @@ function setup(){
  script=script.replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,
   '\nglobalThis.__test={standings,renderBracket,renderRankings,renderTeam,renderHeroLine,baseDivSeed,baseDivRank,setTeam(name){selectedTeam=name},setDivision(n){selectedDiv=n;bracketDiv=n}};');
  const globals={
-  DATA,CONFIRMED_FINALS,FALL_DATA:{sports:{}},calculateRatings,
+  DATA,CONFIRMED_FINALS,FALL_DATA:{sports:{}},calculateRatings,miaaLevel,
   location:{search:''},localStorage:{getItem(){return null},setItem(){}},
   URLSearchParams,matchMedia:()=>({matches:true}),document:{getElementById:getElement},
   window:{},console

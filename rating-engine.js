@@ -84,4 +84,12 @@ function calculateRatings(games, teamNames, divisions, marginCap=14) {
   }
   return {teams,iter:iterations,played,convergence};
 }
-if(typeof module!=='undefined' && module.exports) module.exports={calculateRatings};
+// MIAA's iteration keeps the games-weighted total of adjusted (opponent-use) ratings at zero. Our solver pins a
+// different total, so this returns the shift that puts a solution on MIAA's scale. Pass a degree adjustment to leave
+// out games MIAA's ledger omits.
+function miaaLevel(model,omittedDegree={}){
+  let sum=0,games=0;
+  for(const v of Object.values(model.teams)){const n=v.nonforfeit-(omittedDegree[v.team]||0);if(n>0){sum+=v.adjusted*n;games+=n}}
+  return games?-sum/games:0;
+}
+if(typeof module!=='undefined' && module.exports) module.exports={calculateRatings,miaaLevel};

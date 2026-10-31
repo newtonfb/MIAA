@@ -88,3 +88,20 @@ test('a forfeit changes only the two teams own values, not the opponent-strength
   assert.equal(m.teams['Mahar Regional'].w,4);
   assert.equal(m.teams['Franklin County Tech'].forfeitLosses,1);
 });
+
+test('projecting Oct 30 from the Oct 27 release lands within 0.003 of MIAA for every team',()=>{
+  // Oct 27 release, its games and official ratings, kept as a frozen fixture.
+  const prevSrc=fs.readFileSync(path.join(ROOT,'tests/fixtures/football-2026-10-27.js'),'utf8');
+  const PREV=JSON.parse(prevSrc.replace(/^\s*const DATA=/,'').replace(/;\s*$/,''));
+  const {miaaLevel}=require('../rating-engine.js');
+  const played=d=>d.games.filter(g=>g[3]!==null);
+  const teams=[...new Set(played(PREV).concat(played(DATA)).flatMap(g=>[g[1],g[2]]))].sort();
+  const a=calculateRatings(played(PREV),teams,DATA.divisions),b=calculateRatings(played(DATA),teams,DATA.divisions);
+  const shift=miaaLevel(b)-miaaLevel(a);
+  let max=0;
+  for(const [team,[rank,rating]] of Object.entries(official)){
+    const projected=PREV.official[team][1]+(b.teams[team].raw-a.teams[team].raw)+shift;
+    max=Math.max(max,Math.abs(projected-rating));
+  }
+  assert.ok(max<0.003,'max projection error '+max);
+});
