@@ -5,7 +5,8 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {calculateRatings}=require('../rating-engine.js');
 const root=path.resolve(__dirname,'..');
-const js=fs.readFileSync(path.join(root,'data/fall-2026.js'),'utf8').trim();
+// Frozen copy of the Oct 30 release; data/fall-2026.js changes whenever scores are synced.
+const js=fs.readFileSync(path.join(root,'tests/fixtures/fall-2026-10-30.js'),'utf8').trim();
 const data=JSON.parse(js.replace(/^const FALL_DATA=/,'').replace(/;$/,''));
 const keys=['field-hockey','boys-soccer','girls-soccer','volleyball'];
 const limits={

@@ -1,0 +1,41 @@
+name: Sync scores from MIAA Arbiter export
+# Started by the site's Admin > Sync button (api/sync.js) or by hand from the Actions tab.
+# Downloads MIAA's newest Arbiter-based PDFs for every sport, validates them, runs the
+# tests, and commits to main only if results changed. Vercel deploys the commit.
+on:
+  workflow_dispatch:
+concurrency:
+  group: sync-arbiter
+  cancel-in-progress: false
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'pdfplumber>=0.11,<0.13' 'requests>=2.31,<3'
+      - name: Download and validate MIAA's newest release
+        run: python scripts/sync_miaa.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test the synced data
+        run: node --test tests/rating-engine.test.cjs tests/fall-sports.test.cjs tests/current-data.test.cjs
+      - name: Commit and push if anything changed
+        run: |
+          git add data/season-2026.js data/fall-2026.js
+          if git diff --staged --quiet; then
+            echo "No new results since the last sync."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Sync MIAA Arbiter export ($(date -u +%Y-%m-%d))"
+          git push origin HEAD:main

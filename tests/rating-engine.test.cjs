@@ -6,7 +6,8 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {calculateRatings}=require('../rating-engine.js');
 const ROOT=path.resolve(__dirname,'..');
-const source=fs.readFileSync(path.join(ROOT,'data/season-2026.js'),'utf8');
+// Frozen copy of the Oct 30 release; data/season-2026.js changes whenever scores are synced.
+const source=fs.readFileSync(path.join(ROOT,'tests/fixtures/football-2026-10-30.js'),'utf8');
 const DATA=JSON.parse(source.replace(/^\s*const DATA=/,'').replace(/;\s*$/,''));
 const benchmark=JSON.parse(fs.readFileSync(path.join(ROOT,'data/official-oct30-2026.json'),'utf8'));
 const names=[...new Set(DATA.games.flatMap(g=>[g[1],g[2]]))].sort();

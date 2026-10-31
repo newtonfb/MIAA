@@ -4,8 +4,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="#1d6b45" name="theme-color"/>
-<meta content="MIAA football power-ranking projections from the October 30 baseline, including the October 29 results and Week 8 scenarios and Week 8 scenarios for all divisions." name="description"/>
-<title>MIAA Football Power Rankings and Week 8 Predictor</title>
+<meta content="Unofficial MIAA power rankings and playoff predictor for football, field hockey, boys and girls soccer, and volleyball, with projected tournament brackets for every division." name="description"/>
+<title>MIAA Power Rankings and Predictor</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
@@ -14,8 +14,8 @@
 <body>
 <header class="appbar">
  <div class="appbar-inner">
-  <a class="brand" href="./" aria-label="MA HS Football Power Rankings home">
-   <span class="brand-mark" aria-hidden="true"><span>MA HS</span> <span>Football</span></span>
+  <a class="brand" href="./" aria-label="MA HS Power Rankings home">
+   <span class="brand-mark" aria-hidden="true"><span>MA HS</span> <span class="js-sport">Football</span></span>
    <span class="brand-text"><strong>Power Rankings</strong><small>Unofficial 2026 predictor</small></span>
   </a>
   <nav class="navigation" aria-label="Sections">
@@ -23,13 +23,21 @@
    <button class="tab" data-page="bracket" type="button">Brackets</button>
    <button class="tab" data-page="team" type="button">Teams</button>
    <button class="tab" data-page="about" type="button">About</button>
-   <a class="tab sports-link" href="fall.html">Sports</a>
   </nav>
   <div class="appbar-tools">
-   <span class="chip chip-quiet hide-sm"><span class="dot"></span>Oct 30 official ratings + new finals</span>
+   <span class="chip chip-quiet hide-sm"><span class="dot"></span><span>Official ratings as of <span class="js-date">October 30, 2026</span></span></span>
   </div>
  </div>
 </header>
+<nav class="sportbar" aria-label="Sport">
+ <div class="sportbar-inner">
+  <a class="sport-tab" data-sport-link="football" href="./">Football</a>
+  <a class="sport-tab" data-sport-link="field-hockey" href="./?sport=field-hockey">Field hockey</a>
+  <a class="sport-tab" data-sport-link="boys-soccer" href="./?sport=boys-soccer">Boys soccer</a>
+  <a class="sport-tab" data-sport-link="girls-soccer" href="./?sport=girls-soccer">Girls soccer</a>
+  <a class="sport-tab" data-sport-link="volleyball" href="./?sport=volleyball">Volleyball</a>
+ </div>
+</nav>
 
 <div class="shell">
 
@@ -37,16 +45,16 @@
  <section class="hero field">
   <div class="hero-copy">
    <p class="hero-date" id="heroDate">As of October 30, 2026</p>
-   <h1 class="display">MIAA Football Power Rankings</h1>
-   <p class="lede" id="headlineSub">Use this tool to predict the power rankings after Week 8, the final week of the regular season, and see who makes each division's top-16 tournament field.</p>
+   <h1 class="display">MIAA <span class="js-sport">Football</span> Power Rankings</h1>
+   <p class="lede" id="headlineSub"></p>
    <div class="hero-actions">
-    <button class="bttn bttn-lg bttn-flag" id="heroPredict" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Predict Week 8</button>
-    <button class="bttn bttn-lg bttn-white" id="weekJump" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Enter scores myself</button>
+    <button class="bttn bttn-lg bttn-flag" id="heroPredict" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="heroPredictLabel">Predict Week 8</span></button>
+    <button class="bttn bttn-lg bttn-white" id="weekJump" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span id="weekJumpLabel">Enter scores myself</span></button>
    </div>
-   <div class="hero-status"><span class="chip" id="scenarioBadge">14 Thursday finals applied</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Clear scenarios</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
+   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Clear scenarios</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
   </div>
   <div class="hero-line" id="heroLine" aria-live="polite"></div>
-  </section>
+ </section>
 
  <div class="wrap">
   <main class="panel rankingsPanel">
@@ -59,7 +67,7 @@
    </div>
    <div class="subbar">
     <span id="tableMeta"></span>
-    <span class="legend"><span><i class="lg-zone"></i>Top 16</span><span><i class="lg-move">▲</i>Rank change from your scores</span></span>
+    <span class="legend"><span><i class="lg-zone"></i>Top <span class="js-field">16</span></span><span><i class="lg-move">▲</i>Rank change from your scores</span></span>
    </div>
    <div class="table-scroll">
     <table class="rankingTable">
@@ -74,30 +82,40 @@
   <aside class="side" aria-label="Scenario tools">
    <div class="side-card">
     <div class="sideTabs seg seg-full" role="tablist">
-     <button class="sideTab selected" data-side-tab="week8" type="button">Week 8</button>
+     <button class="sideTab selected" data-side-tab="week8" type="button" id="week8Tab">Week 8</button>
      <button class="sideTab" data-side-tab="changes" type="button">Entered <span class="count" id="editBadge">0</span></button>
     </div>
 
     <div class="sideView" id="week8View">
      <div class="weekTools">
-      <div class="weekhead"><div><h2>Week 8 scores</h2><p>Thursday finals are already entered and locked. Enter remaining scores, or select <strong>Predict Week 8</strong> to estimate the rest.</p></div></div>
+      <div class="weekhead"><div><h2 id="weekTitle">Week 8 scores</h2><p id="weekIntro"></p></div></div>
+      <form class="addgame added-games-only" id="addGame" hidden>
+       <div class="addgame-teams">
+        <label><span>Team</span><input class="input" id="addA" list="teamsList" placeholder="Search a team" autocomplete="off"/></label>
+        <label><span>Opponent</span><input class="input" id="addB" list="teamsList" placeholder="Search a team" autocomplete="off"/></label>
+       </div>
+       <div class="addgame-row">
+        <label><span>Date</span><input class="input" id="addDate" type="date"/></label>
+        <button class="bttn primary" type="submit">Add game</button>
+       </div>
+      </form>
       <label class="search search-sm">
        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-       <input aria-label="Search Week 8 matchups" class="input" id="weekSearch" placeholder="Search matchups" type="search"/>
+       <input aria-label="Search matchups" class="input" id="weekSearch" placeholder="Search matchups" type="search"/>
       </label>
       <div class="weekFilters" id="weekFilters"></div>
       <div class="predictionTools">
-       <button type="button" id="predictWeek8" class="bttn bttn-flag predictButton" title="Fill all unentered Week 8 games across every division">
+       <button type="button" id="predictWeek8" class="bttn bttn-flag predictButton" title="Fill every matchup that has no score yet">
         <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Predict Week 8
+        <span id="predictLabel">Predict Week 8</span>
        </button>
        <button type="button" id="clearPredictions" class="bttn" disabled>Clear predictions</button>
       </div>
-      <p class="predictHelp">Confirmed October 29 scores are locked for everyone. Only unplayed games can be predicted or edited.</p>
+      <p class="predictHelp" id="predictHelp"></p>
      </div>
      <div class="weekMeta" id="weekMeta"></div>
      <div class="fixtureList" id="fixtureList"></div>
-     <div class="status-bar">Scores checked against <a href="https://www.maxpreps.com/ma/massachusetts/football/scores/?date=10%2F29%2F2026" rel="noopener noreferrer" target="_blank">MaxPreps</a> and published game reports. 🔒 means a confirmed final. South Shore–Upper Cape's 45–8 result was reported after the October 30, 4 a.m. MIAA report, so this projection includes a result not yet reflected in that official snapshot. Your other scores save in your browser only.</div>
+     <div class="status-bar"><span class="football-only">Scores checked against <a href="https://www.maxpreps.com/ma/massachusetts/football/scores/?date=10%2F29%2F2026" rel="noopener noreferrer" target="_blank">MaxPreps</a> and published game reports. 🔒 means a confirmed final.</span> Official results come from MIAA's Arbiter export as of <span class="js-date">October 30, 2026</span>. Your scores save in this browser only.</div>
     </div>
 
     <div class="sideView hidden" id="changesView">
@@ -113,20 +131,20 @@
   </aside>
  </div>
 
- <p class="subtle"><b>How to read this.</b> The October 30 official MIAA ratings are the starting point. Two additional confirmed Thursday results are included as projections because they missed MIAA's 4 a.m. cutoff. This is an independent projection, not a new official MIAA ranking. Scores recalculate across all eight divisions, with forfeits excluded from opponent strength and official adjusted ratings used where published. Every team starts from MIAA's published October 30 rating.</p>
+ <p class="subtle"><b>How to read this.</b> MIAA's official <span class="js-sport-lower">football</span> ratings as of <span class="js-date">October 30, 2026</span> are the starting point. This is an independent projection, not an official MIAA ranking. Scores recalculate across every division, with forfeits excluded from opponent strength and official adjusted ratings used where published.</p>
 </div>
 
 <div class="page hidden" id="bracketPage">
  <section class="hero hero-compact field">
   <div class="hero-copy">
-   <h1 class="display">Projected brackets</h1>
+   <h1 class="display">Projected <span class="js-sport-lower">football</span> brackets</h1>
    <p class="lede" id="bracketSub"></p>
   </div>
  </section>
  <div class="panel">
   <div class="toolbar">
    <div class="seg" id="bracketDivs" role="group" aria-label="Division"></div>
-   <span class="legend"><span><i class="lg-proj"></i>Later rounds advance the higher seed</span><span><i class="lg-warn">!</i>Under 3 wins or 7 games so far</span></span>
+   <span class="legend"><span><i class="lg-proj"></i>Later rounds advance the higher seed</span><span class="football-only"><i class="lg-warn">!</i>Under 3 wins or 7 games so far</span></span>
   </div>
   <div class="bracket-scroll"><div class="bracket" id="bracket"></div></div>
  </div>
@@ -154,34 +172,36 @@
  <section class="hero hero-compact field">
   <div class="hero-copy">
    <h1 class="display">How the rankings work</h1>
-   <p class="lede">How the ratings are calculated, and what a projected result means.</p>
+   <p class="lede">How MIAA <span class="js-sport-lower">football</span> ratings are calculated, and what a projected result means.</p>
   </div>
  </section>
  <article class="prose">
   <h2>The calculation</h2>
-  <p>MIAA football ratings combine a team's average scoring margin with its opponents' ratings:</p>
+  <p>MIAA ratings combine a team's average scoring margin with its opponents' ratings. Every sport on this site uses the same formula; only the margin cap changes.</p>
   <div class="equation"><span>Power rating</span><i>=</i><span>Avg capped margin</span><i>+</i><span>Avg opponent rating</span></div>
   <dl class="defs">
-   <div><dt>Average margin</dt><dd>Each result counts at no more than a 14-point win or 14-point loss. A 35–7 win is treated as +14; a 14–21 loss is −7.</dd></div>
+   <div><dt>Average margin</dt><dd>Each result counts at no more than a <span class="js-capunit">14-point</span> win or loss. <span id="capExample"></span></dd></div>
    <div><dt>Opponent rating</dt><dd>The average rating of the teams played. Opponent strength is calculated from the connected statewide schedule, including games against teams from other divisions.</dd></div>
    <div><dt>Power rating</dt><dd>The two values combined. A higher rating means a stronger set of results after adjusting for schedule strength.</dd></div>
-   <div><dt>Change</dt><dd>The difference from that team's October 30 baseline after your entered scores are included.</dd></div>
+   <div><dt>Change</dt><dd>The difference from that team's official <span class="js-date">October 30, 2026</span> rating after your entered scores are included.</dd></div>
   </dl>
 
   <h2>Forfeits</h2>
   <p>A forfeit counts in the team's win/loss record and capped average margin. For opponent-strength calculations, MIAA instead uses a separate <strong>forfeit-adjusted rating</strong> that excludes the forfeited game's margin. The standings rank the team using its regular rating, <strong>not</strong> its forfeit-adjusted rating. This distinction is applied in this calculator.</p>
 
   <h2>What the calculator uses</h2>
-  <p>The baseline uses all <strong>919 completed results</strong> from the MIAA October 30, 4 a.m. Arbiter report, including seven classified forfeits. It includes every official October 30 rating across 262 Massachusetts football teams in Divisions 1–8, as well as their qualifying out-of-state opponents. The updated release corrected Nashoba Valley Tech–KIPP to 41–6 and identified the Quabbin–Tyngsborough result as a forfeit. Two further confirmed Thursday finals (South Shore–Upper Cape and Winthrop–Salem) are applied to the live projections, but not to the frozen official baseline.</p>
-  <p>Every division starts from the <strong>official October 30 ratings</strong>. The model recomputes the entire statewide opponent network whenever a result changes, and adds those changes to the team's published rating. The two supplemental finals are already projected, so the default view may differ slightly from the published sheet. The resulting projections remain unofficial until MIAA releases the tournament brackets.</p>
+  <p>The baseline is MIAA's Arbiter export as of <span class="js-date">October 30, 2026</span>: <strong><span class="js-games">919</span> completed results</strong> and the official rating of all <span class="js-teams">262</span> Massachusetts <span class="js-sport-lower">football</span> teams in <span class="js-divisions">8</span> divisions, along with out-of-state opponents. Every team starts from that official rating. The model recomputes the entire statewide opponent network whenever a result changes, and adds those changes to the published rating.</p>
+  <p class="football-only">Two confirmed Thursday finals that missed MIAA's 4 a.m. cutoff (South Shore–Upper Cape and Winthrop–Salem) are applied to the live projections until MIAA's own release includes them.</p>
 
   <h2>Accuracy and playoff rankings</h2>
-  <p>This is an <strong>independent projection</strong>, not MIAA's official calculator. A high-precision conjugate-gradient solver calculates the interconnected power ratings. Against all 262 published October 30 football ratings, the independently computed results differ by no more than <strong>0.0021 rating points</strong> after fitting one shared offset. It reproduces 260 of 262 rank positions; Ware and Wareham are the extremely close exception (0.0006 apart officially). The default official numbers are imported exactly, but scenario results are estimates and especially close rankings can change.</p>
-  <p>The top 16 positions in each division indicate the usual tournament ranking cutoff, <strong>not a guaranteed playoff berth</strong>. Teams also generally need three wins and seven eligible games; forfeits may affect eligibility. Official bracket decisions and other exceptions are not determined by this page.</p>
+  <p>This is an <strong>independent projection</strong>, not MIAA's official calculator. A high-precision solver calculates the interconnected power ratings; against MIAA's published ratings the independently computed results differ by a few thousandths of a rating point at most and keep MIAA's order for all but a handful of nearly tied teams. The default official numbers are imported exactly, but scenario results are estimates and especially close rankings can change.</p>
+  <p>The top <span class="js-field">16</span> positions in each division indicate the usual tournament cutoff, <strong>not a guaranteed berth</strong>. <span class="football-only">Football teams also generally need three wins and seven eligible games; forfeits may affect eligibility.</span><span class="added-games-only" hidden>In field hockey, soccer and volleyball, lower-ranked teams with a .500 record or better can generally still qualify for a preliminary round.</span> Official bracket decisions and other exceptions are not determined by this page.</p>
 
   <h2>Using scenarios</h2>
-  <p>Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>MAX</strong> sets the selected team to win 14–0, which gives the maximum positive football margin for rating purposes. <strong>Predict Week 8</strong> fills unentered games across all divisions with deterministic estimates based on October 30 team ratings, points scored, and points allowed. These are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Very small differences from the MIAA's published figures may affect extremely close playoff positions. Predictions weigh each team's rating most, then its points scored and allowed, then how both teams did against common opponents. Existing manually entered scores and locked final results are preserved. <strong>Clear predictions</strong> removes only the estimates still marked as predictions. A 🔒 marks a played game that cannot be edited in the simulator.</p>
-  <p><strong>Brackets</strong> seed the top 16 teams in each division by rating, 1 against 16, 8 against 9, and so on. Later rounds show the higher seed advancing. A warning mark means the team has fewer than 3 wins or 7 games so far.</p>
+  <p class="football-only">Pick a division to see its standings and Week 8 matchups side by side on desktop, or stacked on phones. Enter both scores on a matchup card to recalculate immediately. <strong>Predict Week 8</strong> fills unentered games with estimates based on team ratings, points scored and allowed, and results against common opponents. A 🔒 marks a played game that cannot be edited.</p>
+  <p class="added-games-only" hidden>MIAA doesn't publish the remaining schedule for these sports, so add each game still to be played under <strong>Games</strong>. Enter both scores to recalculate immediately, or select <strong>Predict all games</strong> to estimate them from team ratings, scoring and common opponents. Volleyball scores are sets won.</p>
+  <p><strong>MAX</strong> gives the selected team a <span class="js-cap">14</span>–0 win, the largest margin that counts. Predictions are automated statistical estimates, <strong>not predictions from an external AI service</strong>, and are not guaranteed outcomes. Scores you type are never overwritten; <strong>Clear predictions</strong> removes only the estimates.</p>
+  <p><strong>Brackets</strong> seed the top <span class="js-field">16</span> teams in each division by rating, the top seed against the last, and so on. Later rounds show the higher seed advancing.</p>
   <p>Select a team's name or open <strong>Teams</strong> to view all its games and opponents. Results you enter are saved in this browser and can be cleared under <strong>Entered</strong>; they do not sync between devices.</p>
 
   <p class="sourceLinks"><strong>Sources</strong><a href="https://www.miaa.net/game-day/tournament-central/power-rankings" target="_blank" rel="noopener noreferrer">MIAA official rankings</a> <a href="https://www.miaa.net/about-power-ratings" target="_blank" rel="noopener noreferrer">MIAA rating explanation</a> <a href="https://www.miaa.net/sites/default/files/2024-05/power-rankings-forfeit-proposal_tmc-approved-022924.pdf" target="_blank" rel="noopener noreferrer">Forfeit adjustment rules</a></p>
@@ -189,16 +209,17 @@
 </div>
 
 <datalist id="teamsList"></datalist>
-<footer class="footer"><span>Independent statewide projections from official October 30 MIAA ratings and two additional October 29 finals. Not affiliated with the MIAA.</span></footer>
+<footer class="footer"><span>Independent projections from official MIAA ratings. Not affiliated with the MIAA.</span><button class="footer-admin" id="adminOpen" type="button">Admin</button></footer>
 </div>
+
 <dialog class="intro" id="intro" aria-labelledby="introTitle">
  <div class="intro-head">
   <p class="intro-date" id="introDate"></p>
   <h2 id="introTitle">Predict the final MIAA power rankings</h2>
-  <p>Week 8 is the last week before the tournament, and the top 16 in each division make the field. Choose how to fill in <span id="introCount">Week 8</span>.</p>
+  <p id="introBody"></p>
   <button class="intro-close" type="button" data-intro="browse" aria-label="Close">×</button>
  </div>
- <div class="intro-choices">
+ <div class="intro-choices football-only">
   <button class="choice choice-predict" type="button" data-intro="predict" autofocus>
    <strong>Predict Week 8 for me</strong>
    <span>Estimate the remaining games from ratings and team performance. You can change predictions; confirmed final scores remain locked.</span>
@@ -208,10 +229,37 @@
    <span>Type scores into the Week 8 matchups. Rankings, the playoff line and brackets update as you type.</span>
   </button>
  </div>
- <div class="intro-foot"><button class="bttn ghost sml" type="button" data-intro="browse">Just view projected rankings</button><span>Scores you enter stay in this browser.</span></div>
+ <div class="intro-choices added-games-only" hidden>
+  <button class="choice choice-predict" type="button" data-intro="add">
+   <strong>Add the games left to play</strong>
+   <span>Pick two teams and a date, then type the score or let the predictor estimate it from ratings and common opponents.</span>
+  </button>
+  <button class="choice" type="button" data-intro="bracket">
+   <strong>See the projected brackets</strong>
+   <span>View the top-32 field for every division as the official ratings stand today.</span>
+  </button>
+ </div>
+ <div class="intro-foot"><button class="bttn ghost sml" type="button" data-intro="browse">Just view the rankings</button><span>Scores you enter stay in this browser.</span></div>
+</dialog>
+
+<dialog class="admin" id="admin" aria-labelledby="adminTitle">
+ <form id="adminForm" class="admin-body">
+  <h2 id="adminTitle">Sync scores from Arbiter</h2>
+  <p>Downloads MIAA's newest Arbiter export for every sport, checks every team's record and margin against MIAA's published rankings, and publishes the update only if everything matches. It takes about two minutes.</p>
+  <h3>Current official data</h3>
+  <ul class="admin-data" id="adminData"></ul>
+  <label class="admin-key"><span>Admin key</span><input class="input" id="adminKey" type="password" autocomplete="current-password" required/></label>
+  <p class="admin-status" id="adminStatus" role="status" aria-live="polite"></p>
+  <div class="admin-actions">
+   <a class="bttn ghost" id="adminLog" target="_blank" rel="noopener noreferrer" hidden>Open run log</a>
+   <button class="bttn" type="button" id="adminClose">Close</button>
+   <button class="bttn primary" id="adminRun" type="submit">Sync now</button>
+  </div>
+ </form>
 </dialog>
 <div class="alert" id="alert" role="status" aria-live="polite"></div>
 <script src="data/season-2026.js" defer></script>
+<script src="data/fall-2026.js" defer></script>
 <script src="rating-engine.js" defer></script>
 <script src="app.js" defer></script>
 </body>
