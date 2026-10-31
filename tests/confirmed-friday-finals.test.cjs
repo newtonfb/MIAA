@@ -47,9 +47,9 @@ test('published finals are applied once, locked, and displace stale local predic
  vm.runInNewContext(app,sandbox,{timeout:60000});
  const state=sandbox.__audit;
  assert.equal(state.BASE.played,919);
- assert.equal(state.PUBLISHED_FINALS.length,125);
- assert.equal(state.LOCKED_KEYS.size,125);
- assert.equal(state.MODEL.played,1032);
+ assert.equal(state.PUBLISHED_FINALS.length,126);
+ assert.equal(state.LOCKED_KEYS.size,126);
+ assert.equal(state.MODEL.played,1033);
  assert.equal(state.edits.length,0, 'Old user prediction for a confirmed game must be discarded');
  for(const g of CONFIRMED_FINALS.games){
   const actual=state.source.get(key(g));
@@ -97,4 +97,39 @@ test('published finals are applied once, locked, and displace stale local predic
  assert.equal(state.MODEL.teams['Greenfield'].l,5);
  assert.deepEqual([...state.source.get('2026-10-30|Franklin County Tech|Mahar Regional')],['2026-10-30','Mahar Regional','Franklin County Tech',6,36,0]);
  assert.deepEqual([...state.source.get('2026-10-30|Athol|Greenfield')],['2026-10-30','Athol','Greenfield',0,26,0]);
+});
+
+test('historical Hoosac–Hudson NY result is counted once without artificial Massachusetts rating shifts',()=>{
+ const historical=CONFIRMED_FINALS.historical;
+ assert.equal(historical.length,1);
+ assert.deepEqual(historical[0],['2026-10-16','Hoosac Valley','Hudson (N.Y.)',0,32,0]);
+ assert.equal(DATA.games.some(g=>key(g)===key(historical[0])),false,'Frozen MIAA snapshot should remain independent');
+ const app=read('app.js').replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,'\nglobalThis.__audit={source,BASE,MODEL,PUBLISHED_FINALS,LOCKED_KEYS,isLocked,pairKey,records};');
+ function snapshot(data){
+  const context={DATA,CONFIRMED_FINALS:data,FALL_DATA:{sports:{}},calculateRatings,
+   location:{search:''},localStorage:{getItem:()=>null,setItem(){}},
+   URLSearchParams,matchMedia:()=>({matches:true})};
+  vm.runInNewContext(app,context,{timeout:60000});
+  return context.__audit;
+ }
+ const original=snapshot({...CONFIRMED_FINALS,historical:[]});
+ const corrected=snapshot(CONFIRMED_FINALS);
+ const k=key(historical[0]);
+ assert.equal(original.MODEL.played,1032);
+ assert.equal(corrected.MODEL.played,1033);
+ assert.equal(corrected.BASE.played,919);
+ assert.equal(original.MODEL.teams['Hoosac Valley'].gp,7);
+ assert.equal(corrected.MODEL.teams['Hoosac Valley'].gp,8);
+ assert.equal(corrected.MODEL.teams['Hoosac Valley'].l,8);
+ assert.equal(corrected.MODEL.teams['Hoosac Valley'].w,0);
+ assert.deepEqual([...corrected.source.get(k)],[...historical[0]]);
+ assert.equal(corrected.LOCKED_KEYS.has(k),true,'Historical final should show FINAL badge');
+ assert.equal(corrected.isLocked(k),true,'Historical final must be immutable');
+ assert.equal(corrected.records().filter(g=>key(g)===k).length,1);
+ // Hudson is an out-of-state degree-one opponent: this extra game corrects the
+ // Hoosac record but should not invent statewide rating changes.
+ for(const team of Object.keys(DATA.official)){
+  assert.ok(Math.abs(corrected.MODEL.teams[team].rating-original.MODEL.teams[team].rating)<1e-7,
+   team+' gained a phantom rating delta');
+ }
 });
