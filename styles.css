@@ -590,3 +590,6 @@ button.slot:hover{background:var(--surface-2)}
  .fixture-score{width:46px}
  .max-win{padding:0 6px}
 }
+
+/* Confirmed nonfinal scheduling status must remain distinct from a finished game. */
+.fixtureStatus.postponed,.gtag.postponed{color:#8a5b18;background:#fff4d9;border:1px solid #f4d99c;font-weight:750;letter-spacing:.02em}
