@@ -95,13 +95,13 @@ test('Projected bracket, bubble, hero, and both ranking views use eligible field
  const methuen=desktop.split('</tr>').find(x=>x.includes('Methuen'));
  const weymouth=desktop.split('</tr>').find(x=>x.includes('Weymouth'));
  assert.ok(bc);assert.ok(methuen);assert.ok(weymouth);
- assert.match(bc,/INELIGIBLE/);assert.doesNotMatch(bc,/class="playoff-zone"/);
- assert.match(methuen,/INELIGIBLE/);
- assert.match(weymouth,/PLAYOFF SEED 16/);assert.match(weymouth,/class="playoff-zone"/);
+ assert.match(bc,/Ineligible for playoffs/);assert.doesNotMatch(bc,/class="playoff-zone"/);
+ assert.match(methuen,/Ineligible for playoffs/);
+ assert.doesNotMatch(weymouth,/PLAYOFF SEED/);assert.match(weymouth,/class="playoff-zone"/);
  assert.match(desktop,/Below last qualifying seed/);
  const mobile=a.el('mobileRankingsBody').innerHTML;
- assert.match(mobile,/Boston College High[\s\S]*?INELIGIBLE/);
- assert.match(mobile,/Weymouth[\s\S]*?PLAYOFF SEED 16/);
+ assert.match(mobile,/Boston College High[\s\S]*?Ineligible for playoffs/);
+ assert.match(mobile,/class="mrow playoff-zone"[^>]*data-row="Weymouth"/);
  const hero=a.el('heroLine').innerHTML;
  assert.match(hero,/Weymouth/);assert.match(hero,/Newton North/);
  assert.doesNotMatch(hero,/Boston College High/);

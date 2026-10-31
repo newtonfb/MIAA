@@ -101,8 +101,9 @@ function standings(d,model=MODEL){
  });
 }
 const playoffField=d=>standings(d).filter(r=>r.qualified);
-const eligibilityLabel=r=>r.qualified?`PLAYOFF SEED ${r.seed}`:!r.eligible?`INELIGIBLE · ${r.w<3?'FEWER THAN 3 WINS':'FEWER THAN 7 GAMES'}`:'OUTSIDE PLAYOFF FIELD';
-const eligibilityTag=r=>FOOTBALL?`<span class="team-qualifier ${r.qualified?'is-seed':!r.eligible?'is-ineligible':'is-out'}">${eligibilityLabel(r)}</span>`:'';
+const ineligibleReason=r=>r.w<3?'Fewer than 3 wins':'Fewer than 7 games';
+// Only ineligible football teams get a note; the playoff-zone bar and the playoff line show everything else.
+const eligibilityTag=r=>FOOTBALL&&!r.eligible?`<span class="team-qualifier is-ineligible" title="${ineligibleReason(r)}">Ineligible for playoffs</span>`:'';
 function recalc(){MODEL=derive(compute(records()));renderRankings(true);renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateFixtureStates();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(edits));localStorage.setItem(PRED_STORE,JSON.stringify([...predictedKeys]));if(!FOOTBALL)localStorage.setItem(FIXTURE_STORE,JSON.stringify(addedFixtures))}catch{}recalc()}
 function renderDivisionTabs(){el('divisions').innerHTML=DIVISIONS.map(d=>`<button type="button" class="division ${selectedDiv===d?'selected':''}" data-div="${d}" aria-pressed="${selectedDiv===d}">D${d}</button>`).join('')}
