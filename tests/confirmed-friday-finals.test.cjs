@@ -12,12 +12,12 @@ const CONFIRMED_FINALS=JSON.parse(read('data/confirmed-final-scores-2026.js').tr
 const key=g=>g[0]+'|'+[g[1],g[2]].sort().join('|');
 const officialKeys=new Set(DATA.games.map(key));
 const friday=DATA.games.filter(g=>g[0]==='2026-10-30');
-test('Friday supplemental scores: distinct, published, and tied to scheduled October 30 fixtures',()=>{
+test('Week 8 supplemental scores: distinct, published, and tied to scheduled fixtures',()=>{
  assert.equal(CONFIRMED_FINALS.date,'2026-10-30');
- assert.equal(CONFIRMED_FINALS.games.length,112);
+ assert.equal(CONFIRMED_FINALS.games.length,113);
  const seen=new Set();
  for(const g of CONFIRMED_FINALS.games){
-  assert.equal(g[0],'2026-10-30');
+  assert.ok(g[0]>='2026-10-29'&&g[0]<='2026-10-31','Supplemental finals must be Week 8 games: '+key(g));
   assert.equal(g.length,6);
   assert.ok(g[5]===0||g[5]===1,'Invalid forfeit flag');
   assert.ok(Number.isInteger(g[3])&&Number.isInteger(g[4])&&g[3]>=0&&g[4]>=0);
@@ -47,9 +47,9 @@ test('published finals are applied once, locked, and displace stale local predic
  vm.runInNewContext(app,sandbox,{timeout:60000});
  const state=sandbox.__audit;
  assert.equal(state.BASE.played,919);
- assert.equal(state.PUBLISHED_FINALS.length,127);
- assert.equal(state.LOCKED_KEYS.size,127);
- assert.equal(state.MODEL.played,1034);
+ assert.equal(state.PUBLISHED_FINALS.length,128);
+ assert.equal(state.LOCKED_KEYS.size,128);
+ assert.equal(state.MODEL.played,1035);
  assert.equal(state.edits.length,0, 'Old user prediction for a confirmed game must be discarded');
  for(const g of CONFIRMED_FINALS.games){
   const actual=state.source.get(key(g));
@@ -115,8 +115,8 @@ test('historical Hoosac–Hudson NY result is counted once without artificial Ma
  const original=snapshot({...CONFIRMED_FINALS,historical:[]});
  const corrected=snapshot(CONFIRMED_FINALS);
  const k=key(historical[0]);
- assert.equal(original.MODEL.played,1033);
- assert.equal(corrected.MODEL.played,1034);
+ assert.equal(original.MODEL.played,1034);
+ assert.equal(corrected.MODEL.played,1035);
  assert.equal(corrected.BASE.played,919);
  assert.equal(original.MODEL.teams['Hoosac Valley'].gp,7);
  assert.equal(corrected.MODEL.teams['Hoosac Valley'].gp,8);
