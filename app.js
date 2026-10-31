@@ -381,8 +381,7 @@ function addFixture(){
  focusFixture(fixtureKey(f));toast(`Added ${a} vs ${b}.`);
 }
 
-// First-visit chooser. Dismissal is remembered per browser and per sport.
-const INTRO_KEY=store('miaa-intro-seen-v1');
+// Optional help dialog, opened only when the visitor selects “How this works”.
 function scrollToEl(node){node.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'start'})}
 function openIntro(){const d=el('intro');if(d.open||typeof d.showModal!=='function')return;
  const n=unscoredFixtures().length;
@@ -465,19 +464,6 @@ function initInstall(){
   b.addEventListener('click',()=>{if(typeof prompt?.showDialog==='function')prompt.showDialog(true);else toast('Use your browser menu to add this site to your home screen.')});
  }
 }
-// Offer the install prompt on its own once a week at most: after the first-visit intro closes,
-// or shortly after load for returning visitors. Never inside the installed app or over another dialog.
-const INSTALL_PROMPTED='miaa-install-prompted';
-function scheduleInstallPrompt(){
- const prompt=document.querySelector('pwa-install');
- if(!prompt||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)return;
- let last=0;try{last=Number(localStorage.getItem(INSTALL_PROMPTED))||0}catch{}
- if(Date.now()-last<7*864e5)return;
- const show=()=>{if(document.querySelector('dialog[open]')||typeof prompt.showDialog!=='function')return;
-  prompt.showDialog(true);try{localStorage.setItem(INSTALL_PROMPTED,String(Date.now()))}catch{}};
- if(el('intro').open)el('intro').addEventListener('close',()=>setTimeout(show,900),{once:true});
- else setTimeout(show,2000);
-}
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
@@ -499,7 +485,6 @@ function initFixtures(){
  el('weekJump').addEventListener('click',()=>{if(FOOTBALL){jumpToWeek8();return}if(predictAll())scrollToEl(document.querySelector('.wrap'))});
  el('heroReset').addEventListener('click',reset);
  el('openIntro').addEventListener('click',openIntro);
- el('intro').addEventListener('close',()=>{try{localStorage.setItem(INTRO_KEY,'1')}catch{}});
  // Close on a backdrop click only: the press and release must both land outside the dialog box,
  // so scrollbar drags and text selections that end on the dialog don't dismiss it.
  for(const d of [el('intro'),el('admin')]){
@@ -514,9 +499,6 @@ function initFixtures(){
    else if(b.dataset.intro==='enter'||b.dataset.intro==='add')jumpToWeek8();
    else if(b.dataset.intro==='bracket')switchPage('bracket');
  });
- let seen=false;try{seen=localStorage.getItem(INTRO_KEY)==='1'}catch{}
- if(!seen&&!edits.length)openIntro();
- scheduleInstallPrompt();
  const tabs=document.querySelector('.sideTabs');tabs.addEventListener('click',e=>{const b=e.target.closest('[data-side-tab]');if(!b)return;const name=b.dataset.sideTab;tabs.querySelectorAll('.sideTab').forEach(x=>x.classList.toggle('selected',x===b));for(const n of ['week8','changes'])el(n+'View').classList.toggle('hidden',name!==n)});
  el('predictWeek8').addEventListener('click',predictAll);el('clearPredictions').addEventListener('click',clearAllPredictions);
  el('weekSearch').addEventListener('input',renderFixtures);
