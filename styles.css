@@ -390,6 +390,14 @@ button.slot:hover{background:var(--surface-2)}
 .slot.is-proj{background:repeating-linear-gradient(135deg,transparent 0 6px,var(--surface-2) 6px 7px)}
 .slot.is-proj .slot-name,.slot.is-proj .slot-rate{color:var(--muted);font-weight:500}
 .slot.is-empty{color:var(--faint)}
+/* Bracket title: part of the panel so it appears in any screenshot of the bracket. */
+.bracket-title{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 20px 4px;border-top:1px solid var(--line)}
+.bracket-title h2{font-size:clamp(22px,2.6vw,30px);font-weight:850;font-stretch:125%;letter-spacing:-.03em;line-height:1.05}
+.bracket-title p{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.bracket-credit{display:flex;flex-direction:column;align-items:flex-end;text-align:right;margin:0!important}
+.bracket-credit strong{font-size:12.5px;font-weight:800;font-stretch:112%;color:#0a2350;text-transform:uppercase;letter-spacing:.02em}
+.bracket-credit span{font-size:12px;color:var(--muted)}
+.bracket-title+.bracket-scroll{border-top:0}
 /* Later rounds stay empty until games are played, ready to fill in and share. */
 .slot.is-blank{background:var(--surface)}
 
