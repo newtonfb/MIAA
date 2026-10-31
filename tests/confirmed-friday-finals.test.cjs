@@ -19,7 +19,7 @@ test('Friday supplemental scores: distinct, published, and tied to scheduled Oct
  for(const g of CONFIRMED_FINALS.games){
   assert.equal(g[0],'2026-10-30');
   assert.equal(g.length,6);
-  assert.equal(g[5],0);
+  assert.ok(g[5]===0||g[5]===1,'Invalid forfeit flag');
   assert.ok(Number.isInteger(g[3])&&Number.isInteger(g[4])&&g[3]>=0&&g[4]>=0);
   assert.ok(officialKeys.has(key(g)), 'Missing Arbiter matchup '+key(g));
   assert.ok(!seen.has(key(g)), 'Duplicate published Friday final '+key(g));
@@ -38,7 +38,7 @@ test('published finals are applied once, locked, and displace stale local predic
   setItem(){}
  };
  let app=read('app.js');
- assert.match(app,/lab\.textContent=locked\?'FINAL'/);
+ assert.match(app,/lab\.textContent=locked\?\(g\[5\]/);
  assert.match(app,/gtag locked">FINAL</);
  assert.match(read('index.html'),/data\/confirmed-final-scores-2026\.js/);
  app=app.replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,'\nglobalThis.__audit={source,BASE,MODEL,PUBLISHED_FINALS,LOCKED_KEYS,edits,isLocked,pairKey,records};');
