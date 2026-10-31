@@ -70,13 +70,25 @@ function derive(m){for(const [t,v] of Object.entries(m.teams)){const b=BASE.team
 let MODEL=derive(compute(records()));
 // Official ranks, used to show how far a team moves under the viewer's scenario.
 const BASELINE=derive(compute(SD.games)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
-const baseDivRank={};
-for(const d of DIVISIONS)divTeams[d].map(t=>BASELINE.teams[t]).sort(byRating).forEach((v,i)=>baseDivRank[v.team]=i+1);
+const baseDivRank={},baseDivSeed={};
+for(const d of DIVISIONS)for(const r of standings(d,BASELINE)){baseDivRank[r.team]=r.rank;baseDivSeed[r.team]=r.seed;}
 function rec(r){return `${r.w}–${r.l}${r.ties?'–'+r.ties:''}`}
 function moveTag(now,before){const d=before-now;return d?`<span class="move ${d>0?'up':'down'}" title="${d>0?'Up':'Down'} ${Math.abs(d)} since ${shortDate(SD_DATE)}">${Math.abs(d)}</span>`:''}
 function deltaTag(c){return Math.abs(c)<0.00001?'<span class="delta-none">—</span>':`<span class="delta ${c>0?'pos':'neg'}">${signed(c)}</span>`}
-// Football needs 3 wins and 7 games; the other sports seed their top 32 without a minimum.
-function standings(d){return divTeams[d].map(t=>MODEL.teams[t]).sort((a,b)=>b.rating-a.rating||a.team.localeCompare(b.team)).map((v,i)=>({...v,rank:i+1,eligible:!FOOTBALL||v.w>=3&&v.gp-v.forfeitLosses>=7}))}
+// 2026 MIAA football: skip teams with fewer than three wins or seven competed
+// games, then promote the next eligible team by power-rating order into each seed.
+// A published rating rank and a tournament seed are separate concepts.
+function standings(d,model=MODEL){
+ let nextSeed=0;
+ return divTeams[d].map(t=>model.teams[t]).sort(byRating).map((v,i)=>{
+  const eligible=!FOOTBALL||(v.w>=3&&v.gp-(v.forfeitLosses||0)>=7);
+  const seed=eligible&&nextSeed<FIELD?++nextSeed:null;
+  return {...v,rank:i+1,eligible,seed,qualified:seed!==null};
+ });
+}
+const playoffField=d=>standings(d).filter(r=>r.qualified);
+const eligibilityLabel=r=>r.qualified?`PLAYOFF SEED ${r.seed}`:!r.eligible?`INELIGIBLE · ${r.w<3?'FEWER THAN 3 WINS':'FEWER THAN 7 GAMES'}`:'OUTSIDE PLAYOFF FIELD';
+const eligibilityTag=r=>FOOTBALL?`<span class="team-qualifier ${r.qualified?'is-seed':!r.eligible?'is-ineligible':'is-out'}">${eligibilityLabel(r)}</span>`:'';
 function recalc(){MODEL=derive(compute(records()));renderRankings(true);renderEdits();if(activePage==='team')renderTeam();if(activePage==='bracket')renderBracket();updateFixtureStates();}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(edits));localStorage.setItem(PRED_STORE,JSON.stringify([...predictedKeys]));if(!FOOTBALL)localStorage.setItem(FIXTURE_STORE,JSON.stringify(addedFixtures))}catch{}recalc()}
 function renderDivisionTabs(){el('divisions').innerHTML=DIVISIONS.map(d=>`<button type="button" class="division ${selectedDiv===d?'selected':''}" data-div="${d}" aria-pressed="${selectedDiv===d}">D${d}</button>`).join('')}
@@ -97,16 +109,18 @@ function flipRows(containers,render){
  }
 }
 function scoredCount(){return schedule().filter(r=>{const g=fixtureScore(r);return g&&g[3]!==null&&g[4]!==null}).length}
-function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody'),el('mobileRankingsBody')],()=>renderRankings());return}renderDivisionTabs();let rows=standings(selectedDiv);const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q));
- const showCut=!q;
- el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} in Division ${selectedDiv}`;
- el('rankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.rank<=FIELD?'playoff-zone':'',move=moveTag(r.rank,baseDivRank[r.team]);
-  return `${showCut&&r.rank===FIELD+1?'<tr class="cutrow"><td colspan="7"><div class="cutline-label"><span>Playoff line</span></div></td></tr>':''}<tr class="${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span></span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
- el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.rank<=FIELD?'playoff-zone':'',move=moveTag(r.rank,baseDivRank[r.team]);
-  return `${showCut&&r.rank===FIELD+1?'<div class="mcut"><span>Playoff line</span></div>':''}<div class="mrow ${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><span class="mrank"><span class="rank">${r.rank}</span>${move}</span><button type="button" class="mteam" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span><span class="team-sub"><span>${rec(r)}</span><span>Margin ${signed(r.mov,1)}</span><span>Opp ${signed(r.opp,1)}</span></span></span></button><span class="mrating"><b>${signed(r.rating)}</b>${deltaTag(r.change)}</span></div>`}).join(''):'<div class="empty">No teams match your search.</div>';
+function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody'),el('mobileRankingsBody')],()=>renderRankings());return}renderDivisionTabs();
+ const all=standings(selectedDiv),lastSeed=all.filter(r=>r.qualified).at(-1);
+ let rows=all;const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q));
+ const showCut=!q,cutRank=lastSeed?.rank;
+ el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} in Division ${selectedDiv} · ${all.filter(r=>r.qualified).length} projected playoff seeds`;
+ el('rankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.qualified?'playoff-zone':!r.eligible?'ineligible-row':'',move=moveTag(r.rank,baseDivRank[r.team]);
+  return `${showCut&&cutRank&&r.rank===cutRank+1?'<tr class="cutrow"><td colspan="7"><div class="cutline-label"><span>Below last qualifying seed</span></div></td></tr>':''}<tr class="${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span>${eligibilityTag(r)}</span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
+ el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.qualified?'playoff-zone':!r.eligible?'ineligible-row':'',move=moveTag(r.rank,baseDivRank[r.team]);
+  return `${showCut&&cutRank&&r.rank===cutRank+1?'<div class="mcut"><span>Below last qualifying seed</span></div>':''}<div class="mrow ${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><span class="mrank"><span class="rank">${r.rank}</span>${move}</span><button type="button" class="mteam" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span>${eligibilityTag(r)}<span class="team-sub"><span>${rec(r)}</span><span>Margin ${signed(r.mov,1)}</span><span>Opp ${signed(r.opp,1)}</span></span></span></button><span class="mrating"><b>${signed(r.rating)}</b>${deltaTag(r.change)}</span></div>`}).join(''):'<div class="empty">No teams match your search.</div>';
  renderHeroLine();
  el('resetSearch').classList.toggle('hidden',!q);
- el('tableFootText').textContent=FOOTBALL?'Teams below the playoff line are outside the top 16. Teams also need 3 wins and 7 games.':'Teams below the playoff line are outside the top 32. Lower-ranked teams at .500 or better can generally still reach a preliminary round.';
+ el('tableFootText').textContent=FOOTBALL?'Power-rating ranks remain unchanged. The tournament seeds are the top 16 eligible teams with at least 3 wins and 7 competed games. Ineligible teams are skipped, and the next eligible teams move in.':'Teams below the playoff line are outside the top 32. Lower-ranked teams at .500 or better can generally still reach a preliminary round.';
  const scored=scoredCount(),total=schedule().length,lockedN=schedule().filter(r=>isLocked(fixtureKey(r))).length;
  el('scenarioBadge').classList.toggle('is-active',edits.length>0);
  el('scenarioBadge').innerHTML=FOOTBALL
@@ -118,10 +132,10 @@ function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody')
 }
 // Hero card: the teams on either side of the line in the chosen division.
 function renderHeroLine(){
- const s=standings(selectedDiv),a=s[FIELD-1],b=s[FIELD];
+ const s=standings(selectedDiv),a=s.filter(r=>r.qualified).at(-1),b=s.find(r=>r.eligible&&!r.qualified);
  if(!a||!b){el('heroLine').innerHTML='';return}
  const row=(r,n,cls)=>`<button type="button" class="hl-row${cls}" data-team="${esc(r.team)}"><span class="hl-rank">${n}</span><span class="hl-name">${esc(r.team)}</span><span class="hl-rate">${signed(r.rating,2)}</span></button>`;
- el('heroLine').innerHTML=`<p class="hl-title">The line in Division ${selectedDiv}</p>${row(a,FIELD,'')}<div class="hl-chalk" aria-hidden="true"></div>${row(b,FIELD+1,' is-out')}<p class="hl-gap">${(a.rating-b.rating).toFixed(a.rating-b.rating<0.01?4:2)} rating points apart</p>`;
+ el('heroLine').innerHTML=`<p class="hl-title">Division ${selectedDiv} · Last seed / next eligible team</p>${row(a,a.seed,'')}<div class="hl-chalk" aria-hidden="true"></div>${row(b,FIELD+1,' is-out')}<p class="hl-gap">${(a.rating-b.rating).toFixed(a.rating-b.rating<0.01?4:2)} rating points apart</p>`;
 }
 function renderEdits(){
  const keys=new Set(schedule().map(fixtureKey));
@@ -132,7 +146,7 @@ function renderEdits(){
 function showTeam(name){selectedTeam=name;el('teamSearch').value=name;el('teamSelect').value=name;switchPage('team')}
 function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails').innerHTML='<div class="empty">Choose a team to view its schedule.</div>';return}const myGames=records().filter(g=>g[1]===selectedTeam||g[2]===selectedTeam).sort((a,b)=>a[0].localeCompare(b[0]));const row=x.division?standings(x.division).find(r=>r.team===selectedTeam):null,curRank=row?row.rank:null;
  const editKeys=new Set(edits.map(pairKey)),cls=n=>n>0.00001?'pos':n<-0.00001?'neg':'';
- el('teamDetails').innerHTML=`<div class="details"><div class="team-hero"><div class="team-id"><div><p class="eyebrow">${x.division?`Division ${x.division}`:'Out-of-state opponent'}${curRank?`, ranked ${curRank} of ${divTeams[x.division].length}`:''}</p><h2>${esc(x.team)}</h2><div class="team-facts"><span class="chip"><strong>${rec(x)}</strong></span><span class="chip">${x.gp} games</span>${row?`<span class="chip ${curRank<=FIELD?'ok':'no'}">${curRank<=FIELD?`Inside top ${FIELD}`:`Outside top ${FIELD}`}</span>`:''}</div></div></div><button type="button" class="bttn" id="returnRankings">Back to rankings</button></div>
+ el('teamDetails').innerHTML=`<div class="details"><div class="team-hero"><div class="team-id"><div><p class="eyebrow">${x.division?`Division ${x.division}`:'Out-of-state opponent'}${curRank?`, ranked ${curRank} of ${divTeams[x.division].length}`:''}</p><h2>${esc(x.team)}</h2><div class="team-facts"><span class="chip"><strong>${rec(x)}</strong></span><span class="chip">${x.gp} games</span>${row?`<span class="chip ${row.qualified?'ok':'no'}">${row.qualified?`Playoff seed ${row.seed}`:!row.eligible?'Ineligible for playoffs':`Outside top ${FIELD} eligible teams`}</span>`:''}</div></div></div><button type="button" class="bttn" id="returnRankings">Back to rankings</button></div>
  <div class="metrics"><div class="metric"><small>Power rating</small><b>${signed(x.rating,2)}</b></div><div class="metric"><small>Avg capped margin</small><b>${signed(x.mov,2)}</b></div><div class="metric"><small>Opponent rating</small><b>${signed(x.opp,2)}</b></div><div class="metric"><small>Scenario change</small><b class="${cls(x.change)}">${signed(x.change,2)}</b></div></div>
  <div class="section-head"><h3>Schedule &amp; results</h3><span>Margins capped at ±${CAP}</span></div><div class="table-scroll"><table class="gameTable"><thead><tr><th>Date</th><th>Opponent</th><th>Result</th><th class="num">Margin</th><th class="num">Opp rating</th></tr></thead><tbody>${myGames.map(g=>{const own=g[1]===selectedTeam,opp=own?g[2]:g[1],my=own?g[3]:g[4],their=own?g[4]:g[3],k=pairKey(g),wl=my===null?'u':my>their?'w':my<their?'l':'t',margin=my===null?'—':signed(Math.max(-CAP,Math.min(CAP,my-their)),0);
   const tag=LOCKED_KEYS.has(k)?(g[5]?'<span class="gtag locked">FINAL · FORFEIT</span>':'<span class="gtag locked">FINAL</span>'):g[5]?'<span class="gtag ff">Forfeit</span>':editKeys.has(k)?(predictedKeys.has(k)?'<span class="gtag pred">Prediction</span>':'<span class="gtag scen">Scenario</span>'):POSTPONED_KEYS.has(k)?'<span class="gtag postponed">POSTPONED</span>':'';
