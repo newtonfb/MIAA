@@ -14,7 +14,7 @@ const officialKeys=new Set(DATA.games.map(key));
 const friday=DATA.games.filter(g=>g[0]==='2026-10-30');
 test('Friday supplemental scores: distinct, published, and tied to scheduled October 30 fixtures',()=>{
  assert.equal(CONFIRMED_FINALS.date,'2026-10-30');
- assert.equal(CONFIRMED_FINALS.games.length,38);
+ assert.equal(CONFIRMED_FINALS.games.length,40);
  const seen=new Set();
  for(const g of CONFIRMED_FINALS.games){
   assert.equal(g[0],'2026-10-30');
@@ -47,9 +47,9 @@ test('published finals are applied once, locked, and displace stale local predic
  vm.runInNewContext(app,sandbox,{timeout:60000});
  const state=sandbox.__audit;
  assert.equal(state.BASE.played,919);
- assert.equal(state.PUBLISHED_FINALS.length,52);
- assert.equal(state.LOCKED_KEYS.size,52);
- assert.equal(state.MODEL.played,959);
+ assert.equal(state.PUBLISHED_FINALS.length,54);
+ assert.equal(state.LOCKED_KEYS.size,54);
+ assert.equal(state.MODEL.played,961);
  assert.equal(state.edits.length,0, 'Old user prediction for a confirmed game must be discarded');
  for(const g of CONFIRMED_FINALS.games){
   const actual=state.source.get(key(g));
@@ -59,5 +59,11 @@ test('published finals are applied once, locked, and displace stale local predic
   assert.equal(state.records().filter(x=>key(x)===key(g)).length,1,'Duplicated '+key(g));
  }
  assert.equal(state.BASE.teams['Mahar Regional'].gp,7);
- assert.equal(state.MODEL.teams['Mahar Regional'].gp,7,'Do not invent the Mahar score');
+ assert.equal(state.MODEL.teams['Mahar Regional'].gp,8);
+ assert.equal(state.MODEL.teams['Mahar Regional'].w,3);
+ assert.equal(state.MODEL.teams['Mahar Regional'].l,5);
+ assert.equal(state.MODEL.teams['Greenfield'].w,3);
+ assert.equal(state.MODEL.teams['Greenfield'].l,5);
+ assert.deepEqual([...state.source.get('2026-10-30|Franklin County Tech|Mahar Regional')],['2026-10-30','Mahar Regional','Franklin County Tech',6,36,0]);
+ assert.deepEqual([...state.source.get('2026-10-30|Athol|Greenfield')],['2026-10-30','Athol','Greenfield',0,26,0]);
 });
