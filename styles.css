@@ -593,3 +593,13 @@ button.slot:hover{background:var(--surface-2)}
 
 /* Confirmed nonfinal scheduling status must remain distinct from a finished game. */
 .fixtureStatus.postponed,.gtag.postponed{color:#8a5b18;background:#fff4d9;border:1px solid #f4d99c;font-weight:750;letter-spacing:.02em}
+
+/* 2026 MIAA football: a power-rating rank is not automatically a tournament seed. */
+.team-qualifier{display:block;margin-top:4px;font-size:10px;font-weight:800;letter-spacing:.04em;white-space:normal;line-height:1.25}
+.team-qualifier.is-seed{color:var(--turf)}
+.team-qualifier.is-ineligible{color:var(--loss)}
+.team-qualifier.is-out{color:var(--muted)}
+.ineligible-row{background:var(--surface-2)}
+.ineligible-row .rank{color:var(--muted)}
+.mrow.ineligible-row{background:var(--surface-2)}
+.mrow .team-qualifier{font-size:10px;margin-top:3px}
