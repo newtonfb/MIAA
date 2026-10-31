@@ -10,13 +10,20 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
 <link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MA Rankings">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 </head>
 <body>
 <header class="appbar">
  <div class="appbar-inner">
-  <a class="brand" href="./" aria-label="MA HS Power Rankings home">
-   <span class="brand-mark" aria-hidden="true"><span>MA HS</span> <span class="js-sport">Football</span></span>
-   <span class="brand-text"><strong>Power Rankings</strong><small>Unofficial 2026 predictor</small></span>
+  <a class="brand" href="./" aria-label="MA High School Power Rankings, unofficial, home">
+   <span class="brand-mark" aria-hidden="true"><img src="icons/logo-mark.png" alt="" width="34" height="13"></span>
+   <span class="brand-text"><strong>MA High School</strong><span class="brand-sub"><span class="brand-pill">Power Rankings</span><span class="brand-tag">Unofficial</span></span></span>
   </a>
   <nav class="navigation" aria-label="Sections">
    <button class="tab selected" data-page="rankings" type="button">Rankings</button>
@@ -51,7 +58,7 @@
     <button class="bttn bttn-lg bttn-flag" id="heroPredict" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 18 9.5 12l3.5 3.5L20 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 8h5v5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="heroPredictLabel">Predict Week 8</span></button>
     <button class="bttn bttn-lg bttn-white" id="weekJump" type="button"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span id="weekJumpLabel">Enter scores myself</span></button>
    </div>
-   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Clear scenarios</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button></div>
+   <div class="hero-status"><span class="chip" id="scenarioBadge">Showing official rankings</span><button class="bttn sml bttn-on-turf hidden" id="heroReset" type="button">Clear scenarios</button><button class="bttn sml bttn-on-turf" id="openIntro" type="button">How this works</button><button class="bttn sml bttn-on-turf install-only" id="installApp" type="button" hidden>Add to home screen</button></div>
   </div>
   <div class="hero-line" id="heroLine" aria-live="polite"></div>
  </section>
@@ -209,7 +216,7 @@
 </div>
 
 <datalist id="teamsList"></datalist>
-<footer class="footer"><span>Independent projections from official MIAA ratings. Not affiliated with the MIAA.</span><button class="footer-admin" id="adminOpen" type="button">Admin</button></footer>
+<footer class="footer"><span>Independent projections from official MIAA ratings. Not affiliated with the MIAA.</span><span class="footer-links"><button class="footer-admin install-only" id="installFooter" type="button" hidden>Install the app</button><button class="footer-admin" id="adminOpen" type="button">Admin</button></span></footer>
 </div>
 
 <dialog class="intro" id="intro" aria-labelledby="introTitle">
@@ -258,6 +265,9 @@
  </form>
 </dialog>
 <div class="alert" id="alert" role="status" aria-live="polite"></div>
+<!-- Install prompt (https://github.com/khmyznikov/pwa-install). Opened only from the install buttons. -->
+<pwa-install manifest-url="/manifest.webmanifest" manual-apple manual-chrome install-description="Add MA Rankings to your home screen to open the rankings and predictor like an app."></pwa-install>
+<script src="https://cdn.jsdelivr.net/npm/@khmyznikov/pwa-install@0.7.0/dist/pwa-install.bundle.js" defer></script>
 <script src="data/season-2026.js" defer></script>
 <script src="data/fall-2026.js" defer></script>
 <script src="data/confirmed-final-scores-2026.js" defer></script>

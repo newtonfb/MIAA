@@ -417,6 +417,16 @@ function initAdmin(){
  d.addEventListener('close',()=>{clearTimeout(timer);el('adminKey').value='';key=''});
 }
 
+/* "Add to home screen": pwa-install handles each platform's install flow (Chrome prompt, iOS share-sheet steps).
+   The buttons stay hidden once the site is already running as an installed app. */
+function initInstall(){
+ const installed=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+ const prompt=document.querySelector('pwa-install');
+ for(const b of document.querySelectorAll('.install-only')){
+  b.hidden=installed||!prompt;
+  b.addEventListener('click',()=>{if(typeof prompt?.showDialog==='function')prompt.showDialog(true);else toast('Use your browser menu to add this site to your home screen.')});
+ }
+}
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
@@ -429,6 +439,7 @@ function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option
  el('openTeam').onclick=()=>{const t=el('teamSearch').value.trim();if(!TEAMS.includes(t)){toast('Choose a listed team');return}showTeam(t)};el('teamSelect').addEventListener('change',e=>{if(TEAMS.includes(e.target.value))showTeam(e.target.value)});el('teamSearch').addEventListener('change',e=>{const t=e.target.value.trim();if(TEAMS.includes(t))showTeam(t)});el('teamSearch').addEventListener('keydown',e=>{if(e.key==='Enter')el('openTeam').click()});
  el('teamDetails').addEventListener('click',e=>{if(e.target.closest('#returnRankings'))switchPage('rankings');const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
  initAdmin();
+ initInstall();
 }
 
 function initFixtures(){

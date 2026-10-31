@@ -1,0 +1,23 @@
+{
+  "id": "/",
+  "name": "MA HS Power Rankings",
+  "short_name": "MA Rankings",
+  "description": "Unofficial MIAA power rankings and playoff predictor for football, field hockey, soccer and volleyball. Enter or predict scores and watch every division and bracket update.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#03173c",
+  "theme_color": "#1d6b45",
+  "categories": ["sports"],
+  "icons": [
+    {"src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "screenshots": [
+    {"src": "/icons/screenshots/phone-rankings.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Football rankings with the playoff line"},
+    {"src": "/icons/screenshots/phone-bracket.png", "sizes": "780x1688", "type": "image/png", "form_factor": "narrow", "label": "Projected boys soccer bracket"},
+    {"src": "/icons/screenshots/desktop-rankings.png", "sizes": "1440x900", "type": "image/png", "form_factor": "wide", "label": "Rankings and Week 8 scores side by side"}
+  ]
+}

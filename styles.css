@@ -55,11 +55,14 @@ h1,h2,h3{margin:0}
 .appbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 90%,transparent);backdrop-filter:saturate(1.4) blur(12px);-webkit-backdrop-filter:saturate(1.4) blur(12px);border-bottom:1px solid var(--line)}
 .appbar-inner{max-width:1440px;margin:0 auto;height:var(--hh);padding:0 28px;display:flex;align-items:center;gap:32px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;flex-shrink:0}
-.brand-mark{display:flex;align-items:center;gap:.4em;height:34px;padding:0 12px;border-radius:7px;background:var(--turf);color:var(--turf-ink);font-weight:850;font-stretch:125%;font-size:13px;letter-spacing:-.02em;white-space:nowrap}
-.brand-mark>span:first-child{color:var(--flag)}
+/* Header lockup echoing the app icon: glossy navy tile, heavy white-on-navy type, glowing light-blue pill. */
+.brand-mark{display:grid;place-items:center;flex:0 0 auto;width:42px;height:42px;border-radius:11px;background:radial-gradient(130% 90% at 28% 0%,#2f7ad8 0%,#0d3b85 48%,#03173c 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -2px 6px rgba(0,0,0,.35),0 2px 8px rgba(3,23,60,.3)}
+.brand-mark img{width:34px;height:auto;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
 .brand-text{display:flex;flex-direction:column;line-height:1.15}
-.brand-text strong{font-size:14px;font-weight:750;font-stretch:112%;letter-spacing:-.01em}
-.brand-text small{font-size:11.5px;color:var(--muted)}
+.brand-text strong{font-size:15px;font-weight:900;font-stretch:112%;letter-spacing:.005em;text-transform:uppercase;color:#0a2350}
+.brand-sub{display:flex;align-items:center;gap:7px;margin-top:3px}
+.brand-pill{padding:2px 8px 1px;border-radius:5px;background:linear-gradient(#86ccff,#3c9cf0);color:#03173c;font-size:10.5px;font-weight:850;font-stretch:112%;letter-spacing:.05em;text-transform:uppercase;box-shadow:0 0 0 1px rgba(60,156,240,.55),0 0 10px rgba(60,156,240,.4)}
+.brand-tag{font-size:10.5px;font-weight:650;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .navigation{display:flex;gap:2px;height:100%;align-items:stretch}
 .tab{position:relative;padding:0 12px;font-size:14px;font-weight:550;color:var(--muted);transition:color .15s}
 .tab:hover{color:var(--ink)}
@@ -517,6 +520,7 @@ button.slot:hover{background:var(--surface-2)}
 .subtle{margin:20px 0 0;max-width:80ch;font-size:13px;line-height:1.6;color:var(--muted)}
 .subtle b{color:var(--ink-2)}
 .footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:44px;padding-top:18px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.footer-links{display:flex;gap:16px}
 .footer-admin{font-size:12.5px;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line-strong);text-underline-offset:3px}
 .footer-admin:hover{color:var(--ink)}
 .alert{position:fixed;left:50%;bottom:24px;z-index:60;transform:translate(-50%,12px);opacity:0;pointer-events:none;max-width:calc(100vw - 32px);padding:11px 16px;border-radius:8px;background:var(--ink);color:var(--paper);font-size:13.5px;font-weight:550;box-shadow:0 10px 30px -8px rgba(0,0,0,.35);transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
@@ -545,8 +549,9 @@ button.slot:hover{background:var(--surface-2)}
  :root{--hh:56px}
  .appbar-inner{padding:0 16px;gap:12px}
  .brand-text,.hide-sm{display:none}
- .brand-mark{height:32px;padding:0 9px;font-size:11.5px}
- .brand-mark .js-sport{display:none}  /* the sport bar names the sport on phones */
+ .brand-mark{width:38px;height:38px;border-radius:10px}
+ .brand-mark img{width:30px}
+
  .sportbar-inner{padding:0 12px}
  .navigation{gap:0}
  .tab{padding:0 9px;font-size:13.5px}
