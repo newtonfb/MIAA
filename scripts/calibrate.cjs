@@ -1,6 +1,11 @@
 'use strict';
 // Test candidate versions of MIAA's rating procedure against every archived release (data/releases).
 //   node scripts/calibrate.cjs [season ...]     e.g. node scripts/calibrate.cjs 2025 2026
+//   RAW=1 node scripts/calibrate.cjs ...        score each candidate's own level, with no offset
+// Run scripts/check_consistency.cjs first: only seasons whose releases satisfy MIAA's equations belong here.
+// Findings so far (2025-2026): the formula is exact; differences come from where MIAA's calculation starts and
+// stops, and no start-from-scratch candidate reproduces MIAA's level, so MIAA likely continues from its previous
+// values. Consecutive releases (archived automatically by the sync) are what can confirm that.
 // For each candidate it counts official ratings reproduced exactly to MIAA's four decimals, with
 // MIAA's scale set by the games-weighted rule (no fitted offset), and reports the best candidates
 // overall and per sport. Releases come from scripts/archive_releases.py.
@@ -33,8 +38,8 @@ function solve(n,{seidel,damp,start,tol,maxIt}){
  for(let it=0;it<maxIt;it++){const src=seidel?A:Float64Array.from(A);let md=0;
   for(let i=0;i<n.N;i++){if(!n.dNF[i])continue;let s=0;for(const j of n.nb[i])s+=src[j];const v=damp*A[i]+(1-damp)*(n.movNF[i]+s/n.dNF[i]);md=Math.max(md,Math.abs(v-A[i]));A[i]=v}
   if(md<tol)break}
- // Put the solution on MIAA's scale: games-weighted total of opponent-use ratings is zero.
- let ws=0,wd=0;for(let i=0;i<n.N;i++){ws+=A[i]*n.dNF[i];wd+=n.dNF[i]}const level=wd?-ws/wd:0;
+ // RAW=1 keeps the candidate's own level; otherwise use MIAA's games-weighted scale rule.
+ let ws=0,wd=0;for(let i=0;i<n.N;i++){ws+=A[i]*n.dNF[i];wd+=n.dNF[i]}const level=process.env.RAW?0:(wd?-ws/wd:0);
  const out={};for(let i=0;i<n.N;i++){let s=0;for(const j of n.nb[i])s+=A[j]+level;out[n.teams[i]]=n.movAll[i]+(n.nb[i].length?s/n.nb[i].length:0)}
  return out;
 }
@@ -42,6 +47,7 @@ function solve(n,{seidel,damp,start,tol,maxIt}){
 function score(r,R){const diffs=Object.entries(r.official).filter(([t])=>R[t]!==undefined).map(([t,row])=>row[1]-R[t]).sort((a,b)=>a-b);
  const shift=diffs.length?diffs[diffs.length>>1]:0;let exact=0,max=0,n=0;
  for(const [t,row] of Object.entries(r.official)){if(R[t]===undefined)continue;n++;const e=Math.abs(R[t]+shift-row[1]);if(e<0.00005)exact++;if(e>max)max=e}return {exact,n,max,shift}}
+function scoreRaw(r,R){let exact=0,max=0,n=0;for(const [t,row] of Object.entries(r.official)){if(R[t]===undefined)continue;n++;const e=Math.abs(R[t]-row[1]);if(e<0.00005)exact++;if(e>max)max=e}return {exact,n,max}}
 function outliers(r,R,limit){const s=score(r,R).shift;return Object.entries(r.official).filter(([t])=>R[t]!==undefined).map(([t,row])=>[t,+(R[t]+s-row[1]).toFixed(4)]).filter(([,e])=>Math.abs(e)>limit).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]))}
 
 const candidates=[];
@@ -50,7 +56,7 @@ for(const order of ['alpha','ledger','rank'])for(const seidel of [false,true])fo
 const nets=new Map();
 const net=(r,o)=>{const k=r.season+r.sport+r.date+o;if(!nets.has(k))nets.set(k,network(r,o));return nets.get(k)};
 const results=candidates.map(c=>{let exact=0,n=0,max=0;const per={};
- for(const r of releases){const s=score(r,solve(net(r,c.order),c));exact+=s.exact;n+=s.n;max=Math.max(max,s.max);per[`${r.sport} ${r.date}`]=`${s.exact}/${s.n}`}
+ for(const r of releases){const sol=solve(net(r,c.order),c);const s=process.env.RAW?scoreRaw(r,sol):score(r,sol);exact+=s.exact;n+=s.n;max=Math.max(max,s.max);per[`${r.sport} ${r.date}`]=`${s.exact}/${s.n}`}
  return {...c,exact,n,max:+max.toFixed(5),per}});
 results.sort((a,b)=>b.exact-a.exact||a.max-b.max);
 console.log(`${releases.length} releases, ${results[0].n} official ratings, ${candidates.length} candidate procedures\n`);
