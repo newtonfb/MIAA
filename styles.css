@@ -390,6 +390,8 @@ button.slot:hover{background:var(--surface-2)}
 .slot.is-proj{background:repeating-linear-gradient(135deg,transparent 0 6px,var(--surface-2) 6px 7px)}
 .slot.is-proj .slot-name,.slot.is-proj .slot-rate{color:var(--muted);font-weight:500}
 .slot.is-empty{color:var(--faint)}
+/* Later rounds stay empty until games are played, ready to fill in and share. */
+.slot.is-blank{background:var(--surface)}
 
 .bubble{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:16px}
 .bubble-col{padding:16px 18px 10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}

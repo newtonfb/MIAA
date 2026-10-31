@@ -205,7 +205,7 @@ function reset(){if(edits.length&&!confirm('Remove all scenario changes?'))retur
 
 /* Projected brackets: the top FIELD teams by rating in each division, standard seeding
    (1 plays the last seed, and the top two seeds can only meet in the final).
-   Later rounds advance the higher seed, which is also the higher-rated team. */
+   Only the first round is filled in; later rounds are left blank to be filled as games are played. */
 let bracketDiv=DIVISIONS[0];
 function seedOrder(n){let order=[1];while(order.length<n){const size=order.length*2;order=order.flatMap(s=>[s,size+1-s])}return order}
 const ROUND_NAMES={32:'Round of 32',16:'Round of 16',8:'Quarterfinals',4:'Semifinals',2:'State final'};
@@ -215,11 +215,12 @@ function renderBracket(){
  const slot=(s,fav,proj)=>{const r=seed[s];if(!r)return `<div class="slot is-empty"><span class="seed">${s}</span><span class="slot-name">No eligible team</span></div>`;
   const warn='';
   return `<button type="button" class="slot${fav?' is-fav':''}${proj?' is-proj':''}" data-team="${esc(r.team)}"><span class="seed">${s}</span><span class="slot-name">${esc(r.team)}</span>${warn}<span class="slot-rate">${signed(r.rating,2)}</span></button>`};
+ const blank='<div class="slot is-blank" aria-hidden="true"></div>';
  const order=seedOrder(FIELD);let round=Array.from({length:FIELD/2},(_,i)=>[order[2*i],order[2*i+1]]);const rounds=[round];
  while(round.length>1){round=Array.from({length:round.length/2},(_,i)=>[Math.min(...round[2*i]),Math.min(...round[2*i+1])].sort((a,b)=>a-b));rounds.push(round)}
  el('bracket').style.setProperty('--rounds',rounds.length);
  el('bracket').innerHTML=rounds.map((rd,i)=>{const pairs=rd.length>1?Array.from({length:rd.length/2},(_,k)=>rd.slice(2*k,2*k+2)):[rd];
-  return `<section class="round"><h3>${ROUND_NAMES[rd.length*2]}</h3><div class="round-body">${pairs.map(p=>`<div class="pair${p.length===1?' is-single':''}">${p.map(([a,b])=>`<div class="match-wrap"><div class="match">${slot(a,true,i>0)}${slot(b,false,i>0)}</div></div>`).join('')}</div>`).join('')}</div></section>`}).join('');
+  return `<section class="round"><h3>${ROUND_NAMES[rd.length*2]}</h3><div class="round-body">${pairs.map(p=>`<div class="pair${p.length===1?' is-single':''}">${p.map(([a,b])=>`<div class="match-wrap"><div class="match">${i?blank+blank:slot(a,true,false)+slot(b,false,false)}</div></div>`).join('')}</div>`).join('')}</div></section>`}).join('');
  const lastSeed=field.at(-1),firstOut=nextEligible[0];
  const item=(r,gap)=>`<li><span class="bubble-rank">${r.seed||r.rank}</span><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="bubble-gap">${gap}</span></li>`;
  const lastIn=firstOut?field.slice(-4).map(r=>item(r,'+'+(r.rating-firstOut.rating).toFixed(2))).join(''):field.slice(-4).map(r=>item(r,'—')).join(''),out=lastSeed?nextEligible.slice(0,4).map(r=>item(r,'−'+(lastSeed.rating-r.rating).toFixed(2))).join(''):'';
