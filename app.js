@@ -464,6 +464,18 @@ function initInstall(){
   b.addEventListener('click',()=>{if(typeof prompt?.showDialog==='function')prompt.showDialog(true);else toast('Use your browser menu to add this site to your home screen.')});
  }
 }
+// Offer the install prompt at most once a week, except in the installed app.
+const INSTALL_PROMPTED='miaa-install-prompted';
+function scheduleInstallPrompt(){
+ const prompt=document.querySelector('pwa-install');
+ if(!prompt||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true)return;
+ let last=0;try{last=Number(localStorage.getItem(INSTALL_PROMPTED))||0}catch{}
+ if(Date.now()-last<7*864e5)return;
+ const show=()=>{if(document.querySelector('dialog[open]')||typeof prompt.showDialog!=='function')return;
+  prompt.showDialog(true);try{localStorage.setItem(INSTALL_PROMPTED,String(Date.now()))}catch{}};
+ if(el('intro').open)el('intro').addEventListener('close',()=>setTimeout(show,900),{once:true});
+ else setTimeout(show,2000);
+}
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
@@ -499,6 +511,7 @@ function initFixtures(){
    else if(b.dataset.intro==='enter'||b.dataset.intro==='add')jumpToWeek8();
    else if(b.dataset.intro==='bracket')switchPage('bracket');
  });
+ scheduleInstallPrompt();
  const tabs=document.querySelector('.sideTabs');tabs.addEventListener('click',e=>{const b=e.target.closest('[data-side-tab]');if(!b)return;const name=b.dataset.sideTab;tabs.querySelectorAll('.sideTab').forEach(x=>x.classList.toggle('selected',x===b));for(const n of ['week8','changes'])el(n+'View').classList.toggle('hidden',name!==n)});
  el('predictWeek8').addEventListener('click',predictAll);el('clearPredictions').addEventListener('click',clearAllPredictions);
  el('weekSearch').addEventListener('input',renderFixtures);
