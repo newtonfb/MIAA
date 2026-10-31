@@ -31,3 +31,4 @@ jobs:
       - run: node --test tests/fall-sports.test.cjs
       - run: node --test tests/current-data.test.cjs
       - run: node --test tests/confirmed-friday-finals.test.cjs
+      - run: node --test tests/football-playoff-eligibility.test.cjs
