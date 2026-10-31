@@ -162,21 +162,23 @@ function seedOrder(n){let order=[1];while(order.length<n){const size=order.lengt
 const ROUND_NAMES={32:'Round of 32',16:'Round of 16',8:'Quarterfinals',4:'Semifinals',2:'State final'};
 function renderBracket(){
  el('bracketDivs').innerHTML=DIVISIONS.map(d=>`<button type="button" class="${bracketDiv===d?'selected':''}" data-bdiv="${d}" aria-pressed="${bracketDiv===d}">D${d}</button>`).join('');
- const rows=standings(bracketDiv),seed=Object.fromEntries(rows.slice(0,FIELD).map(r=>[r.rank,r]));
- const slot=(s,fav,proj)=>{const r=seed[s];if(!r)return `<div class="slot is-empty"><span class="seed">${s}</span><span class="slot-name">No team</span></div>`;
-  const warn=r.eligible?'':`<span class="slot-warn" title="${r.w<3?'Fewer than 3 wins':'Fewer than 7 games'} so far">!</span>`;
+ const rows=standings(bracketDiv),field=rows.filter(r=>r.qualified),nextEligible=rows.filter(r=>r.eligible&&!r.qualified),seed=Object.fromEntries(field.map(r=>[r.seed,r]));
+ const slot=(s,fav,proj)=>{const r=seed[s];if(!r)return `<div class="slot is-empty"><span class="seed">${s}</span><span class="slot-name">No eligible team</span></div>`;
+  const warn='';
   return `<button type="button" class="slot${fav?' is-fav':''}${proj?' is-proj':''}" data-team="${esc(r.team)}"><span class="seed">${s}</span><span class="slot-name">${esc(r.team)}</span>${warn}<span class="slot-rate">${signed(r.rating,2)}</span></button>`};
  const order=seedOrder(FIELD);let round=Array.from({length:FIELD/2},(_,i)=>[order[2*i],order[2*i+1]]);const rounds=[round];
  while(round.length>1){round=Array.from({length:round.length/2},(_,i)=>[Math.min(...round[2*i]),Math.min(...round[2*i+1])].sort((a,b)=>a-b));rounds.push(round)}
  el('bracket').style.setProperty('--rounds',rounds.length);
  el('bracket').innerHTML=rounds.map((rd,i)=>{const pairs=rd.length>1?Array.from({length:rd.length/2},(_,k)=>rd.slice(2*k,2*k+2)):[rd];
   return `<section class="round"><h3>${ROUND_NAMES[rd.length*2]}</h3><div class="round-body">${pairs.map(p=>`<div class="pair${p.length===1?' is-single':''}">${p.map(([a,b])=>`<div class="match-wrap"><div class="match">${slot(a,true,i>0)}${slot(b,false,i>0)}</div></div>`).join('')}</div>`).join('')}</div></section>`}).join('');
- const lastSeed=rows[FIELD-1],firstOut=rows[FIELD];
- const item=(r,gap)=>`<li><span class="bubble-rank">${r.rank}</span><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="bubble-gap">${gap}</span></li>`;
- const lastIn=firstOut?rows.slice(FIELD-4,FIELD).map(r=>item(r,'+'+(r.rating-firstOut.rating).toFixed(2))).join(''):'',out=lastSeed?rows.slice(FIELD,FIELD+4).map(r=>item(r,'−'+(lastSeed.rating-r.rating).toFixed(2))).join(''):'';
- const moved=rows.filter(r=>(r.rank<=FIELD)!==(baseDivRank[r.team]<=FIELD));
- el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Rating ahead of team ${FIELD+1}</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Rating behind team ${FIELD}</p><ol>${out}</ol></div>${moved.length?`<div class="bubble-col bubble-moves"><h3>Changed by your scores</h3><p>Compared with the ${BASELINE_DATE} field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.rank<=FIELD?'is-in':'is-out'}">${r.rank<=FIELD?'Now in':'Now out'}, was ${baseDivRank[r.team]}</span></li>`).join('')}</ul></div>`:''}`;
- el('bracketSub').textContent=`Division ${bracketDiv} has ${rows.length} teams and the top ${FIELD} make the tournament. ${edits.length?`This field includes your ${edits.length} entered ${edits.length===1?'score':'scores'}.`:`This field uses MIAA's ${BASELINE_DATE} ratings.`}`;
+ const lastSeed=field.at(-1),firstOut=nextEligible[0];
+ const item=(r,gap)=>`<li><span class="bubble-rank">${r.seed||r.rank}</span><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="bubble-gap">${gap}</span></li>`;
+ const lastIn=firstOut?field.slice(-4).map(r=>item(r,'+'+(r.rating-firstOut.rating).toFixed(2))).join(''):field.slice(-4).map(r=>item(r,'—')).join(''),out=lastSeed?nextEligible.slice(0,4).map(r=>item(r,'−'+(lastSeed.rating-r.rating).toFixed(2))).join(''):'';
+ const moved=rows.filter(r=>!!r.qualified!==!!baseDivSeed[r.team]);
+  const skipped=FOOTBALL?rows.filter(r=>!r.eligible&&r.rank<=(lastSeed?.rank||FIELD)):[];
+  const skipCard=skipped.length?'<div class="bubble-col"><h3>Skipped — ineligible</h3><p>Replaced by next eligible teams</p><ol>'+skipped.map(r=>'<li><span class="bubble-rank">'+r.rank+'</span><button type="button" class="team-button" data-team="'+esc(r.team)+'"><span class="team-name">'+esc(r.team)+'</span></button><span class="bubble-gap">'+(r.w<3?r.w+' win'+(r.w===1?'':'s'):'Under 7 games')+'</span></li>').join('')+'</ol></div>':'';
+ el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Eligible seeds in the projected bracket</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Next eligible teams by rating</p><ol>${out}</ol></div>${skipCard}${moved.length?`<div class="bubble-col bubble-moves"><h3>Changed by your scores</h3><p>Compared with the ${BASELINE_DATE} field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.qualified?'is-in':'is-out'}">${r.qualified?'Now seeded '+r.seed:'Now out'}, was ${baseDivSeed[r.team]||'not seeded'}</span></li>`).join('')}</ul></div>`:''}`;
+ el('bracketSub').textContent=FOOTBALL?`Division ${bracketDiv}: ${field.length} projected playoff seeds. The 16 highest-rated eligible teams (3 wins and 7 competed games minimum) are selected; ineligible teams are skipped. ${edits.length?'Includes your '+edits.length+' scenario score(s).':'Includes all entered final scores.'}`:`Division ${bracketDiv} has ${rows.length} teams and the top ${FIELD} make the projected bracket.`;
 }
 
 /* Matchups: football's Week 8 schedule, or the games a viewer adds for other sports. */
