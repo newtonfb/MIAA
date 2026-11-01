@@ -94,6 +94,7 @@ a posted final is **unverified**, not automatically a loss, draw, cancellation o
 To research results still missing after a sync, check:
 - [iBerkshires high school sports](https://www.iberkshires.com/sports/highschool/main) for Berkshire / Western Massachusetts games.
 - [Worcester Telegram & Gazette high school scoreboard](https://cm.telegram.com/highschool-scores?season=202627&type=scoreboard) for Central Massachusetts games.
+- [Worcester T&G Sports on X (@tgsports)](https://x.com/tgsports) for Central Mass. game recaps, final scores, and school-athletics reposts. Cross-check the dated post before using a score; an X profile alone is not proof of any specific result.
 
 An independently verified result may be recorded in `data/verified-reported-2026.js`,
 with its sport, date, participants, score, publisher and exact public article URL.
