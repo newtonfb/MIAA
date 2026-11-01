@@ -38,7 +38,7 @@ test('published finals are applied once, locked, and displace stale local predic
   setItem(){}
  };
  let app=read('app.js');
- assert.match(app,/lab\.textContent=locked\?\(g\[5\]/);
+ assert.match(app,/lab\.textContent=locked\?\(REPORTED_APPLIED\.has\(k\)\?'REPORTED FINAL':g\[5\]/);
  assert.match(app,/gtag locked">FINAL</);
  assert.match(read('index.html'),/data\/confirmed-final-scores-2026\.js/);
  app=app.replace(/\ninit\(\);\s*initFixtures\(\);\s*$/,'\nglobalThis.__audit={source,BASE,MODEL,PUBLISHED_FINALS,LOCKED_KEYS,POSTPONED_KEYS,edits,isLocked,pairKey,records};');
