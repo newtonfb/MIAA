@@ -583,6 +583,8 @@ button.slot:hover{background:var(--surface-2)}
  .fixtureList{grid-template-columns:1fr}
  .bracket-scroll{padding:0 14px 18px;scroll-snap-type:x proximity}
  .round{scroll-snap-align:start}
+ .bracket-title{padding:24px 14px 2px}
+ .bracket-title>div>p,.bracket-credit{display:none}
  .team-hero{padding:18px}
  #returnRankings{display:none}
  .metric{padding:14px 18px}

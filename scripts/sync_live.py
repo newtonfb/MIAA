@@ -7,7 +7,9 @@ games that also appear in MIAA's official ledger (same date, same score), then w
 data/live-2026.js with:
 
   results   varsity games played after the sport's latest official MIAA release
-  upcoming  scheduled varsity games that have no score yet
+  upcoming  unresolved varsity games, including past dates awaiting a result
+  overdue   games with past dates that still lack an official score
+  unverified fixtures missing from the new feed without a final/cancellation
 
 Run after scripts/sync_miaa.py so the official ledger it reads is current:
 
@@ -19,7 +21,8 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 
 import requests
@@ -64,7 +67,7 @@ def fetch(sport_id, gender_id, through):
     games = r.json()
     if not isinstance(games, list):
         raise ValueError("unexpected response shape")
-    return [g for g in games if g.get("levelId") == 1 and not g.get("isDeleted") and len(g.get("teams") or []) == 2]
+    return [g for g in games if g.get("levelId") == 1 and len(g.get("teams") or []) == 2 and (not g.get("isDeleted") or str(g.get("status", "")).lower() in ("canceled", "cancelled"))]
 
 
 def learn_names(games, ledger):
@@ -131,7 +134,62 @@ def learn_names(games, ledger):
         mapping.update(added)
 
 
-def sport_live(slug, today):
+
+def same_match(a, b):
+    """Treat short date moves as the same matchup, but preserve later rematches."""
+    return set(a[1:3]) == set(b[1:3]) and abs((date.fromisoformat(a[0]) - date.fromisoformat(b[0])).days) <= 3
+
+
+def reconcile_live(fresh, previous, ledger, today):
+    """Never drop an unscored game without a recorded final or explicit cancellation."""
+    previous = previous or {}
+    finished = list(fresh["results"]) + list(ledger)
+    canceled = list(fresh.get("canceled", []))
+    for game in previous.get("canceled", []):
+        if not any(same_match(game, x) for x in canceled + finished):
+            canceled.append(game)
+    fresh["canceled"] = sorted(canceled)
+    # The scoreboard can briefly list an unscored duplicate of a completed game.
+    # Canceling one fixture must not suppress a separately rescheduled one.
+    fresh["upcoming"] = [
+        g for g in fresh["upcoming"]
+        if not any(same_match(g, x) for x in finished)
+        and not any(g[0] == x[0] and set(g[1:3]) == set(x[1:3]) for x in canceled)
+    ]
+
+    # Preserve earlier official-scoreboard finals if an API response temporarily omits them.
+    # The newly published MIAA ledger supersedes these as the baseline advances.
+    for game in previous.get("results", []):
+        if game[0] >= fresh["asOf"] and not any(same_match(game, x) for x in finished + canceled):
+            fresh["results"].append(game)
+            finished.append(game)
+    fresh["results"].sort()
+
+    unverified = []
+    for game in previous.get("upcoming", []):
+        if any(same_match(game, x) for x in finished) or any(game[0] == x[0] and set(game[1:3]) == set(x[1:3]) for x in canceled):
+            continue
+        if any(same_match(game, x) for x in fresh["upcoming"]):
+            continue  # still listed or moved within three days
+        fresh["upcoming"].append(game)
+        unverified.append(game)  # no longer listed upstream; not verified resolved
+    fresh["upcoming"].sort()
+    fresh["unverified"] = sorted(unverified)
+
+    postponed = list(fresh.get("postponed", []))
+    for game in previous.get("postponed", []):
+        if (not any(same_match(game, x) for x in postponed + finished + canceled)
+                and any(same_match(game, x) for x in unverified)):
+            postponed.append(game)
+    fresh["postponed"] = sorted(postponed)
+    fresh["overdue"] = sorted(
+        g for g in fresh["upcoming"]
+        if g[0] < today.isoformat() and not any(same_match(g, x) for x in postponed)
+    )
+    return fresh
+
+
+def sport_live(slug, today, previous=None):
     sport_id, gender_id, cap = SPORTS[slug]
     as_of, divisions, ledger = official(slug)
     games = fetch(sport_id, gender_id, (today + timedelta(days=21)).isoformat())
@@ -139,42 +197,50 @@ def sport_live(slug, today):
     covered = {t for t in mapping.values() if t in divisions}
     if len(covered) < 0.9 * len(divisions):
         raise ValueError(f"only {len(covered)} of {len(divisions)} teams matched to Arbiter schools")
-    results, upcoming, unmapped = {}, {}, Counter()
+    results, upcoming, canceled, postponed, unmapped = {}, {}, {}, {}, Counter()
     for g in games:
         day = g["fromDate"][:10]
-        if day < as_of:
-            continue  # covered by the official release (stamped 4 a.m. on its date, so that night's games are not)
+        if day < as_of and str(g.get("status", "")).lower() not in ("canceled", "cancelled"):
+            continue  # previous scores are in the official ledger; cancellations can resolve old pending games
         a, b = g["teams"]
         ta, tb = mapping.get(a["schoolId"]), mapping.get(b["schoolId"])
         if not ta or not tb:
             unmapped[names.get(a["schoolId"] if not ta else b["schoolId"])] += 1
             continue
         key = g["uniqueGameId"]  # keeps same-day doubleheaders as separate games
-        status = g.get("status")
-        if a["score"] is not None and b["score"] is not None and status in ("Normal", "Forfeit"):
+        status = g.get("status") or "Normal"
+        if status.lower() in ("canceled", "cancelled"):
+            canceled[key] = [day, ta, tb, status]
+        elif a["score"] is not None and b["score"] is not None and status in ("Normal", "Forfeit"):
             results[key] = [day, ta, tb, int(a["score"]), int(b["score"]), 1 if status == "Forfeit" else 0]
         elif status == "Forfeit" and (a.get("isMarkedWinner") or b.get("isMarkedWinner")):
             results[key] = [day, ta, tb, cap if a.get("isMarkedWinner") else 0, cap if b.get("isMarkedWinner") else 0, 1]
-        elif status == "Normal" and a["score"] is None and b["score"] is None and day >= today.isoformat():
+        elif a["score"] is None or b["score"] is None:
+            # An unreported past game is still unresolved. Keep it until verified.
             upcoming[key] = [day, ta, tb, g["fromDate"][11:16]]
-    return {
+            if status.lower() in ("postponed", "rescheduled"):
+                postponed[key] = upcoming[key]
+    fresh = {
         "asOf": as_of,
         "results": sorted(results.values()),
         "upcoming": sorted(upcoming.values()),
+        "canceled": sorted(canceled.values()),
+        "postponed": sorted(postponed.values()),
         "unmappedSchools": sorted(n for n in unmapped if n),
         "matchedTeams": len(covered),
     }
+    return reconcile_live(fresh, previous, ledger, today)
 
 
 def main():
-    today = date.today()
+    today = datetime.now(ZoneInfo("America/New_York")).date()
     previous = read_js(OUT, "LIVE_DATA")["sports"] if OUT.exists() else {}
     sports, failed = {}, []
     for slug in SPORTS:
         try:
-            sports[slug] = sport_live(slug, today)
+            sports[slug] = sport_live(slug, today, previous.get(slug))
             s = sports[slug]
-            print(f"{slug}: {len(s['results'])} results after {s['asOf']}, {len(s['upcoming'])} upcoming, {s['matchedTeams']} teams matched, {len(s['unmappedSchools'])} unmapped schools")
+            print(f"{slug}: {len(s['results'])} live results, {len(s['upcoming'])} unresolved games ({len(s['overdue'])} past due, {len(s['unverified'])} missing from feed), {len(s['canceled'])} canceled, {s['matchedTeams']} mapped teams")
         except (requests.RequestException, ValueError) as exc:
             failed.append(slug)
             print(f"{slug}: kept previous live data ({exc})", file=sys.stderr)

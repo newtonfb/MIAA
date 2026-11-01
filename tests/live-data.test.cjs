@@ -24,7 +24,15 @@ for(const [slug,s] of Object.entries(live.sports)){
    assert.ok(g[5]===0||g[5]===1);
    assert.ok(!/^(TBA|TBD|#N\/?A)$/i.test(g[1])&&!/^(TBA|TBD|#N\/?A)$/i.test(g[2]),'placeholder team');
   }
-  for(const r of s.upcoming){assert.ok(known.has(r[1])&&known.has(r[2]),'unknown team in upcoming '+r.join(' '))}
+  const near=(a,b)=>[a[1],a[2]].sort().join('|')===[b[1],b[2]].sort().join('|')&&Math.abs((Date.parse(a[0])-Date.parse(b[0]))/864e5)<=3;
+  for(const r of s.upcoming){
+   assert.ok(known.has(r[1])&&known.has(r[2]),'unknown team in pending '+r.join(' '));
+   assert.ok(!s.results.some(g=>near(g,r)),'completed game retained as pending '+r.join(' '));
+   assert.ok(!(s.canceled||[]).some(g=>near(g,r)),'canceled game retained as pending '+r.join(' '));
+  }
+  for(const r of s.overdue||[])assert.ok(s.upcoming.some(g=>JSON.stringify(g)===JSON.stringify(r)),'overdue must be pending');
+  for(const r of s.unverified||[])assert.ok(s.upcoming.some(g=>JSON.stringify(g)===JSON.stringify(r)),'unverified must be pending');
+  for(const r of s.postponed||[])assert.ok(s.upcoming.some(g=>near(g,r)),'postponed must remain pending');
   assert.ok(s.matchedTeams>=0.9*Object.keys(o.divisions).length,'too few teams matched');
  });
 }

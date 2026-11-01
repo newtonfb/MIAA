@@ -1,7 +1,7 @@
 'use strict';
 /* One page serves every MIAA sport; ?sport= picks the dataset.
    Football keeps its hand-built Week 8 schedule and confirmed Thursday finals.
-   The other sports use the upcoming games on MIAA's scoreboard, and viewers can add any that are missing. */
+   The other sports list their upcoming games, and viewers can add any that are missing. */
 const SPORTS={
  football:{name:'Football',cap:14,field:16,unit:'point'},
  'field-hockey':{name:'Field Hockey',cap:3,field:32,unit:'goal'},
@@ -32,7 +32,9 @@ const BASELINE_DATE=new Date(SD_DATE+'T12:00').toLocaleDateString('en-US',{month
 // Football: results played Thursday, October 29, 2026, confirmed from published score reports.
 // Shared by all visitors, unlike locally saved what-if scenarios. MIAA's own ledger wins
 // whenever it already has a score for the same game.
-const PUBLISHED_FINALS=FOOTBALL?[["2026-10-29","Lee","Ware",46,14,0],["2026-10-29","Hoosac Valley","Holyoke",8,27,0],["2026-10-29","Quaboag Regional","Smith Vo-Tech",0,36,0],["2026-10-29","Lynn English","Medford",48,21,0],["2026-10-29","Chelsea","Minuteman Regional",23,22,0],["2026-10-29","Upper Cape Cod RVT","South Shore Vo-Tech",8,45,0],["2026-10-29","Winthrop","Salem",42,22,0],["2026-10-29","Cathedral","Archbishop Williams",26,47,0],["2026-10-29","Haverhill","Central Catholic",36,43,0],["2026-10-29","Quincy","Pembroke",41,14,0],["2026-10-29","Blue Hills RVT","Tri-County RVT",30,7,0],["2026-10-29","Milton","Weymouth",27,20,0],["2026-10-29","McCann Tech","Belchertown",0,54,0],["2026-10-29","Springfield Int'l Charter","HS of Commerce",49,6,0],...(typeof CONFIRMED_FINALS!=='undefined'?CONFIRMED_FINALS.games:[]),...HISTORICAL_FINALS]:[];
+const REPORTED_FALL=FOOTBALL?[]:(typeof REPORTED_FALL_FINALS!=='undefined'?REPORTED_FALL_FINALS.sports?.[SPORT]||[]:[]);
+// These are verified local-news finals, separate from MIAA's official data.
+const PUBLISHED_FINALS=FOOTBALL?[["2026-10-29","Lee","Ware",46,14,0],["2026-10-29","Hoosac Valley","Holyoke",8,27,0],["2026-10-29","Quaboag Regional","Smith Vo-Tech",0,36,0],["2026-10-29","Lynn English","Medford",48,21,0],["2026-10-29","Chelsea","Minuteman Regional",23,22,0],["2026-10-29","Upper Cape Cod RVT","South Shore Vo-Tech",8,45,0],["2026-10-29","Winthrop","Salem",42,22,0],["2026-10-29","Cathedral","Archbishop Williams",26,47,0],["2026-10-29","Haverhill","Central Catholic",36,43,0],["2026-10-29","Quincy","Pembroke",41,14,0],["2026-10-29","Blue Hills RVT","Tri-County RVT",30,7,0],["2026-10-29","Milton","Weymouth",27,20,0],["2026-10-29","McCann Tech","Belchertown",0,54,0],["2026-10-29","Springfield Int'l Charter","HS of Commerce",49,6,0],...(typeof CONFIRMED_FINALS!=='undefined'?CONFIRMED_FINALS.games:[]),...HISTORICAL_FINALS]:REPORTED_FALL.map(x=>x.game);
 // Football Week 8 schedule (date, home, away, kickoff).
 const WEEK8=[["2026-10-29","Lee","Ware","18:00"],["2026-10-29","Hoosac Valley","Holyoke","18:00"],["2026-10-29","Quaboag Regional","Smith Vo-Tech","18:00"],["2026-10-29","Lynn English","Medford","18:00"],["2026-10-29","Chelsea","Minuteman Regional","18:00"],["2026-10-29","Upper Cape Cod RVT","South Shore Vo-Tech","18:00"],["2026-10-29","Winthrop","Salem","18:30"],["2026-10-29","Cathedral","Archbishop Williams","19:00"],["2026-10-29","Haverhill","Central Catholic","19:00"],["2026-10-29","Quincy","Pembroke","19:00"],["2026-10-29","Blue Hills RVT","Tri-County RVT","19:00"],["2026-10-29","Milton","Weymouth","19:00"],["2026-10-30","O'Bryant","English High","16:00"],["2026-10-30","Everett","Lynn Classical","17:00"],["2026-10-30","Leominster","Grafton","18:00"],["2026-10-30","Northeast Metro RVT","Greater Lowell Tech","18:00"],["2026-10-30","Winchester","Belmont","18:00"],["2026-10-30","Shawsheen Valley Tech","Greater Lawrence Tech","18:00"],["2026-10-30","Putnam Vo-Tech","Taconic","18:00"],["2026-10-30","Norwell","Randolph","18:00"],["2026-10-29","Springfield Int'l Charter","HS of Commerce","18:00"],["2026-10-30","Lexington","Arlington","18:00"],["2026-10-30","Dennis-Yarmouth","Falmouth","18:00"],["2026-10-30","Malden Catholic","Xaverian Brothers","18:00"],["2026-10-30","East Boston","Tech Boston Academy","18:00"],["2026-10-30","North High","Worcester Tech","18:00"],["2026-10-30","Monument Mountain","Pathfinder RVT","18:00"],["2026-10-30","Bishop Feehan","La Salle Academy (R.I.)","18:00"],["2026-10-30","Saint John's","Boston College High","18:00"],["2026-10-30","Hull","Carver","18:00"],["2026-10-30","Cape Cod RVT","Atlantis Charter","18:00"],["2026-10-30","Gardner","Tyngsborough","18:00"],["2026-10-30","Barnstable","Bridgewater-Raynham","18:00"],["2026-10-30","Ashland","Norwood","18:00"],["2026-10-30","Hopkinton","Westwood","18:00"],["2026-10-30","Oliver Ames","Canton","18:00"],["2026-10-30","Malden","Somerville","18:00"],["2026-10-30","Medfield","Holliston","18:00"],["2026-10-30","Seekonk","West Bridgewater","18:00"],["2026-10-30","Franklin","Taunton","18:00"],["2026-10-30","Chelmsford","Lawrence","18:00"],["2026-10-30","North Andover","Lowell","18:00"],["2026-10-30","Needham","Framingham","18:00"],["2026-10-30","St. John's Prep","Catholic Memorial","18:00"],["2026-10-30","Millis","Dover-Sherborn","18:00"],["2026-10-30","Whittier RVT","Revere","18:00"],["2026-10-30","David Prouty","Abby Kelley Foster","18:00"],["2026-10-30","Sandwich","Nauset Regional","18:00"],["2026-10-30","Amesbury","Hamilton-Wenham","18:00"],["2026-10-30","Concord-Carlisle","Wayland","18:00"],["2026-10-30","Hingham","Silver Lake Regional","18:00"],["2026-10-30","Brookline","Wellesley","18:00"],["2026-10-30","Burlington","Wakefield Memorial","18:00"],["2026-10-30","Mansfield","King Philip Regional","18:00"],["2026-10-30","Duxbury","Plymouth North","18:00"],["2026-10-30","St. Mary's","Norton","18:00"],["2026-10-30","Reading Memorial","Woburn Memorial","18:00"],["2026-10-30","Wachusett Regional","Algonquin","18:00"],["2026-10-30","Joseph Case","Sharon","18:00"],["2026-10-30","Manchester Essex","Pentucket Regional","18:00"],["2026-10-30","Montachusett RVT","Nashoba Regional","18:00"],["2026-10-30","Holbrook","Monomoy","18:00"],["2026-10-30","Marshfield","Whitman-Hanson Reg.","18:00"],["2026-10-30","Newton North","Braintree","18:00"],["2026-10-30","Attleboro","Milford","18:00"],["2026-10-30","Medway","Bellingham","18:00"],["2026-10-30","Bishop Stang","Cardinal Spellman","18:00"],["2026-10-30","St. Bernard's","Oxford","18:30"],["2026-10-30","Shrewsbury","Westborough","18:30"],["2026-10-30","Lunenburg","Leicester","18:30"],["2026-10-30","Melrose","Stoneham","18:30"],["2026-10-30","Brockton","Durfee","18:30"],["2026-10-30","Keefe Tech","Southbridge","18:30"],["2026-10-30","Apponequet Regional","Dighton-Rehoboth","18:30"],["2026-10-30","North Reading","Essex North Shore","18:30"],["2026-10-30","Natick","Walpole","18:30"],["2026-10-30","Fairhaven","Greater New Bedford","18:30"],["2026-10-30","Lincoln-Sudbury","Cambridge Rindge & Lat.","18:30"],["2026-10-30","Nashua North (N.H.)","Dracut","18:30"],["2026-10-30","Stoughton","Wareham","18:30"],["2026-10-30","Boston Latin Academy","Brighton","18:30"],["2026-10-30","Cohasset","Mashpee","18:30"],["2026-10-30","Lynnfield","Newburyport","18:30"],["2026-10-30","Old Rochester Regional","Somerset Berkley Reg.","18:30"],["2026-10-29","McCann Tech","Belchertown","19:00"],["2026-10-30","Doherty Memorial","Tantasqua Regional","19:00"],["2026-10-30","Waltham","Boston Latin","19:00"],["2026-10-30","Agawam","Wahconah Regional","19:00"],["2026-10-30","KIPP Academy Lynn Coll.","Lowell Catholic","19:00"],["2026-10-30","Athol","Greenfield","19:00"],["2026-10-30","Methuen","Billerica Memorial","19:00"],["2026-10-30","Minnechaug","Longmeadow","19:00"],["2026-10-30","Acton-Boxborough","Bedford","19:00"],["2026-10-30","Blackstone Valley RVT","Assabet Valley RVT","19:00"],["2026-10-30","Maynard","Hudson","19:00"],["2026-10-30","Masconomet Regional","Marblehead","19:00"],["2026-10-30","Andover","Tewksbury Memorial","19:00"],["2026-10-30","Arlington Catholic","Bishop Fenwick","19:00"],["2026-10-30","South High Community","Auburn","19:00"],["2026-10-30","Saugus","Swampscott","19:00"],["2026-10-30","Chicopee","Northampton","19:00"],["2026-10-30","Millbury","Northbridge","19:00"],["2026-10-30","Marlborough","Shepherd Hill Regional","19:00"],["2026-10-30","Diman RVT","Bristol-Plymouth RVT","19:00"],["2026-10-30","Springfield Central","West Springfield","19:00"],["2026-10-30","Easthampton","South Hadley","19:00"],["2026-10-30","Newton South","Westford Academy","19:00"],["2026-10-30","Weston","Fitchburg","19:00"],["2026-10-30","Southeastern RVT","Old Colony RVT","19:00"],["2026-10-30","Bay Path RVT","Uxbridge","19:00"],["2026-10-30","East Longmeadow","Westfield","19:00"],["2026-10-30","Quabbin Regional","Groton-Dunstable","19:00"],["2026-10-30","North Attleborough","Foxborough","19:00"],["2026-10-30","East Bridgewater","Abington","19:00"],["2026-10-30","Scituate","Hanover","19:00"],["2026-10-30","Danvers","Peabody Veterans","19:00"],["2026-10-30","Bartlett","Narragansett Regional","19:00"],["2026-10-30","Middleborough","Rockland","19:00"],["2026-10-30","Murdock","Ayer Shirley","19:00"],["2026-10-30","Watertown","Wilmington","19:00"],["2026-10-30","Mahar Regional","Franklin County Tech","19:00"],["2026-10-30","New Bedford","Dartmouth","19:00"],["2026-10-30","Ludlow","Frontier Regional","19:00"],["2026-10-30","West Boylston","Oakmont Regional","19:00"],["2026-10-30","Plymouth South","North Quincy","19:00"],["2026-10-30","Amherst-Pelham Reg.","Chicopee Comp.","19:00"],["2026-10-30","Nashoba Valley Tech","Lynn Vo-Tech","19:30"],["2026-10-31","Gloucester","Beverly","11:00"],["2026-10-31","Blackstone-Millville","Burncoat","12:00"],["2026-10-31","Clinton","Nipmuc Regional","12:00"],["2026-10-31","Martha's Vineyard Reg.","Nantucket","15:00"]];
 const LOCKED_MATCHUPS=new Set(PUBLISHED_FINALS.map(g=>[g[1],g[2]].sort().join('|')));
@@ -44,7 +46,7 @@ const source=new Map();
 for(const g of SD.games){let k=pairKey(g);if(source.has(k)){let i=2;while(source.has(k+'#'+i))i++;k+='#'+i}source.set(k,g)}
 // Remove outdated unplayed placeholders for games completed Thursday.
 for(const [k,g] of source)if(g[3]===null&&g[4]===null&&isPublishedWeek8Game(g))source.delete(k);
-// Order of authority: MIAA's official ledger, then live results from MIAA's public scoreboard (Arbiter data,
+// Order of authority: MIAA's official ledger, then the live results feed (
 // synced daily by scripts/sync_live.py), then hand-entered finals for anything neither has yet.
 // A later source is skipped when an earlier one has the same two teams within three days
 // (a Friday game can be logged as Saturday), so no game is counted twice.
@@ -56,11 +58,11 @@ const playedNear=g=>(playedOn.get(matchup(g))||[]).some(t=>Math.abs(t-Date.parse
 for(const g of SD.games)if(g[3]!==null)notePlayed(g);
 const HAND_FORFEITS=new Map(PUBLISHED_FINALS.filter(g=>g[5]).map(g=>[matchup(g),g]));
 const LIVE_KEYS=new Set();
-// Live results and the official ledger both come from Arbiter, so their dates agree exactly; a live game is
+// Live results and the official ledger share the same game records, so their dates agree exactly; a live game is
 // skipped only if the ledger has that exact game. Same-day doubleheaders get a second key, as in the ledger.
 for(const g of LIVE.results){
  if(!TEAMS.includes(g[1])||!TEAMS.includes(g[2]))continue;
- // Keep a hand-verified forfeit label when Arbiter shows the same score as an ordinary game.
+ // Keep a hand-verified forfeit label when the live feed shows the same score as an ordinary game.
  const f=HAND_FORFEITS.get(matchup(g)),same=f&&(f[1]===g[1]?[f[3],f[4]]:[f[4],f[3]]).join()===[g[3],g[4]].join();
  const r=same&&!g[5]?[...g.slice(0,5),1]:g;
  let k=pairKey(r);const cur=source.get(k);if(cur&&cur[3]!==null&&!LIVE_KEYS.has(k))continue;
@@ -68,11 +70,12 @@ for(const g of LIVE.results){
  source.set(k,r);LIVE_KEYS.add(k);notePlayed(r);
 }
 for(const g of PUBLISHED_FINALS){const cur=source.get(pairKey(g));if((!cur||cur[3]===null)&&!playedNear(g))source.set(pairKey(g),g)}
+const REPORTED_APPLIED=new Map(REPORTED_FALL.filter(x=>source.get(pairKey(x.game))===x.game).map(x=>[pairKey(x.game),x.source]));
 // A scheduled game logged under a different date is attached to its schedule card, so the card shows the
 // final and a prediction can't count the same game twice.
 for(const r of FOOTBALL?WEEK8:[]){const k=pairKey([r[0],r[1],r[2]]);const cur=source.get(k);if(cur&&cur[3]!==null)continue;
  for(const [other,g] of source)if(other!==k&&g[3]!==null&&matchup(g)===matchup(r)&&Math.abs(Date.parse(g[0])-Date.parse(r[0]))<=3*864e5){source.delete(other);source.set(k,g);if(LIVE_KEYS.delete(other))LIVE_KEYS.add(k);break}}
-// A game is locked once a final score exists: MIAA's ledger, the live scoreboard or a confirmed final.
+// A game is locked once a final score exists: the official ledger, the live feed or a confirmed final.
 const isLocked=k=>{const g=source.get(k);return !!(g&&g[3]!==null)};
 const PUBLISHED_FINAL_KEYS=new Set(PUBLISHED_FINALS.map(pairKey));
 const LOCKED_KEYS=new Set([...source.keys()].filter(k=>(PUBLISHED_FINAL_KEYS.has(k)||LIVE_KEYS.has(k))&&isLocked(k)));
@@ -89,7 +92,19 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edit
 if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getItem('miaa-fall-2026-v1:'+SPORT)||'[]');
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
 const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2]));
-const schedule=()=>FOOTBALL?WEEK8:[...LIVE_UPCOMING,...addedFixtures.filter(f=>!LIVE_UPCOMING.some(r=>pairKey([r[0],r[1],r[2]])===pairKey([f[0],f[1],f[2]])))];
+const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
+const REPORTED_POSTPONED=new Map(
+ ((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.postponed?.[SPORT])||[])
+ .map(x=>[pairKey(x.game),x.source]));
+const LIVE_POSTPONED=new Set([...(LIVE.postponed||[]).map(r=>pairKey(r)),...REPORTED_POSTPONED.keys()]);
+const TODAY_ET=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'});
+const awaitingOfficial=r=>r[0]<TODAY_ET&&!isLocked(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r));
+// A locally verified final may never have appeared in the list of scheduled games.
+// Include such matches on the Games panel rather than only in the underlying ratings.
+const REPORTED_FIXTURES=FOOTBALL?[]:REPORTED_FALL.map(x=>[x.game[0],x.game[1],x.game[2],null])
+ .filter(f=>!LIVE_UPCOMING.some(r=>pairKey(r)===pairKey(f)));
+const schedule=()=>FOOTBALL?WEEK8:[...LIVE_UPCOMING,...REPORTED_FIXTURES,
+ ...addedFixtures.filter(f=>![...LIVE_UPCOMING,...REPORTED_FIXTURES].some(r=>pairKey(r)===pairKey(f)))];
 const isAddedFixture=k=>addedFixtures.some(f=>pairKey([f[0],f[1],f[2]])===k);
 let selectedDiv=DIVISIONS[0], activePage='rankings', selectedTeam=Object.keys(DIV).sort((a,b)=>a.localeCompare(b))[0], weekDiv=DIVISIONS[0];
 let alertTimer;
@@ -202,6 +217,54 @@ function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails')
   return `<tr><td class="date">${shortDate(g[0])}</td><td><button type="button" class="team-button" data-team="${esc(opp)}"><span class="team-name">${esc(opp)}</span></button></td><td><span class="result"><span class="wl ${wl}">${wl==='u'?'–':wl.toUpperCase()}</span>${my===null?'Unplayed':my+'–'+their}</span>${tag}</td><td class="num">${margin}</td><td class="num">${signed(MODEL.teams[opp]?.rating,2)}</td></tr>`}).join('')}</tbody></table></div></div>`;}
 function switchPage(page){activePage=page;document.querySelectorAll('.page').forEach(e=>e.classList.toggle('hidden',e.id!==page+'Page'));document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.page===page));if(page==='team')renderTeam();if(page==='bracket'){bracketDiv=selectedDiv;renderBracket()}window.scrollTo(0,0)}
 function reset(){if(edits.length&&!confirm('Remove all scenario changes?'))return;edits=[];predictedKeys.clear();save();toast(FOOTBALL?'Scenarios cleared; confirmed scores remain locked':'Scenario scores cleared; your added games are still listed')}
+
+/* 1080x1920 bracket image for TikTok and other 9:16 posts. The bracket stays inside the
+   area TikTok leaves uncovered (its tabs on top, caption on the bottom, buttons on the right). */
+const SHORT_ROUNDS={16:'R16',8:'QF',4:'SF',2:'Final'};
+function fitText(ctx,s,max){if(ctx.measureText(s).width<=max)return s;while(s.length>1&&ctx.measureText(s+'…').width>max)s=s.slice(0,-1);return s+'…'}
+function bracketCanvas(){
+ const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const ctx=c.getContext('2d');
+ const css=getComputedStyle(document.body),v=n=>css.getPropertyValue(n).trim(),turf=v('--turf')||'#1d6b45',ink=v('--ink')||'#0f1f17',muted=v('--muted')||'#5b6b63',line=v('--line-strong')||'#c6d0ca',soft=v('--surface-2')||'#f1f4f2';
+ const F=(w,px)=>`${w} ${px}px Archivo, system-ui, sans-serif`;
+ const rows=standings(bracketDiv),seed=Object.fromEntries(rows.filter(r=>r.qualified).map(r=>[r.seed,r]));
+ const order=seedOrder(FIELD),counts=[];for(let n=FIELD/2;n>=1;n/=2)counts.push(n);
+ ctx.fillStyle=turf;ctx.fillRect(0,0,W,H);
+ const card={x:40,y:320,w:914,h:1350};
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(card.x,card.y,card.w,card.h,28);ctx.fill();
+ const L=card.x+32,R=card.x+card.w-32;let y=card.y+44;
+ ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText('PROJECTED BRACKET',L,y);
+ ctx.fillStyle=ink;ctx.font=F(850,60);ctx.fillText(fitText(ctx,`Division ${bracketDiv} ${SP.name}`,R-L),L,y+=66);
+ ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
+ const gap=26,firstW=470,restW=(R-L-firstW-gap*(counts.length-1))/(counts.length-1);
+ const colX=i=>i?L+firstW+gap+(i-1)*(restW+gap):L,colW=i=>i?restW:firstW;
+ const top=y+=74,bottom=card.y+card.h-70,area=bottom-top;
+ ctx.fillStyle=muted;ctx.font=F(700,22);
+ counts.forEach((n,i)=>ctx.fillText(i?SHORT_ROUNDS[n*2]:ROUND_NAMES[n*2],colX(i),top-16));
+ const boxH=Math.min(area/counts[0]*.8,120),slotH=boxH/2,mid=(i,j)=>top+(j+.5)*area/counts[i];
+ ctx.lineWidth=2;ctx.strokeStyle=line;
+ counts.forEach((n,i)=>{for(let j=0;j<n;j++){
+  const x=colX(i),w=colW(i),cy=mid(i,j),by=cy-boxH/2;
+  if(i<counts.length-1){const nx=colX(i+1),ex=x+w+gap/2;ctx.beginPath();ctx.moveTo(x+w,cy);ctx.lineTo(ex,cy);if(j%2===0){ctx.lineTo(ex,mid(i,j+1));ctx.moveTo(ex,(cy+mid(i,j+1))/2);ctx.lineTo(nx,(cy+mid(i,j+1))/2)}ctx.stroke()}
+  ctx.fillStyle=i?soft:'#fff';ctx.beginPath();ctx.roundRect(x,by,w,boxH,10);ctx.fill();
+  ctx.strokeStyle=i===counts.length-1?turf:line;ctx.stroke();ctx.strokeStyle=line;
+  ctx.beginPath();ctx.moveTo(x,cy);ctx.lineTo(x+w,cy);ctx.stroke();
+  if(i)continue;
+  const fs=Math.round(slotH*.46);ctx.textBaseline='middle';
+  [order[2*j],order[2*j+1]].forEach((s,k)=>{const r=seed[s],sy=by+slotH*(k+.5);
+   ctx.fillStyle=muted;ctx.font=F(800,fs);ctx.textAlign='center';ctx.fillText(s,x+28,sy);ctx.textAlign='left';
+   const rate=r?signed(r.rating,2):'';ctx.font=F(500,fs*.85);const rw=ctx.measureText(rate).width;ctx.textAlign='right';ctx.fillText(rate,x+w-14,sy);ctx.textAlign='left';
+   ctx.fillStyle=r?ink:muted;ctx.font=F(k?500:700,fs);ctx.fillText(fitText(ctx,r?r.team:'No eligible team',w-56-14-rw-12),x+56,sy)});
+  ctx.textBaseline='alphabetic'}});
+ ctx.fillStyle=turf;ctx.font=F(800,22);const credit='MA HIGH SCHOOL POWER RANKINGS';ctx.fillText(credit,L,card.y+card.h-30);
+ const cw=ctx.measureText(credit).width;ctx.fillStyle=muted;ctx.font=F(500,22);ctx.fillText(fitText(ctx,'  ·  '+(location.host||'miaa-football-scenarios.vercel.app'),R-L-cw),L+cw,card.y+card.h-30);
+ return c}
+// Built and shared synchronously so iOS still treats the share as part of the tap.
+function shareBracketImage(){
+ const url=bracketCanvas().toDataURL('image/png'),name=`${SPORT}-division-${bracketDiv}-bracket.png`;
+ const bin=atob(url.split(',')[1]),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+ const file=new File([bytes],name,{type:'image/png'}),download=()=>{const a=document.createElement('a');a.href=url;a.download=name;a.click()};
+ if(navigator.canShare?.({files:[file]}))navigator.share({files:[file]}).catch(e=>{if(e.name!=='AbortError')download()});
+ else download()}
 
 /* Projected brackets: the top FIELD teams by rating in each division, standard seeding
    (1 plays the last seed, and the top two seeds can only meet in the final).
@@ -332,7 +395,7 @@ function renderFixtures(){
  filters.innerHTML=DIVISIONS.map(d=>`<button type="button" data-wdiv="${d}" class="weekFilter ${weekDiv===d?'selected':''}">D${d}</button>`).join('');
  const games=visibleFixtures();
  const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}"><span class="fixture-name">${esc(name)}</span></button>${teamMeta(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win ${CAP}–0">MAX</button></div></div>`;
- const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No upcoming games on MIAA\'s scoreboard yet. Add any you know of above.';
+ const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No upcoming games listed yet. Add any you know of above.';
  el('fixtureList').innerHTML=games.length?games.map(r=>`<article class="fixture" data-fixture="${esc(fixtureKey(r))}">
    <div class="fixturetop"><span class="fixture-date">${fixtureWhen(r)}</span><div class="fixture-meta"><span class="fixtureStatus"></span><button type="button" class="fixtureClear" data-clear="${esc(fixtureKey(r))}" title="${FOOTBALL?'Remove score':'Remove game'}" aria-label="${FOOTBALL?'Remove score':'Remove game'}">×</button></div></div>
    ${line('a',r[1])}${line('b',r[2])}
@@ -344,7 +407,25 @@ function updateFixtureStates(){
  for(const card of list.querySelectorAll('[data-fixture]')){
  const k=card.dataset.fixture,entered=edits.find(g=>pairKey(g)===k),base=source.get(k), g=entered||base;
  const locked=isLocked(k),has=!!(g&&g[3]!==null&&g[4]!==null),pred=!!entered&&predictedKeys.has(k);if(has)n++;
- const lab=card.querySelector('.fixtureStatus');lab.textContent=locked?(g[5]?'FINAL · FORFEIT':'FINAL'):entered?(pred?'Prediction':'Scenario'):POSTPONED_KEYS.has(k)?'POSTPONED':'';lab.classList.toggle('saved',!!entered&&!pred);lab.classList.toggle('pred',pred);lab.classList.toggle('locked',locked);lab.classList.toggle('postponed',!locked&&!entered&&POSTPONED_KEYS.has(k));lab.classList.remove('warn');
+ const isPostponed=POSTPONED_KEYS.has(k)||LIVE_POSTPONED.has(k);
+ const overdue=!FOOTBALL&&k.slice(0,10)<TODAY_ET&&!locked&&!isPostponed;
+ const lab=card.querySelector('.fixtureStatus');
+ lab.textContent=locked?(REPORTED_APPLIED.has(k)?'REPORTED FINAL':g[5]?'FINAL · FORFEIT':'FINAL'):entered?(pred?'Prediction':'Scenario'):isPostponed?'POSTPONED':overdue?'SCORE MISSING':LIVE_UNVERIFIED.has(k)?'VERIFY GAME':'';
+ const provenance=REPORTED_APPLIED.get(k)||(!locked&&isPostponed?REPORTED_POSTPONED.get(k):null);
+ lab.title=provenance?(
+  REPORTED_APPLIED.has(k)?'Independently reported by '+provenance.publisher+'; official MIAA score takes precedence':
+  'Postponement reported by '+provenance.publisher+'; awaiting rescheduling'
+ ):'';
+ let sourceRef=card.querySelector('.fixture-source');
+ if(provenance&&!sourceRef){
+  sourceRef=document.createElement('a');sourceRef.className='fixture-source';
+  sourceRef.target='_blank';sourceRef.rel='noopener noreferrer';sourceRef.textContent='Source';
+  lab.after(sourceRef);
+ }
+ if(sourceRef){if(provenance)sourceRef.href=provenance.url;else sourceRef.remove()}
+ lab.classList.toggle('saved',!!entered&&!pred);lab.classList.toggle('pred',pred);
+ lab.classList.toggle('locked',locked);lab.classList.toggle('postponed',!locked&&!entered&&isPostponed);
+ lab.classList.toggle('warn',!locked&&!entered&&overdue);
  for(const [side,index] of [['a',3],['b',4]]){const input=card.querySelector(`[data-side=${side}]`);if(input!==document.activeElement){const target=has?String(g[index]):'';if(input.value!==target)input.value=target;}input.disabled=locked;
    card.querySelector(`[data-line=${side}]`).classList.toggle('is-win',has&&g[index]>g[index===3?4:3]);}
  card.classList.toggle('fixture-edited',!!entered);card.classList.toggle('is-pred',pred);card.classList.toggle('fixture-locked',locked);card.querySelectorAll('[data-max]').forEach(b=>b.disabled=locked);
@@ -359,7 +440,8 @@ function updateFixtureStates(){
  card.querySelector('.fixtureClear').disabled=isAddedFixture(k)?false:locked||!entered;
  }
  const total=visibleFixtures().length;
- el('weekMeta').textContent=total?`${n} of ${total} ${total===1?'matchup':'matchups'} scored`:FOOTBALL?'':'Games you add are saved in this browser only';
+ const pending=FOOTBALL?0:visibleFixtures().filter(awaitingOfficial).length;
+ el('weekMeta').textContent=total?`${n} of ${total} ${total===1?'matchup':'matchups'} scored${pending?' · '+pending+' past games awaiting official scores':''}`:FOOTBALL?'':'Games you add are saved in this browser only';
  el('clearPredictions').disabled=!predictedKeys.size;
 }
 // A score must be whole numbers; volleyball counts sets, so the winner has exactly 3 and the loser 0–2.
@@ -381,8 +463,7 @@ function addFixture(){
  focusFixture(fixtureKey(f));toast(`Added ${a} vs ${b}.`);
 }
 
-// First-visit chooser. Dismissal is remembered per browser and per sport.
-const INTRO_KEY=store('miaa-intro-seen-v1');
+// Optional help dialog, opened only when the visitor selects “How this works”.
 function scrollToEl(node){node.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'start'})}
 function openIntro(){const d=el('intro');if(d.open||typeof d.showModal!=='function')return;
  const n=unscoredFixtures().length;
@@ -405,26 +486,29 @@ function applySportCopy(){
  text('.js-capunit',`${CAP}-${SP.unit}`);text('.js-date',BASELINE_DATE);
  text('.js-teams',Object.keys(OFF).length);text('.js-games',SD.games.filter(g=>g[3]!==null).length.toLocaleString('en-US'));text('.js-divisions',DIVISIONS.length);
  el('capExample').textContent=FOOTBALL?'A 35–7 win is treated as +14; a 14–21 loss is −7.':SPORT==='volleyball'?'Results count in sets: a 3–0 match is +3 and a 3–2 match is +1.':'A 6–0 win is treated as +3; a 1–2 loss is −1.';
- el('headlineSub').textContent=FOOTBALL?'Use this tool to predict the power rankings after Week 8, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
-  :`MIAA ratings with live scores from MIAA's scoreboard. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
+ el('headlineSub').textContent=FOOTBALL?'Enter Week 8 scores, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
+  :`MIAA ratings with the latest scores. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
  for(const n of document.querySelectorAll('.football-only'))n.hidden=!FOOTBALL;
  for(const n of document.querySelectorAll('.added-games-only'))n.hidden=FOOTBALL;
  el('heroPredictLabel').textContent=FOOTBALL?'Predict Week 8':'Add a game';
+ el('heroPredict').style.display=FOOTBALL?'none':'';
+ el('predictWeek8').style.display=FOOTBALL?'none':'';
+ document.querySelector('.choice-predict').style.display=FOOTBALL?'none':'';
  el('weekJumpLabel').textContent=FOOTBALL?'Enter scores myself':'Predict my games';
  el('week8Tab').textContent=FOOTBALL?'Week 8':'Games';
  el('weekTitle').textContent=FOOTBALL?'Week 8 scores':'Games still to play';
- el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter remaining scores, or select <strong>Predict Week 8</strong> to estimate the rest.'
-  :'Upcoming games come from MIAA\'s scoreboard. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
+ el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter any remaining scores.'
+  :'Upcoming games are listed below. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
  el('predictLabel').textContent=FOOTBALL?'Predict Week 8':'Predict all games';
- el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be predicted or edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
+ el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
  el('introDate').textContent=`Official rankings as of ${BASELINE_DATE}`;
- el('introTitle').textContent=`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
- el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Choose how to fill in <span id="introCount">Week 8</span>.'
-  :`The top 32 in each division make the tournament. The games still to be played come from MIAA's scoreboard; score them yourself or predict them, and add any that are missing.`;
+ el('introTitle').textContent=FOOTBALL?`Final MIAA ${SP.name.toLowerCase()} power rankings`:`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
+ el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Type in scores for <span id="introCount">Week 8</span>.'
+  :`The top 32 in each division make the tournament. The games still to be played are listed; score them yourself or predict them, and add any that are missing.`;
  if(!FOOTBALL){const next=new Date(SD_DATE+'T12:00');next.setDate(next.getDate()+1);el('addDate').value=next.toISOString().slice(0,10);el('addDate').min=SD_DATE}
 }
 
-/* Admin: start a sync of MIAA's newest Arbiter export (api/sync.js runs a GitHub workflow). */
+/* Admin: start a data sync (api/sync.js runs a GitHub workflow). */
 function initAdmin(){
  const d=el('admin'),status=el('adminStatus');let key='',timer=0;
  const show=(text,tone)=>{status.textContent=text;status.dataset.tone=tone||''};
@@ -465,8 +549,7 @@ function initInstall(){
   b.addEventListener('click',()=>{if(typeof prompt?.showDialog==='function')prompt.showDialog(true);else toast('Use your browser menu to add this site to your home screen.')});
  }
 }
-// Offer the install prompt on its own once a week at most: after the first-visit intro closes,
-// or shortly after load for returning visitors. Never inside the installed app or over another dialog.
+// Offer the install prompt at most once a week, except in the installed app.
 const INSTALL_PROMPTED='miaa-install-prompted';
 function scheduleInstallPrompt(){
  const prompt=document.querySelector('pwa-install');
@@ -479,6 +562,10 @@ function scheduleInstallPrompt(){
  else setTimeout(show,2000);
 }
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
+ // The TikTok image button is only for the site owner: open the site once with ?tiktok=1 (or ?tiktok=0 to hide it again) and this browser remembers.
+ const tk=new URLSearchParams(location.search).get('tiktok');
+ try{if(tk==='1')localStorage.setItem('miaa-tiktok','1');if(tk==='0')localStorage.removeItem('miaa-tiktok');el('bracketShare').hidden=localStorage.getItem('miaa-tiktok')!=='1'}catch{el('bracketShare').hidden=tk!=='1'}
+ el('bracketShare').addEventListener('click',shareBracketImage);document.fonts?.load('800 40px Archivo');
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
  document.querySelector('.navigation').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)switchPage(b.dataset.page)});
@@ -499,7 +586,6 @@ function initFixtures(){
  el('weekJump').addEventListener('click',()=>{if(FOOTBALL){jumpToWeek8();return}if(predictAll())scrollToEl(document.querySelector('.wrap'))});
  el('heroReset').addEventListener('click',reset);
  el('openIntro').addEventListener('click',openIntro);
- el('intro').addEventListener('close',()=>{try{localStorage.setItem(INTRO_KEY,'1')}catch{}});
  // Close on a backdrop click only: the press and release must both land outside the dialog box,
  // so scrollbar drags and text selections that end on the dialog don't dismiss it.
  for(const d of [el('intro'),el('admin')]){
@@ -514,8 +600,6 @@ function initFixtures(){
    else if(b.dataset.intro==='enter'||b.dataset.intro==='add')jumpToWeek8();
    else if(b.dataset.intro==='bracket')switchPage('bracket');
  });
- let seen=false;try{seen=localStorage.getItem(INTRO_KEY)==='1'}catch{}
- if(!seen&&!edits.length)openIntro();
  scheduleInstallPrompt();
  const tabs=document.querySelector('.sideTabs');tabs.addEventListener('click',e=>{const b=e.target.closest('[data-side-tab]');if(!b)return;const name=b.dataset.sideTab;tabs.querySelectorAll('.sideTab').forEach(x=>x.classList.toggle('selected',x===b));for(const n of ['week8','changes'])el(n+'View').classList.toggle('hidden',name!==n)});
  el('predictWeek8').addEventListener('click',predictAll);el('clearPredictions').addEventListener('click',clearAllPredictions);

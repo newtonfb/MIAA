@@ -118,6 +118,24 @@ git commit -m "Explain my change"
 git push origin main
 ```
 
+## Verifying scores missing from MIAA
+
+MIAA's official rankings PDFs and live scoreboard remain the primary sources. A fixture without
+a posted final is **unverified**, not automatically a loss, draw, cancellation or completed game.
+
+To research results still missing after a sync, check:
+- [iBerkshires high school sports](https://www.iberkshires.com/sports/highschool/main) for Berkshire / Western Massachusetts games.
+- [Boston Globe High School Sports scoreboard](https://www.bostonglobe.com/sports/high-schools/scoreboard/) for Eastern Massachusetts soccer, field hockey, and volleyball results; check the dated scoreboard.
+- [Worcester Telegram & Gazette high school scoreboard](https://cm.telegram.com/highschool-scores?season=202627&type=scoreboard) for Central Massachusetts games.
+- [Worcester T&G Sports on X (@tgsports)](https://x.com/tgsports) for Central Mass. game recaps, final scores, and school-athletics reposts. Cross-check the dated post before using a score; an X profile alone is not proof of any specific result.
+
+An independently verified result may be recorded in `data/verified-reported-2026.js`,
+with its sport, date, participants, score, publisher and exact public article URL.
+The website labels these **REPORTED FINAL**, links to the source, and uses them
+provisionally in projections. **MIAA's own scored ledger and live scoreboard take
+precedence** when the same game appears in their data. Do not infer missing
+scores from a scheduled matchup or season record.
+
 ## Sources
 
 - [MIAA power-ranking releases](https://www.miaa.net/game-day/tournament-central/power-rankings)
