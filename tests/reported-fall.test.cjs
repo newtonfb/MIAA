@@ -6,7 +6,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const root=path.resolve(__dirname,'..');
 const js=fs.readFileSync(path.join(root,'data/verified-reported-2026.js'),'utf8');
-const reported=JSON.parse(js.replace(/^\/\/[^\n]*\n/g,'').trim().replace(/^const REPORTED_FALL_FINALS=/,'').replace(/;\s*$/,''));
+const reported=JSON.parse(js.replace(/^(?:\/\/[^\n]*\n)+/,'').trim().replace(/^const REPORTED_FALL_FINALS=/,'').replace(/;\s*$/,''));
 const fallText=fs.readFileSync(path.join(root,'data/fall-2026.js'),'utf8');
 const fall=JSON.parse(fallText.trim().replace(/^const FALL_DATA=/,'').replace(/;\s*$/,''));
 for(const [sport,entries] of Object.entries(reported.sports)){
