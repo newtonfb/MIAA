@@ -55,3 +55,33 @@ test('Telegram scoreboard finals were added with exact date and score',()=>{
   }
  }
 });
+
+test('Globe-confirmed October finals are present with traceable sources',()=>{
+ const expected={
+  'boys-soccer':[['2026-10-31','Boston International','Boston Latin Academy',1,0,0]],
+  'girls-soccer':[['2026-10-31','Milton','Brockton',5,0,0],['2026-10-31',"O'Bryant",'Boston Latin Academy',1,0,0]],
+  volleyball:[['2026-10-30','Winchester','Newton North',2,3,0]]
+ };
+ for(const [sport,fixtures] of Object.entries(expected)){
+  for(const game of fixtures){
+   const match=reported.sports[sport].find(x=>x.game[0]===game[0]&&
+    [x.game[1],x.game[2]].sort().join('|')===[game[1],game[2]].sort().join('|'));
+   assert.ok(match,'missing Globe final '+game.join(' '));
+   assert.deepEqual(match.game,game);
+   assert.equal(match.source.publisher,'The Boston Globe');
+   assert.ok(match.source.url.startsWith('https://www.bostonglobe.com/'));
+  }
+ }
+});
+
+test('confirmed postponement does not count as an unreported final',()=>{
+ const rows=reported.postponed['field-hockey'];
+ const entry=rows.find(x=>x.game[0]==='2026-10-31'&&x.game[1]==='Manchester Essex'&&x.game[2]==='Triton Regional');
+ assert.ok(entry,'missing independently confirmed postponement');
+ assert.equal(entry.source.publisher,'Cape Ann Current');
+ assert.ok(entry.source.url.startsWith('https://capeanncurrent.com/'));
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ assert.match(app,/const REPORTED_POSTPONED=new Map/);
+ assert.match(app,/\.\.\.REPORTED_POSTPONED\.keys\(\)/);
+ assert.match(app,/!LIVE_POSTPONED\.has\(fixtureKey\(r\)\)/);
+});
