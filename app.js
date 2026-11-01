@@ -528,6 +528,9 @@ function scheduleInstallPrompt(){
  else setTimeout(show,2000);
 }
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
+ // The TikTok image button is only for the site owner: open the site once with ?tiktok=1 (or ?tiktok=0 to hide it again) and this browser remembers.
+ const tk=new URLSearchParams(location.search).get('tiktok');
+ try{if(tk==='1')localStorage.setItem('miaa-tiktok','1');if(tk==='0')localStorage.removeItem('miaa-tiktok');el('bracketShare').hidden=localStorage.getItem('miaa-tiktok')!=='1'}catch{el('bracketShare').hidden=tk!=='1'}
  el('bracketShare').addEventListener('click',shareBracketImage);document.fonts?.load('800 40px Archivo');
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
