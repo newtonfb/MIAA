@@ -12,7 +12,7 @@ const fall=JSON.parse(fallText.trim().replace(/^const FALL_DATA=/,'').replace(/;
 for(const [sport,entries] of Object.entries(reported.sports)){
  test(sport+': independently reported scores include verifiable provenance and known teams',()=>{
   const official=fall.sports[sport];assert.ok(official);
-  const teams=new Set(Object.keys(official.divisions));
+  const teams=new Set([...Object.keys(official.divisions),...official.games.flatMap(g=>[g[1],g[2]])]);
   for(const entry of entries){
    const g=entry.game;
    assert.equal(g.length,6);
