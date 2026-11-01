@@ -7,7 +7,8 @@ const vm=require('node:vm');
 const {calculateRatings,miaaLevel}=require('../rating-engine.js');
 const root=path.resolve(__dirname,'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
-const DATA=JSON.parse(read('data/season-2026.js').trim().replace(/^const DATA=/,'').replace(/;$/,''));
+// Frozen Oct 30 release: these tests audit how Week 8 finals layered onto it before MIAA's final ledger.
+const DATA=JSON.parse(read('tests/fixtures/season-2026-10-30.js').trim().replace(/^const DATA=/,'').replace(/;$/,''));
 const CONFIRMED_FINALS=JSON.parse(read('data/confirmed-final-scores-2026.js').trim().replace(/^.*?const CONFIRMED_FINALS=/s,'').replace(/;$/,''));
 const key=g=>g[0]+'|'+[g[1],g[2]].sort().join('|');
 const officialKeys=new Set(DATA.games.map(key));

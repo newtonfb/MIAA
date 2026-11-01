@@ -280,7 +280,8 @@ def sync(check_only):
             kept.append(slug)
             print(f"  kept the previous official data: {exc}")
             continue
-        out[slug] = dict(title=title, cap=cap, date=as_of, divisions=divisions, official=official, games=games, urls={"rankings": rank_urls, "scores": meta.pop("scores")}, **meta)
+        # End-of-season "FINAL" releases are undated; date them by the last game they include.
+        out[slug] = dict(title=title, cap=cap, date=as_of or max(g[0] for g in games), **({"final": True} if as_of is None else {}), divisions=divisions, official=official, games=games, urls={"rankings": rank_urls, "scores": meta.pop("scores")}, **meta)
         print(f"  as of {as_of}: {len(official)} teams, {len(games)} games")
     if len(kept) == len(SPORTS):
         raise SyncError("no sport could be read")
@@ -310,7 +311,7 @@ def write_football(fb):
         return g[3] is None and g[0] >= fb["date"] and not moved
 
     upcoming = [g for g in current["games"] if still_upcoming(g)]
-    football = {"date": fb["date"], "games": fb["games"] + upcoming, "divisions": fb["divisions"], "official": fb["official"]}
+    football = {"date": fb["date"], **({"final": True} if fb.get("final") else {}), "games": fb["games"] + upcoming, "divisions": fb["divisions"], "official": fb["official"]}
     football_path.write_text("\nconst DATA=" + json.dumps(football, separators=(",", ":"), ensure_ascii=False) + ";\n\n", encoding="utf8")
     print(f"Wrote {football_path.name}: {len(fb['games'])} scored games, {len(upcoming)} upcoming")
 

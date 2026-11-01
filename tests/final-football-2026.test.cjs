@@ -50,3 +50,20 @@ test('final football data is loaded before the app, and anchors model scenarios'
  assert.match(app,/FINAL_EXCLUDED_GAMES/);
  assert.match(app,/Official MIAA FINAL/);
 });
+
+test('with MIAA final ledger, projecting from the Oct 30 release reproduces every final rank',()=>{
+ // Pre-final misses came from game inputs (missing, extra or mislabeled games), not the formula.
+ const {calculateRatings,miaaLevel}=require('../rating-engine.js');
+ const rel=f=>JSON.parse(fs.readFileSync(path.join(root,'data/releases/2026',f),'utf8'));
+ const A=rel('football-2026-10-30.json'),B=rel('football-2026-10-31.json');
+ const teams=[...new Set([...A.games,...B.games].flatMap(g=>[g[1],g[2]]))].sort();
+ const a=calculateRatings(A.games,teams,B.divisions),b=calculateRatings(B.games,teams,B.divisions);
+ const shift=miaaLevel(b)-miaaLevel(a);
+ const proj=Object.fromEntries(Object.keys(B.official).map(t=>[t,A.official[t][1]+(b.teams[t].raw-a.teams[t].raw)+shift]));
+ const errs=Object.keys(B.official).map(t=>proj[t]-B.official[t][1]),mean=errs.reduce((s,e)=>s+e,0)/errs.length;
+ assert.ok(Math.max(...errs.map(e=>Math.abs(e-mean)))<0.0005,'rating gaps must match MIAA');
+ for(let d=1;d<=8;d++){
+  const ts=Object.keys(B.official).filter(t=>B.divisions[t]===d).sort((x,y)=>proj[y]-proj[x]);
+  ts.forEach((t,i)=>assert.equal(i+1,B.official[t][0],`D${d} ${t}`));
+ }
+});
