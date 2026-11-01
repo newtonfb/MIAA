@@ -409,6 +409,7 @@ function applySportCopy(){
  for(const n of document.querySelectorAll('.football-only'))n.hidden=!FOOTBALL;
  for(const n of document.querySelectorAll('.added-games-only'))n.hidden=FOOTBALL;
  el('heroPredictLabel').textContent=FOOTBALL?'Predict Week 8':'Add a game';
+ el('heroPredict').style.display=FOOTBALL?'none':'';
  el('weekJumpLabel').textContent=FOOTBALL?'Enter scores myself':'Predict my games';
  el('week8Tab').textContent=FOOTBALL?'Week 8':'Games';
  el('weekTitle').textContent=FOOTBALL?'Week 8 scores':'Games still to play';
