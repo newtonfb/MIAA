@@ -424,9 +424,13 @@ function renderFixtures(){
  renderOpenCount();
 }
 // Ratings are solved statewide, so games outside the selected division still move it.
-function renderOpenCount(){
+function openGames(){
  const open=schedule().filter(r=>!isLocked(fixtureKey(r))),post=r=>POSTPONED_KEYS.has(fixtureKey(r))||LIVE_POSTPONED.has(fixtureKey(r));
- const missing=open.filter(r=>r[0]<TODAY_ET&&!post(r)).length,upcoming=open.filter(r=>r[0]>=TODAY_ET&&!post(r)).length,postponed=open.filter(post).length;
+ return {open,missing:open.filter(r=>r[0]<TODAY_ET&&!post(r)).length,upcoming:open.filter(r=>r[0]>=TODAY_ET&&!post(r)).length,postponed:open.filter(post)};
+}
+const plural=(n,word)=>`${n} ${word}${n===1?'':'s'}`;
+function renderOpenCount(){
+ const {open,missing,upcoming,postponed:pp}=openGames(),postponed=pp.length;
  const here=open.filter(r=>DIV[r[1]]===weekDiv||DIV[r[2]]===weekDiv).length,others=open.length-here,s=n=>n===1?'':'s';
  if(!open.length){el('openCount').innerHTML='<strong>Every scheduled game statewide has a result.</strong>';return}
  const parts=[missing&&`${missing} score${s(missing)} not reported`,upcoming&&`${upcoming} still to play`,postponed&&`${postponed} postponed`].filter(Boolean).join(', ');
@@ -497,7 +501,7 @@ function addFixture(){
 function scrollToEl(node){node.scrollIntoView({behavior:reduceMotion.matches?'auto':'smooth',block:'start'})}
 function openIntro(){const d=el('intro');if(d.open||typeof d.showModal!=='function')return;
  const n=unscoredFixtures().length;
- if(FOOTBALL)el('introCount').textContent=n?`the ${n} Week 8 ${n===1?'game':'games'} that ${n===1?'has':'have'} no score yet`:'Week 8';
+ if(FOOTBALL&&el('introCount'))el('introCount').textContent=n?`the ${n} Week 8 ${n===1?'game':'games'} that ${n===1?'has':'have'} no score yet`:'Week 8';
  d.showModal()}
 // Shows the matchup list and puts the cursor in the first empty score box (or the add-game form).
 function jumpToWeek8(){if(activePage!=='rankings')switchPage('rankings');document.querySelector('[data-side-tab=week8]').click();
@@ -516,25 +520,33 @@ function applySportCopy(){
  text('.js-capunit',`${CAP}-${SP.unit}`);text('.js-date',BASELINE_DATE);
  text('.js-teams',Object.keys(OFF).length);text('.js-games',SD.games.filter(g=>g[3]!==null).length.toLocaleString('en-US'));text('.js-divisions',DIVISIONS.length);
  el('capExample').textContent=FOOTBALL?'A 35–7 win is treated as +14; a 14–21 loss is −7.':SPORT==='volleyball'?'Results count in sets: a 3–0 match is +3 and a 3–2 match is +1.':'A 6–0 win is treated as +3; a 1–2 loss is −1.';
- el('headlineSub').textContent=FOOTBALL?'Enter Week 8 scores, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
-  :`MIAA ratings with the latest scores. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
+ // Wording follows what is actually left, so a finished week never asks for scores.
+ const left=openGames(),playable=left.missing+left.upcoming,ppNames=left.postponed.map(r=>`${r[1]} vs ${r[2]}`).join(', ');
+ const ppNote=left.postponed.length?` ${left.postponed.length===1?'One game is':plural(left.postponed.length,'game')+' are'} postponed with no result (${ppNames}).`:'';
+ const weekDone=FOOTBALL&&!playable;
+ el('headlineSub').textContent=FOOTBALL
+  ?(weekDone?`Week 8 is complete. These are the final regular-season power rankings and each division's projected top-16 tournament field.${ppNote}`
+   :`${plural(playable,'Week 8 game')} still ${playable===1?'needs':'need'} a score. Enter ${playable===1?'it':'them'} to see who makes each division's top-16 tournament field.${ppNote}`)
+  :(playable?`MIAA ratings with the latest scores. ${plural(left.upcoming,'game')} left to play statewide${left.missing?` and ${plural(left.missing,'score')} not yet reported`:''}. Enter or predict them to see who makes each division's top-32 tournament field.`
+   :`MIAA ratings with the latest scores. Every scheduled game has a result, so these are the final regular-season ratings and each division's projected top-32 tournament field.`);
  for(const n of document.querySelectorAll('.football-only'))n.hidden=!FOOTBALL;
  for(const n of document.querySelectorAll('.added-games-only'))n.hidden=FOOTBALL;
  el('heroPredictLabel').textContent=FOOTBALL?'Predict Week 8':'Add a game';
  el('heroPredict').style.display=FOOTBALL?'none':'';
  el('predictWeek8').style.display=FOOTBALL?'none':'';
  document.querySelector('.choice-predict').style.display=FOOTBALL?'none':'';
- el('weekJumpLabel').textContent=FOOTBALL?'Enter scores myself':'Predict my games';
+ el('weekJumpLabel').textContent=FOOTBALL?(weekDone?'See the brackets':`Enter ${playable===1?'the last score':`the ${playable} remaining scores`}`):'Predict my games';
  el('week8Tab').textContent=FOOTBALL?'Week 8':'Games';
- el('weekTitle').textContent=FOOTBALL?'Week 8 scores':'Games still to play';
- el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter any remaining scores.'
+ el('weekTitle').textContent=FOOTBALL?(weekDone?'Week 8 results':'Week 8 scores'):'Games still to play';
+ el('weekIntro').innerHTML=FOOTBALL?(weekDone?`All Week 8 finals are entered and locked.${left.postponed.length?' A postponed game can still be scored below to see how a makeup game would change the rankings.':''}`:`Verified finals are entered and locked. ${plural(playable,'game')} still ${playable===1?'needs':'need'} a score.`)
   :'Upcoming games are listed below. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
  el('predictLabel').textContent=FOOTBALL?'Predict Week 8':'Predict all games';
  el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
  el('introDate').textContent=`Official rankings as of ${BASELINE_DATE}`;
  el('introTitle').textContent=FOOTBALL?`Final MIAA ${SP.name.toLowerCase()} power rankings`:`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
- el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Type in scores for <span id="introCount">Week 8</span>.'
+ el('introBody').innerHTML=FOOTBALL?(weekDone?`Week 8 is complete, and the top 16 eligible teams in each division make the field.${ppNote}`:'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Type in scores for <span id="introCount">Week 8</span>.')
   :`The top 32 in each division make the tournament. The games still to be played are listed; score them yourself or predict them, and add any that are missing.`;
+ if(weekDone){const c=document.querySelector('[data-intro=enter]');c.dataset.intro='bracket';c.querySelector('strong').textContent='See the projected brackets';c.querySelector('span').textContent='View the top-16 field and seeds for every division.'}
  if(!FOOTBALL){const next=new Date(SD_DATE+'T12:00');next.setDate(next.getDate()+1);el('addDate').value=next.toISOString().slice(0,10);el('addDate').min=SD_DATE}
 }
 
@@ -632,7 +644,7 @@ function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option
 function initFixtures(){
  // Hero buttons: football predicts Week 8 / enters scores; other sports add a game / predict the added games.
  el('heroPredict').addEventListener('click',()=>FOOTBALL?predictAll():jumpToWeek8());
- el('weekJump').addEventListener('click',()=>{if(FOOTBALL){jumpToWeek8();return}if(predictAll())scrollToEl(document.querySelector('.wrap'))});
+ el('weekJump').addEventListener('click',()=>{if(FOOTBALL){if(!openGames().open.some(r=>!POSTPONED_KEYS.has(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r))))switchPage('bracket');else jumpToWeek8();return}if(predictAll())scrollToEl(document.querySelector('.wrap'))});
  el('heroReset').addEventListener('click',reset);
  el('openIntro').addEventListener('click',openIntro);
  // Close on a backdrop click only: the press and release must both land outside the dialog box,
