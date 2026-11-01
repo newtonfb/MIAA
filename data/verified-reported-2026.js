@@ -34,6 +34,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31T12:34:00-04:00"
         },
         "note": "T&G scoreboard lists FINAL 3-0; unreported in MIAA/Arbiter feed"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Winchester",
+          "Newton North",
+          2,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/sports/high-schools/scoreboard/",
+          "published": "2026-10-30"
+        },
+        "note": "Boston Globe girls' volleyball scoreboard records Newton North 3, Winchester 2"
       }
     ],
     "girls-soccer": [
@@ -52,6 +68,38 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31T12:34:00-04:00"
         },
         "note": "MVADA consolation; T&G scoreboard lists FINAL 0-0; unreported in MIAA/Arbiter feed"
+      },
+      {
+        "game": [
+          "2026-10-31",
+          "Milton",
+          "Brockton",
+          5,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/sports/high-schools/girls-soccer/scoreboard/",
+          "published": "2026-10-31"
+        },
+        "note": "Boston Globe girls' soccer scoreboard records Milton 5, Brockton 0"
+      },
+      {
+        "game": [
+          "2026-10-31",
+          "O'Bryant",
+          "Boston Latin Academy",
+          1,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/2026/10/31/sports/obryant-girls-soccer-latin-academy/",
+          "published": "2026-10-31"
+        },
+        "note": "Boston City League championship; confirmed by Boston Globe October 31 game report"
       }
     ],
     "field-hockey": [
@@ -70,6 +118,42 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31T23:51:00-04:00"
         },
         "note": "T&G scoreboard lists FINAL 3-0; the matchup is absent from MIAA live schedule"
+      }
+    ],
+    "boys-soccer": [
+      {
+        "game": [
+          "2026-10-31",
+          "Boston International",
+          "Boston Latin Academy",
+          1,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/2026/10/31/sports/boston-international-city-league-boys-soccer-championship/",
+          "published": "2026-10-31"
+        },
+        "note": "Boston City League championship; confirmed in Boston Globe October 31 game report"
+      }
+    ]
+  },
+  "postponed": {
+    "field-hockey": [
+      {
+        "game": [
+          "2026-10-31",
+          "Manchester Essex",
+          "Triton Regional",
+          "13:00"
+        ],
+        "source": {
+          "publisher": "Cape Ann Current",
+          "url": "https://capeanncurrent.com/2026/10/31/scoreboard/",
+          "published": "2026-10-31"
+        },
+        "note": "October 31 field hockey game postponed; no makeup date announced"
       }
     ]
   }
