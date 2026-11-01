@@ -257,21 +257,36 @@ def read_js_object(path, name):
 
 def sync(check_only):
     urls = discover_urls()
-    out = {}
+    out, kept = {}, []
     for slug, (title, ndiv, cap, has_ties) in SPORTS.items():
         print(f"{title}:")
-        official, divisions, rank_urls, as_of = rankings(slug, ndiv, has_ties, urls)
-        games, meta = scores(slug, cap, official, url_for(urls, slug, "scores"), as_of)
+        # One unreadable sport (MIAA sometimes posts a release as an image, or the score ledger moves ahead of
+        # the rankings) must not stop the others: keep that sport's previous official data and carry on.
+        try:
+            official, divisions, rank_urls, as_of = rankings(slug, ndiv, has_ties, urls)
+            games, meta = scores(slug, cap, official, url_for(urls, slug, "scores"), as_of)
+        except (SyncError, requests.RequestException) as exc:
+            kept.append(slug)
+            print(f"  kept the previous official data: {exc}")
+            continue
         out[slug] = dict(title=title, cap=cap, date=as_of, divisions=divisions, official=official, games=games, urls={"rankings": rank_urls, "scores": meta.pop("scores")}, **meta)
         print(f"  as of {as_of}: {len(official)} teams, {len(games)} games")
+    if len(kept) == len(SPORTS):
+        raise SyncError("no sport could be read")
     if check_only:
-        print("Check passed; nothing written.")
+        print("Check passed; nothing written." + (f" Kept previous data for: {', '.join(kept)}." if kept else ""))
         return
 
-    # Football keeps the upcoming schedule (unscored rows) from the current file.
+    write_football(out.pop("football", None))
+    write_fall(out)
+
+
+def write_football(fb):
+    """Football keeps the upcoming schedule (unscored rows) from the current file."""
+    if fb is None:
+        return
     football_path = ROOT / "data" / "season-2026.js"
     current = read_js_object(football_path, "DATA") or {"games": []}
-    fb = out.pop("football")
     played_on = {}
     for g in fb["games"]:
         played_on.setdefault(tuple(sorted((g[1], g[2]))), []).append(datetime.fromisoformat(g[0]))
@@ -288,10 +303,18 @@ def sync(check_only):
     football_path.write_text("\nconst DATA=" + json.dumps(football, separators=(",", ":"), ensure_ascii=False) + ";\n\n", encoding="utf8")
     print(f"Wrote {football_path.name}: {len(fb['games'])} scored games, {len(upcoming)} upcoming")
 
-    dates = {s["date"] for s in out.values()}
+
+
+def write_fall(out):
+    fall_path = ROOT / "data" / "fall-2026.js"
+    previous = (read_js_object(fall_path, "FALL_DATA") or {}).get("sports", {})
+    # Sports that couldn't be read this time keep what was published before.
+    out = {slug: out.get(slug) or previous[slug] for slug in SPORTS if slug != "football" and (slug in out or slug in previous)}
+    if not out:
+        return
+    dates = {s.get("date") for s in out.values() if s.get("date")}
     # No run timestamp in the file: a sync with no new results must leave it byte-for-byte unchanged.
     fall = {"date": max(dates), "sports": out}
-    fall_path = ROOT / "data" / "fall-2026.js"
     fall_path.write_text("const FALL_DATA=" + json.dumps(fall, separators=(",", ":"), ensure_ascii=False) + ";\n", encoding="utf8")
     print(f"Wrote {fall_path.name}: " + ", ".join(f"{k} {len(v['games'])} games as of {v['date']}" for k, v in out.items()))
 

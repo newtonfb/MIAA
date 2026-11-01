@@ -1,7 +1,7 @@
 'use strict';
 /* One page serves every MIAA sport; ?sport= picks the dataset.
    Football keeps its hand-built Week 8 schedule and confirmed Thursday finals.
-   The other sports use the upcoming games on MIAA's scoreboard, and viewers can add any that are missing. */
+   The other sports list their upcoming games, and viewers can add any that are missing. */
 const SPORTS={
  football:{name:'Football',cap:14,field:16,unit:'point'},
  'field-hockey':{name:'Field Hockey',cap:3,field:32,unit:'goal'},
@@ -46,7 +46,7 @@ const source=new Map();
 for(const g of SD.games){let k=pairKey(g);if(source.has(k)){let i=2;while(source.has(k+'#'+i))i++;k+='#'+i}source.set(k,g)}
 // Remove outdated unplayed placeholders for games completed Thursday.
 for(const [k,g] of source)if(g[3]===null&&g[4]===null&&isPublishedWeek8Game(g))source.delete(k);
-// Order of authority: MIAA's official ledger, then live results from MIAA's public scoreboard (Arbiter data,
+// Order of authority: MIAA's official ledger, then the live results feed (
 // synced daily by scripts/sync_live.py), then hand-entered finals for anything neither has yet.
 // A later source is skipped when an earlier one has the same two teams within three days
 // (a Friday game can be logged as Saturday), so no game is counted twice.
@@ -58,11 +58,11 @@ const playedNear=g=>(playedOn.get(matchup(g))||[]).some(t=>Math.abs(t-Date.parse
 for(const g of SD.games)if(g[3]!==null)notePlayed(g);
 const HAND_FORFEITS=new Map(PUBLISHED_FINALS.filter(g=>g[5]).map(g=>[matchup(g),g]));
 const LIVE_KEYS=new Set();
-// Live results and the official ledger both come from Arbiter, so their dates agree exactly; a live game is
+// Live results and the official ledger share the same game records, so their dates agree exactly; a live game is
 // skipped only if the ledger has that exact game. Same-day doubleheaders get a second key, as in the ledger.
 for(const g of LIVE.results){
  if(!TEAMS.includes(g[1])||!TEAMS.includes(g[2]))continue;
- // Keep a hand-verified forfeit label when Arbiter shows the same score as an ordinary game.
+ // Keep a hand-verified forfeit label when the live feed shows the same score as an ordinary game.
  const f=HAND_FORFEITS.get(matchup(g)),same=f&&(f[1]===g[1]?[f[3],f[4]]:[f[4],f[3]]).join()===[g[3],g[4]].join();
  const r=same&&!g[5]?[...g.slice(0,5),1]:g;
  let k=pairKey(r);const cur=source.get(k);if(cur&&cur[3]!==null&&!LIVE_KEYS.has(k))continue;
@@ -75,7 +75,7 @@ const REPORTED_APPLIED=new Map(REPORTED_FALL.filter(x=>source.get(pairKey(x.game
 // final and a prediction can't count the same game twice.
 for(const r of FOOTBALL?WEEK8:[]){const k=pairKey([r[0],r[1],r[2]]);const cur=source.get(k);if(cur&&cur[3]!==null)continue;
  for(const [other,g] of source)if(other!==k&&g[3]!==null&&matchup(g)===matchup(r)&&Math.abs(Date.parse(g[0])-Date.parse(r[0]))<=3*864e5){source.delete(other);source.set(k,g);if(LIVE_KEYS.delete(other))LIVE_KEYS.add(k);break}}
-// A game is locked once a final score exists: MIAA's ledger, the live scoreboard or a confirmed final.
+// A game is locked once a final score exists: the official ledger, the live feed or a confirmed final.
 const isLocked=k=>{const g=source.get(k);return !!(g&&g[3]!==null)};
 const PUBLISHED_FINAL_KEYS=new Set(PUBLISHED_FINALS.map(pairKey));
 const LOCKED_KEYS=new Set([...source.keys()].filter(k=>(PUBLISHED_FINAL_KEYS.has(k)||LIVE_KEYS.has(k))&&isLocked(k)));
@@ -99,7 +99,7 @@ const REPORTED_POSTPONED=new Map(
 const LIVE_POSTPONED=new Set([...(LIVE.postponed||[]).map(r=>pairKey(r)),...REPORTED_POSTPONED.keys()]);
 const TODAY_ET=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'});
 const awaitingOfficial=r=>r[0]<TODAY_ET&&!isLocked(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r));
-// A locally verified final may never have appeared in Arbiter's list of scheduled games.
+// A locally verified final may never have appeared in the list of scheduled games.
 // Include such matches on the Games panel rather than only in the underlying ratings.
 const REPORTED_FIXTURES=FOOTBALL?[]:REPORTED_FALL.map(x=>[x.game[0],x.game[1],x.game[2],null])
  .filter(f=>!LIVE_UPCOMING.some(r=>pairKey(r)===pairKey(f)));
@@ -395,7 +395,7 @@ function renderFixtures(){
  filters.innerHTML=DIVISIONS.map(d=>`<button type="button" data-wdiv="${d}" class="weekFilter ${weekDiv===d?'selected':''}">D${d}</button>`).join('');
  const games=visibleFixtures();
  const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}"><span class="fixture-name">${esc(name)}</span></button>${teamMeta(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win ${CAP}–0">MAX</button></div></div>`;
- const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No games on MIAA\'s scoreboard yet. Add any you know of above.';
+ const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No upcoming games listed yet. Add any you know of above.';
  el('fixtureList').innerHTML=games.length?games.map(r=>`<article class="fixture" data-fixture="${esc(fixtureKey(r))}">
    <div class="fixturetop"><span class="fixture-date">${fixtureWhen(r)}</span><div class="fixture-meta"><span class="fixtureStatus"></span><button type="button" class="fixtureClear" data-clear="${esc(fixtureKey(r))}" title="${FOOTBALL?'Remove score':'Remove game'}" aria-label="${FOOTBALL?'Remove score':'Remove game'}">×</button></div></div>
    ${line('a',r[1])}${line('b',r[2])}
@@ -487,7 +487,7 @@ function applySportCopy(){
  text('.js-teams',Object.keys(OFF).length);text('.js-games',SD.games.filter(g=>g[3]!==null).length.toLocaleString('en-US'));text('.js-divisions',DIVISIONS.length);
  el('capExample').textContent=FOOTBALL?'A 35–7 win is treated as +14; a 14–21 loss is −7.':SPORT==='volleyball'?'Results count in sets: a 3–0 match is +3 and a 3–2 match is +1.':'A 6–0 win is treated as +3; a 1–2 loss is −1.';
  el('headlineSub').textContent=FOOTBALL?'Enter Week 8 scores, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
-  :`MIAA ratings with live scores from MIAA's scoreboard. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
+  :`MIAA ratings with the latest scores. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
  for(const n of document.querySelectorAll('.football-only'))n.hidden=!FOOTBALL;
  for(const n of document.querySelectorAll('.added-games-only'))n.hidden=FOOTBALL;
  el('heroPredictLabel').textContent=FOOTBALL?'Predict Week 8':'Add a game';
@@ -498,17 +498,17 @@ function applySportCopy(){
  el('week8Tab').textContent=FOOTBALL?'Week 8':'Games';
  el('weekTitle').textContent=FOOTBALL?'Week 8 scores':'Games still to play';
  el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter any remaining scores.'
-  :'Upcoming games come from MIAA\'s scoreboard. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
+  :'Upcoming games are listed below. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
  el('predictLabel').textContent=FOOTBALL?'Predict Week 8':'Predict all games';
  el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
  el('introDate').textContent=`Official rankings as of ${BASELINE_DATE}`;
  el('introTitle').textContent=FOOTBALL?`Final MIAA ${SP.name.toLowerCase()} power rankings`:`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
  el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Type in scores for <span id="introCount">Week 8</span>.'
-  :`The top 32 in each division make the tournament. The games still to be played come from MIAA's scoreboard; score them yourself or predict them, and add any that are missing.`;
+  :`The top 32 in each division make the tournament. The games still to be played are listed; score them yourself or predict them, and add any that are missing.`;
  if(!FOOTBALL){const next=new Date(SD_DATE+'T12:00');next.setDate(next.getDate()+1);el('addDate').value=next.toISOString().slice(0,10);el('addDate').min=SD_DATE}
 }
 
-/* Admin: start a sync of MIAA's newest Arbiter export (api/sync.js runs a GitHub workflow). */
+/* Admin: start a data sync (api/sync.js runs a GitHub workflow). */
 function initAdmin(){
  const d=el('admin'),status=el('adminStatus');let key='',timer=0;
  const show=(text,tone)=>{status.textContent=text;status.dataset.tone=tone||''};
