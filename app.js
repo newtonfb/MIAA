@@ -12,11 +12,12 @@ const SPORTS={
 const SPORT=(()=>{const s=new URLSearchParams(location.search).get('sport');return s&&SPORTS[s]&&s!=='football'&&typeof FALL_DATA!=='undefined'&&FALL_DATA.sports?.[s]?s:'football'})();
 const SP=SPORTS[SPORT],FOOTBALL=SPORT==='football',CAP=SP.cap,FIELD=SP.field;
 const SD=FOOTBALL?DATA:FALL_DATA.sports[SPORT];
-const SD_DATE=SD.date||(FOOTBALL?DATA.date:FALL_DATA.date);
+const HAS_FOOTBALL_FINAL=FOOTBALL&&typeof FOOTBALL_FINAL_2026!=='undefined'&&FOOTBALL_FINAL_2026.status==='FINAL';
+const SD_DATE=HAS_FOOTBALL_FINAL?FOOTBALL_FINAL_2026.date:(SD.date||(FOOTBALL?DATA.date:FALL_DATA.date));
 // Football keeps its original storage keys so existing visitors keep their scenarios.
 const store=name=>FOOTBALL?name:`${name}:${SPORT}`;
 const KEY=store('miaa-scenario-lab-2026-oct30-v2');
-const DIV=SD.divisions, OFF=SD.official;  // MIAA's published ratings for every division
+const DIV=SD.divisions, OFF=HAS_FOOTBALL_FINAL?FOOTBALL_FINAL_2026.official:SD.official; // Final official football ratings, or latest baseline for other sports
 const HISTORICAL_FINALS=FOOTBALL&&typeof CONFIRMED_FINALS!=='undefined'?(CONFIRMED_FINALS.historical||[]):[];
 const TEAMS=[...new Set(SD.games.flatMap(g=>[g[1],g[2]]).concat(Object.keys(DIV),HISTORICAL_FINALS.flatMap(g=>[g[1],g[2]])))].sort((a,b)=>a.localeCompare(b));
 const DIVISIONS=[...new Set(Object.values(DIV))].sort((a,b)=>a-b);
@@ -61,6 +62,8 @@ const LIVE_KEYS=new Set();
 // Live results and the official ledger share the same game records, so their dates agree exactly; a live game is
 // skipped only if the ledger has that exact game. Same-day doubleheaders get a second key, as in the ledger.
 for(const g of LIVE.results){
+ // Final football tournament ratings freeze at the Oct 31 regular-season cutoff.
+ if(HAS_FOOTBALL_FINAL&&g[0]>'2026-10-31')continue;
  if(!TEAMS.includes(g[1])||!TEAMS.includes(g[2]))continue;
  // Keep a hand-verified forfeit label when the live feed shows the same score as an ordinary game.
  const f=HAND_FORFEITS.get(matchup(g)),same=f&&(f[1]===g[1]?[f[3],f[4]]:[f[4],f[3]]).join()===[g[3],g[4]].join();
@@ -111,7 +114,9 @@ let alertTimer;
 function toast(s){const x=el('alert');x.textContent=s;x.classList.add('show');clearTimeout(alertTimer);alertTimer=setTimeout(()=>x.classList.remove('show'),3000)}
 function records(){const m=new Map(source);for(const g of edits)if(!isPublishedWeek8Game(g))m.set(pairKey(g),g);return [...m.values()]}
 function compute(games){return calculateRatings(games,TEAMS,DIV,CAP)}
-const BASE=compute(SD.games);
+// Freeze final football at the actual regular-season results before any viewer scenarios.
+// Its team-by-team rating, records and margins are anchored to MIAA's Nov 1 verified release.
+const BASE=compute(HAS_FOOTBALL_FINAL?[...source.values()]:SD.games);
 const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Object.keys(OFF).length;
 // Estimate changes in the overall scale by centering games-weighted opponent-use ratings. This is a heuristic:
 // Oct 27 → Oct 30 matched within 0.0028, but earlier transitions have shared offsets as large as 0.0555.
@@ -120,19 +125,28 @@ const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Obj
 // one-game outside opponent corrects a record without moving anyone's rating.
 const HISTORICAL_DEGREE={};
 for(const g of HISTORICAL_FINALS)if(!g[5])for(const t of [g[1],g[2]])HISTORICAL_DEGREE[t]=(HISTORICAL_DEGREE[t]||0)+1;
-const BASE_LEVEL=miaaLevel(BASE);
+const BASE_LEVEL=miaaLevel(BASE,HAS_FOOTBALL_FINAL?HISTORICAL_DEGREE:{});
 const historicalInSource=()=>HISTORICAL_FINALS.some(g=>source.get(pairKey(g))===g);
 function derive(m,withHistorical=false){
  const shift=miaaLevel(m,withHistorical?HISTORICAL_DEGREE:{})-BASE_LEVEL;
  for(const [t,v] of Object.entries(m.teams)){
   const b=BASE.teams[t];const anchor=OFF[t]?OFF[t][1]:b.raw+offset;
   v.rating=anchor+(v.raw-b.raw)+shift;v.change=v.rating-anchor;
+  if(HAS_FOOTBALL_FINAL&&OFF[t]){
+   // MIAA's audited final is authoritative; hypothetical edits show changes relative to it.
+   // Some source games remain missing or differently classified, so do not show the
+   // approximate raw-model W/L or average margin as if they were official results.
+   const row=OFF[t],winsDiff=v.w-b.w,lossesDiff=v.l-b.l,tiesDiff=v.ties-b.ties,gamesDiff=v.gp-b.gp;
+   v.mov=row[2]+(v.mov-b.mov);v.opp=v.rating-v.mov;
+   v.w=row[4]+winsDiff;v.l=row[5]+lossesDiff;v.ties=row[6]+tiesDiff;
+   v.gp=row[4]+row[5]+row[6]+gamesDiff;
+  }
  }
  return m;
 }
 let MODEL=derive(compute(records()),historicalInSource());
 // Official ranks, used to show how far a team moves under the viewer's scenario.
-const BASELINE=derive(compute(SD.games)),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
+const BASELINE=derive(compute(HAS_FOOTBALL_FINAL?[...source.values()]:SD.games),HAS_FOOTBALL_FINAL&&historicalInSource()),byRating=(a,b)=>b.rating-a.rating||a.team.localeCompare(b.team);
 const baseDivRank={},baseDivSeed={};
 for(const d of DIVISIONS)for(const r of standings(d,BASELINE)){baseDivRank[r.team]=r.rank;baseDivSeed[r.team]=r.seed;}
 function rec(r){return `${r.w}–${r.l}${r.ties?'–'+r.ties:''}`}
@@ -192,7 +206,7 @@ function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody')
   :(edits.length?`<strong>Your projection: ${scored} of ${total} added ${total===1?'game':'games'} scored</strong>`:'Showing official rankings');
  el('heroReset').classList.toggle('hidden',!edits.length);
  const extraFinals=PUBLISHED_FINALS.filter(g=>{const s=SD.games.find(h=>pairKey(h)===pairKey(g));return !s||s[3]===null}).length;
- el('heroDate').textContent=edits.length?'Projected rankings':LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} + live scores through ${shortDate(LIVE_THROUGH)}`:extraFinals?`${shortDate(SD_DATE)} MIAA baseline + ${extraFinals} verified supplemental ${extraFinals===1?'result':'results'}`:`As of ${BASELINE_DATE}`;
+ el('heroDate').textContent=HAS_FOOTBALL_FINAL?(edits.length?'Scenario versus the Nov 1 final MIAA rankings':'Official MIAA FINAL · November 1, 2026'):edits.length?'Projected rankings':LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} + live scores through ${shortDate(LIVE_THROUGH)}`:extraFinals?`${shortDate(SD_DATE)} MIAA baseline + ${extraFinals} verified supplemental ${extraFinals===1?'result':'results'}`:`As of ${BASELINE_DATE}`;
 }
 // Hero card: the teams on either side of the line in the chosen division.
 function renderHeroLine(){
