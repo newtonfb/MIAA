@@ -89,6 +89,10 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edit
 if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getItem('miaa-fall-2026-v1:'+SPORT)||'[]');
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
 const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2]));
+const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
+const LIVE_POSTPONED=new Set((LIVE.postponed||[]).map(r=>pairKey(r)));
+const TODAY_ET=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'});
+const awaitingOfficial=r=>r[0]<TODAY_ET&&!isLocked(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r));
 const schedule=()=>FOOTBALL?WEEK8:[...LIVE_UPCOMING,...addedFixtures.filter(f=>!LIVE_UPCOMING.some(r=>pairKey([r[0],r[1],r[2]])===pairKey([f[0],f[1],f[2]])))];
 const isAddedFixture=k=>addedFixtures.some(f=>pairKey([f[0],f[1],f[2]])===k);
 let selectedDiv=DIVISIONS[0], activePage='rankings', selectedTeam=Object.keys(DIV).sort((a,b)=>a.localeCompare(b))[0], weekDiv=DIVISIONS[0];
@@ -380,7 +384,7 @@ function renderFixtures(){
  filters.innerHTML=DIVISIONS.map(d=>`<button type="button" data-wdiv="${d}" class="weekFilter ${weekDiv===d?'selected':''}">D${d}</button>`).join('');
  const games=visibleFixtures();
  const line=(side,name)=>`<div class="fixtureline" data-line="${side}"><div class="fixtureteam"><button type="button" class="fixture-team-link" data-team="${esc(name)}" title="View ${esc(name)}"><span class="fixture-name">${esc(name)}</span></button>${teamMeta(name)}</div><div class="score-actions"><input class="fixture-score" data-side="${side}" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="3" aria-label="Score for ${esc(name)}" placeholder="–"><button type="button" class="max-win" data-max="${side}" title="Set ${esc(name)} to win ${CAP}–0">MAX</button></div></div>`;
- const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No upcoming games on MIAA\'s scoreboard yet. Add any you know of above.';
+ const none=FOOTBALL?'No matchups match your search.':schedule().length?`No added games involve a Division ${weekDiv} team.`:'No games on MIAA\'s scoreboard yet. Add any you know of above.';
  el('fixtureList').innerHTML=games.length?games.map(r=>`<article class="fixture" data-fixture="${esc(fixtureKey(r))}">
    <div class="fixturetop"><span class="fixture-date">${fixtureWhen(r)}</span><div class="fixture-meta"><span class="fixtureStatus"></span><button type="button" class="fixtureClear" data-clear="${esc(fixtureKey(r))}" title="${FOOTBALL?'Remove score':'Remove game'}" aria-label="${FOOTBALL?'Remove score':'Remove game'}">×</button></div></div>
    ${line('a',r[1])}${line('b',r[2])}
@@ -392,7 +396,13 @@ function updateFixtureStates(){
  for(const card of list.querySelectorAll('[data-fixture]')){
  const k=card.dataset.fixture,entered=edits.find(g=>pairKey(g)===k),base=source.get(k), g=entered||base;
  const locked=isLocked(k),has=!!(g&&g[3]!==null&&g[4]!==null),pred=!!entered&&predictedKeys.has(k);if(has)n++;
- const lab=card.querySelector('.fixtureStatus');lab.textContent=locked?(g[5]?'FINAL · FORFEIT':'FINAL'):entered?(pred?'Prediction':'Scenario'):POSTPONED_KEYS.has(k)?'POSTPONED':'';lab.classList.toggle('saved',!!entered&&!pred);lab.classList.toggle('pred',pred);lab.classList.toggle('locked',locked);lab.classList.toggle('postponed',!locked&&!entered&&POSTPONED_KEYS.has(k));lab.classList.remove('warn');
+ const isPostponed=POSTPONED_KEYS.has(k)||LIVE_POSTPONED.has(k);
+ const overdue=!FOOTBALL&&k.slice(0,10)<TODAY_ET&&!locked&&!isPostponed;
+ const lab=card.querySelector('.fixtureStatus');
+ lab.textContent=locked?(g[5]?'FINAL · FORFEIT':'FINAL'):entered?(pred?'Prediction':'Scenario'):isPostponed?'POSTPONED':overdue?'SCORE MISSING':LIVE_UNVERIFIED.has(k)?'VERIFY GAME':'';
+ lab.classList.toggle('saved',!!entered&&!pred);lab.classList.toggle('pred',pred);
+ lab.classList.toggle('locked',locked);lab.classList.toggle('postponed',!locked&&!entered&&isPostponed);
+ lab.classList.toggle('warn',!locked&&!entered&&overdue);
  for(const [side,index] of [['a',3],['b',4]]){const input=card.querySelector(`[data-side=${side}]`);if(input!==document.activeElement){const target=has?String(g[index]):'';if(input.value!==target)input.value=target;}input.disabled=locked;
    card.querySelector(`[data-line=${side}]`).classList.toggle('is-win',has&&g[index]>g[index===3?4:3]);}
  card.classList.toggle('fixture-edited',!!entered);card.classList.toggle('is-pred',pred);card.classList.toggle('fixture-locked',locked);card.querySelectorAll('[data-max]').forEach(b=>b.disabled=locked);
@@ -407,7 +417,8 @@ function updateFixtureStates(){
  card.querySelector('.fixtureClear').disabled=isAddedFixture(k)?false:locked||!entered;
  }
  const total=visibleFixtures().length;
- el('weekMeta').textContent=total?`${n} of ${total} ${total===1?'matchup':'matchups'} scored`:FOOTBALL?'':'Games you add are saved in this browser only';
+ const pending=FOOTBALL?0:visibleFixtures().filter(awaitingOfficial).length;
+ el('weekMeta').textContent=total?`${n} of ${total} ${total===1?'matchup':'matchups'} scored${pending?' · '+pending+' past games awaiting official scores':''}`:FOOTBALL?'':'Games you add are saved in this browser only';
  el('clearPredictions').disabled=!predictedKeys.size;
 }
 // A score must be whole numbers; volleyball counts sets, so the winner has exactly 3 and the loser 0–2.
