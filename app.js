@@ -93,7 +93,10 @@ if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getIte
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
 const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2]));
 const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
-const LIVE_POSTPONED=new Set((LIVE.postponed||[]).map(r=>pairKey(r)));
+const REPORTED_POSTPONED=new Map(
+ ((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.postponed?.[SPORT])||[])
+ .map(x=>[pairKey(x.game),x.source]));
+const LIVE_POSTPONED=new Set([...(LIVE.postponed||[]).map(r=>pairKey(r)),...REPORTED_POSTPONED.keys()]);
 const TODAY_ET=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'});
 const awaitingOfficial=r=>r[0]<TODAY_ET&&!isLocked(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r));
 // A locally verified final may never have appeared in Arbiter's list of scheduled games.
@@ -408,8 +411,11 @@ function updateFixtureStates(){
  const overdue=!FOOTBALL&&k.slice(0,10)<TODAY_ET&&!locked&&!isPostponed;
  const lab=card.querySelector('.fixtureStatus');
  lab.textContent=locked?(REPORTED_APPLIED.has(k)?'REPORTED FINAL':g[5]?'FINAL · FORFEIT':'FINAL'):entered?(pred?'Prediction':'Scenario'):isPostponed?'POSTPONED':overdue?'SCORE MISSING':LIVE_UNVERIFIED.has(k)?'VERIFY GAME':'';
- const provenance=REPORTED_APPLIED.get(k);
- lab.title=provenance?'Independently reported by '+provenance.publisher+'; official MIAA score takes precedence':'';
+ const provenance=REPORTED_APPLIED.get(k)||(!locked&&isPostponed?REPORTED_POSTPONED.get(k):null);
+ lab.title=provenance?(
+  REPORTED_APPLIED.has(k)?'Independently reported by '+provenance.publisher+'; official MIAA score takes precedence':
+  'Postponement reported by '+provenance.publisher+'; awaiting rescheduling'
+ ):'';
  let sourceRef=card.querySelector('.fixture-source');
  if(provenance&&!sourceRef){
   sourceRef=document.createElement('a');sourceRef.className='fixture-source';
