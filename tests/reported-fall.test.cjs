@@ -38,6 +38,21 @@ test('local reporting is shown separately from MIAA finals',()=>{
  assert.match(app,/\.\.\.REPORTED_FIXTURES/,'reported fixtures must be shown');
 });
 
+test('Boston Globe October 30 finals absent from MIAA are sourced and modeled',()=>{
+ const expected={
+  'girls-soccer':['2026-10-30','Middleborough','Apponequet Regional',1,3,0],
+  volleyball:['2026-10-30','Sturgis Charter West','Monomoy',1,3,0]
+ };
+ for(const [sport,game] of Object.entries(expected)){
+  const found=reported.sports[sport].find(e=>e.game[0]===game[0]&&
+   [e.game[1],e.game[2]].sort().join('|')===[game[1],game[2]].sort().join('|'));
+  assert.ok(found,'No Globe result for '+sport);
+  assert.deepEqual(found.game,game);
+  assert.match(found.source.publisher,/Boston Globe/);
+  assert.match(found.source.url,/bostonglobe.com\/sports\/high-schools\/scoreboard/);
+ }
+});
+
 test('Telegram scoreboard finals were added with exact date and score',()=>{
  const expected={
   'field-hockey':[['2026-10-31','Nipmuc Regional','Quaboag Regional',3,0,0]],
