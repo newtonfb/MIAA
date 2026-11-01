@@ -203,6 +203,54 @@ function renderTeam(){const x=MODEL.teams[selectedTeam];if(!x){el('teamDetails')
 function switchPage(page){activePage=page;document.querySelectorAll('.page').forEach(e=>e.classList.toggle('hidden',e.id!==page+'Page'));document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('selected',e.dataset.page===page));if(page==='team')renderTeam();if(page==='bracket'){bracketDiv=selectedDiv;renderBracket()}window.scrollTo(0,0)}
 function reset(){if(edits.length&&!confirm('Remove all scenario changes?'))return;edits=[];predictedKeys.clear();save();toast(FOOTBALL?'Scenarios cleared; confirmed scores remain locked':'Scenario scores cleared; your added games are still listed')}
 
+/* 1080x1920 bracket image for TikTok and other 9:16 posts. The bracket stays inside the
+   area TikTok leaves uncovered (its tabs on top, caption on the bottom, buttons on the right). */
+const SHORT_ROUNDS={16:'R16',8:'QF',4:'SF',2:'Final'};
+function fitText(ctx,s,max){if(ctx.measureText(s).width<=max)return s;while(s.length>1&&ctx.measureText(s+'…').width>max)s=s.slice(0,-1);return s+'…'}
+function bracketCanvas(){
+ const W=1080,H=1920,c=document.createElement('canvas');c.width=W;c.height=H;const ctx=c.getContext('2d');
+ const css=getComputedStyle(document.body),v=n=>css.getPropertyValue(n).trim(),turf=v('--turf')||'#1d6b45',ink=v('--ink')||'#0f1f17',muted=v('--muted')||'#5b6b63',line=v('--line-strong')||'#c6d0ca',soft=v('--surface-2')||'#f1f4f2';
+ const F=(w,px)=>`${w} ${px}px Archivo, system-ui, sans-serif`;
+ const rows=standings(bracketDiv),seed=Object.fromEntries(rows.filter(r=>r.qualified).map(r=>[r.seed,r]));
+ const order=seedOrder(FIELD),counts=[];for(let n=FIELD/2;n>=1;n/=2)counts.push(n);
+ ctx.fillStyle=turf;ctx.fillRect(0,0,W,H);
+ const card={x:40,y:150,w:914,h:1350};
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(card.x,card.y,card.w,card.h,28);ctx.fill();
+ const L=card.x+32,R=card.x+card.w-32;let y=card.y+44;
+ ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText('PROJECTED BRACKET',L,y);
+ ctx.fillStyle=ink;ctx.font=F(850,60);ctx.fillText(fitText(ctx,`Division ${bracketDiv} ${SP.name}`,R-L),L,y+=66);
+ ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
+ const gap=26,firstW=470,restW=(R-L-firstW-gap*(counts.length-1))/(counts.length-1);
+ const colX=i=>i?L+firstW+gap+(i-1)*(restW+gap):L,colW=i=>i?restW:firstW;
+ const top=y+=74,bottom=card.y+card.h-70,area=bottom-top;
+ ctx.fillStyle=muted;ctx.font=F(700,22);
+ counts.forEach((n,i)=>ctx.fillText(i?SHORT_ROUNDS[n*2]:ROUND_NAMES[n*2],colX(i),top-16));
+ const boxH=Math.min(area/counts[0]*.8,120),slotH=boxH/2,mid=(i,j)=>top+(j+.5)*area/counts[i];
+ ctx.lineWidth=2;ctx.strokeStyle=line;
+ counts.forEach((n,i)=>{for(let j=0;j<n;j++){
+  const x=colX(i),w=colW(i),cy=mid(i,j),by=cy-boxH/2;
+  if(i<counts.length-1){const nx=colX(i+1),ex=x+w+gap/2;ctx.beginPath();ctx.moveTo(x+w,cy);ctx.lineTo(ex,cy);if(j%2===0){ctx.lineTo(ex,mid(i,j+1));ctx.moveTo(ex,(cy+mid(i,j+1))/2);ctx.lineTo(nx,(cy+mid(i,j+1))/2)}ctx.stroke()}
+  ctx.fillStyle=i?soft:'#fff';ctx.beginPath();ctx.roundRect(x,by,w,boxH,10);ctx.fill();
+  ctx.strokeStyle=i===counts.length-1?turf:line;ctx.stroke();ctx.strokeStyle=line;
+  ctx.beginPath();ctx.moveTo(x,cy);ctx.lineTo(x+w,cy);ctx.stroke();
+  if(i)continue;
+  const fs=Math.round(slotH*.46);ctx.textBaseline='middle';
+  [order[2*j],order[2*j+1]].forEach((s,k)=>{const r=seed[s],sy=by+slotH*(k+.5);
+   ctx.fillStyle=muted;ctx.font=F(800,fs);ctx.textAlign='center';ctx.fillText(s,x+28,sy);ctx.textAlign='left';
+   const rate=r?signed(r.rating,2):'';ctx.font=F(500,fs*.85);const rw=ctx.measureText(rate).width;ctx.textAlign='right';ctx.fillText(rate,x+w-14,sy);ctx.textAlign='left';
+   ctx.fillStyle=r?ink:muted;ctx.font=F(k?500:700,fs);ctx.fillText(fitText(ctx,r?r.team:'No eligible team',w-56-14-rw-12),x+56,sy)});
+  ctx.textBaseline='alphabetic'}});
+ ctx.fillStyle=turf;ctx.font=F(800,22);const credit='MA HIGH SCHOOL POWER RANKINGS';ctx.fillText(credit,L,card.y+card.h-30);
+ const cw=ctx.measureText(credit).width;ctx.fillStyle=muted;ctx.font=F(500,22);ctx.fillText(fitText(ctx,'  ·  '+(location.host||'miaa-football-scenarios.vercel.app'),R-L-cw),L+cw,card.y+card.h-30);
+ return c}
+// Built and shared synchronously so iOS still treats the share as part of the tap.
+function shareBracketImage(){
+ const url=bracketCanvas().toDataURL('image/png'),name=`${SPORT}-division-${bracketDiv}-bracket.png`;
+ const bin=atob(url.split(',')[1]),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+ const file=new File([bytes],name,{type:'image/png'}),download=()=>{const a=document.createElement('a');a.href=url;a.download=name;a.click()};
+ if(navigator.canShare?.({files:[file]}))navigator.share({files:[file]}).catch(e=>{if(e.name!=='AbortError')download()});
+ else download()}
+
 /* Projected brackets: the top FIELD teams by rating in each division, standard seeding
    (1 plays the last seed, and the top two seeds can only meet in the final).
    Only the first round is filled in; later rounds are left blank to be filled as games are played. */
@@ -480,6 +528,7 @@ function scheduleInstallPrompt(){
  else setTimeout(show,2000);
 }
 function init(){applySportCopy();el('teamsList').innerHTML=TEAMS.map(t=>`<option value="${esc(t)}"></option>`).join('');renderRankings();renderEdits();el('teamSearch').value=selectedTeam;el('teamSelect').innerHTML=Object.keys(DIV).sort((a,b)=>a.localeCompare(b)).map(t=>`<option value="${esc(t)}">${esc(t)} (D${DIV[t]})</option>`).join('');el('teamSelect').value=selectedTeam;
+ el('bracketShare').addEventListener('click',shareBracketImage);document.fonts?.load('800 40px Archivo');
  el('bracketDivs').addEventListener('click',e=>{const b=e.target.closest('[data-bdiv]');if(b){bracketDiv=Number(b.dataset.bdiv);renderBracket()}});
  for(const id of ['bracket','bubble','heroLine'])el(id).addEventListener('click',e=>{const t=e.target.closest('[data-team]');if(t)showTeam(t.dataset.team)});
  document.querySelector('.navigation').addEventListener('click',e=>{const b=e.target.closest('[data-page]');if(b)switchPage(b.dataset.page)});
