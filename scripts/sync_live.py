@@ -149,6 +149,13 @@ def reconcile_live(fresh, previous, ledger, today):
         if not any(same_match(game, x) for x in canceled + finished):
             canceled.append(game)
     fresh["canceled"] = sorted(canceled)
+    # The scoreboard can briefly list an unscored duplicate of a completed game.
+    # Canceling one fixture must not suppress a separately rescheduled one.
+    fresh["upcoming"] = [
+        g for g in fresh["upcoming"]
+        if not any(same_match(g, x) for x in finished)
+        and not any(g[0] == x[0] and set(g[1:3]) == set(x[1:3]) for x in canceled)
+    ]
 
     # Preserve earlier official-scoreboard finals if an API response temporarily omits them.
     # The newly published MIAA ledger supersedes these as the baseline advances.
@@ -160,7 +167,7 @@ def reconcile_live(fresh, previous, ledger, today):
 
     unverified = []
     for game in previous.get("upcoming", []):
-        if any(same_match(game, x) for x in finished + canceled):
+        if any(same_match(game, x) for x in finished) or any(game[0] == x[0] and set(game[1:3]) == set(x[1:3]) for x in canceled):
             continue
         if any(same_match(game, x) for x in fresh["upcoming"]):
             continue  # still listed or moved within three days
