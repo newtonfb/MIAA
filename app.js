@@ -98,9 +98,9 @@ function records(){const m=new Map(source);for(const g of edits)if(!isPublishedW
 function compute(games){return calculateRatings(games,TEAMS,DIV,CAP)}
 const BASE=compute(SD.games);
 const offset=Object.keys(OFF).reduce((s,t)=>s+OFF[t][1]-BASE.teams[t].raw,0)/Object.keys(OFF).length;
-// MIAA's iteration keeps the games-weighted total of adjusted (opponent-use) ratings at zero, so its whole scale
-// moves as results are added. Projections follow that scale: on Oct 27 → Oct 30 football every team landed within
-// 0.0028 of MIAA's release, against 0.032 when the old level was carried forward (and 0.035 holding the MA average).
+// Estimate changes in the overall scale by centering games-weighted opponent-use ratings. This is a heuristic:
+// Oct 27 → Oct 30 matched within 0.0028, but earlier transitions have shared offsets as large as 0.0555.
+// Those common offsets do not affect rating gaps or ranks. See data/research/mahsratings/procedure-analysis.json.
 // Games MIAA's ledger is known to omit (HISTORICAL_FINALS, e.g. Hoosac–Hudson NY) are left out of the level, so a
 // one-game outside opponent corrects a record without moving anyone's rating.
 const HISTORICAL_DEGREE={};

@@ -18,7 +18,7 @@ function calculateRatings(games, teamNames, divisions, marginCap=14) {
     if(!Number.isInteger(sa)||!Number.isInteger(sb)||sa<0||sb<0||sa>999||sb>999) continue;
     const i=index.get(a), j=index.get(b);
     if(i===undefined||j===undefined||i===j) continue;
-    const margin=Math.max(-marginCap,Math.min(marginCap,sa-sb));
+    const margin=forfeit?Math.sign(sa-sb)*marginCap:Math.max(-marginCap,Math.min(marginCap,sa-sb));
     played++; count[i]++; count[j]++;
     marginSum[i]+=margin; marginSum[j]-=margin;
     if(sa>sb) { wins[i]++; losses[j]++; }
@@ -84,9 +84,9 @@ function calculateRatings(games, teamNames, divisions, marginCap=14) {
   }
   return {teams,iter:iterations,played,convergence};
 }
-// MIAA's iteration keeps the games-weighted total of adjusted (opponent-use) ratings at zero. Our solver pins a
-// different total, so this returns the shift that puts a solution on MIAA's scale. Pass a degree adjustment to leave
-// out games MIAA's ledger omits.
+// Estimate the scale shift by centering games-weighted opponent-use ratings. This is a projection heuristic,
+// not a verified MIAA invariant: archived October 2026 releases have different nonzero weighted means.
+// Pass a degree adjustment to leave out games MIAA's ledger omits. A shared shift does not affect rankings.
 function miaaLevel(model,omittedDegree={}){
   let sum=0,games=0;
   for(const v of Object.values(model.teams)){const n=v.nonforfeit-(omittedDegree[v.team]||0);if(n>0){sum+=v.adjusted*n;games+=n}}

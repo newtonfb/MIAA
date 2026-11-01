@@ -2,10 +2,9 @@
 // Test candidate versions of MIAA's rating procedure against every archived release (data/releases).
 //   node scripts/calibrate.cjs [season ...]     e.g. node scripts/calibrate.cjs 2025 2026
 //   RAW=1 node scripts/calibrate.cjs ...        score each candidate's own level, with no offset
-// Run scripts/check_consistency.cjs first: only seasons whose releases satisfy MIAA's equations belong here.
-// Findings so far (2025-2026): the formula is exact; differences come from where MIAA's calculation starts and
-// stops, and no start-from-scratch candidate reproduces MIAA's level, so MIAA likely continues from its previous
-// values. Consecutive releases (archived automatically by the sync) are what can confirm that.
+// Run scripts/check_consistency.cjs first: use individual releases whose inputs satisfy MIAA's equations.
+// Findings so far (2025-2026): releases satisfy the equations; calculation details remain unresolved. The tested start-from-scratch candidates do not reproduce MIAA's level. Continuing from previous
+// values is a hypothesis, not established; check_procedure.cjs tests archived consecutive releases.
 // For each candidate it counts official ratings reproduced exactly to MIAA's four decimals, with
 // MIAA's scale set by the games-weighted rule (no fitted offset), and reports the best candidates
 // overall and per sport. Releases come from scripts/archive_releases.py.
@@ -29,7 +28,7 @@ function network(r,order){
  if(order==='rank')teams.sort((a,b)=>(r.divisions[a]||99)-(r.divisions[b]||99)||((r.official[a]||[999])[0]-(r.official[b]||[999])[0])||a.localeCompare(b));
  const I=new Map(teams.map((t,i)=>[t,i])),N=teams.length,nb=Array.from({length:N},()=>[]);
  const sNF=new Float64Array(N),dNF=new Float64Array(N),sAll=new Float64Array(N),dAll=new Float64Array(N);
- for(const [,a,b,sa,sb,f] of games){const m=Math.max(-r.cap,Math.min(r.cap,sa-sb)),i=I.get(a),j=I.get(b);
+ for(const [,a,b,sa,sb,f] of games){const m=f?Math.sign(sa-sb)*r.cap:Math.max(-r.cap,Math.min(r.cap,sa-sb)),i=I.get(a),j=I.get(b);
   sAll[i]+=m;sAll[j]-=m;dAll[i]++;dAll[j]++;if(f)continue;sNF[i]+=m;sNF[j]-=m;dNF[i]++;dNF[j]++;nb[i].push(j);nb[j].push(i)}
  return {teams,N,nb,dNF,movNF:Array.from(dNF,(x,i)=>x?sNF[i]/x:0),movAll:Array.from(dAll,(x,i)=>x?sAll[i]/x:0)};
 }
@@ -66,6 +65,6 @@ console.log('\nBest candidate per release:');
 for(const rel of releases){const key=`${rel.sport} ${rel.date}`;let best=null;
  for(const r of results){const [e]=r.per[key].split('/').map(Number);if(!best||e>best.e)best={e,r}}
  console.log(` ${key.padEnd(24)} ${best.r.per[key].padStart(8)}  order=${best.r.order} ${best.r.seidel?'in-place':'simultaneous'} damp=${best.r.damp} start=${best.r.start} stop<${best.r.tol}`)}
-console.log('\nTeams more than 0.01 off under the best candidate (bad inputs, not procedure):');
+console.log('\nTeams more than 0.01 off under the best candidate (investigate inputs and procedure):');
 for(const rel of releases){const o=outliers(rel,solve(net(rel,results[0].order),results[0]),0.01);if(o.length)console.log(` ${rel.sport} ${rel.date}: ${o.length} teams`,JSON.stringify(o.slice(0,6)))}
 fs.writeFileSync(path.join(root,'data','calibration.json'),JSON.stringify({seasons:onlySeasons.length?onlySeasons:'all',releases:releases.length,ratings:results[0].n,best:results.slice(0,10)},null,1)+'\n');

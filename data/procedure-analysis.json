@@ -1,0 +1,101 @@
+[
+  {
+    "candidates": 576,
+    "pair": "2026/football 2026-10-27 → 2026-10-30",
+    "baseline": {
+      "teams": 262,
+      "exact": 0,
+      "mae": 0.002660571759127926,
+      "max": 0.002800910612446472
+    },
+    "bestPrevious": [
+      {
+        "order": "rank",
+        "inPlace": true,
+        "damping": 0,
+        "decimals": 4,
+        "tol": 0.0001,
+        "start": "previous",
+        "iterations": 58,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.023356597600872407,
+        "max": 0.025057142857143333
+      },
+      {
+        "order": "rank",
+        "inPlace": true,
+        "damping": 0,
+        "decimals": 4,
+        "tol": 0.00005,
+        "start": "previous",
+        "iterations": 58,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.023356597600872407,
+        "max": 0.025057142857143333
+      },
+      {
+        "order": "rank",
+        "inPlace": true,
+        "damping": 0,
+        "decimals": 4,
+        "tol": 0.00001,
+        "start": "previous",
+        "iterations": 58,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.023356597600872407,
+        "max": 0.025057142857143333
+      }
+    ],
+    "bestZero": [
+      {
+        "order": "alpha",
+        "inPlace": false,
+        "damping": 0.2,
+        "decimals": 4,
+        "tol": 0.00005,
+        "start": "zero",
+        "iterations": 232,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.005025081788440527,
+        "max": 0.005399999999999849
+      },
+      {
+        "order": "alpha",
+        "inPlace": false,
+        "damping": 0.2,
+        "decimals": 4,
+        "tol": 0.00001,
+        "start": "zero",
+        "iterations": 232,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.005025081788440527,
+        "max": 0.005399999999999849
+      },
+      {
+        "order": "ledger",
+        "inPlace": false,
+        "damping": 0.2,
+        "decimals": 4,
+        "tol": 0.00005,
+        "start": "zero",
+        "iterations": 232,
+        "converged": true,
+        "teams": 262,
+        "exact": 0,
+        "mae": 0.005025081788440527,
+        "max": 0.005399999999999849
+      }
+    ],
+    "note": "Raw predictions; no fitted offset. Unpublished previous opponent ratings estimated from the previous ledger. One pair cannot establish a general procedure."
+  }
+]

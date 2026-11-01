@@ -76,6 +76,38 @@ Independently solved ratings, aligned to MIAA's scale with one shared offset per
 
 The mismatched positions are teams separated by less than the difference. Official numbers are shown exactly; only scenario changes are modeled.
 
+## Formula investigation (October 31, 2026)
+
+The archived 2024 football release satisfies the current equations after correcting three missing forfeit flags: Catholic Memorial–St. Francis (September 21), Holbrook–Wareham (October 25), and Monomoy–Nantucket (November 1). All 256 teams whose opponents have published ratings now pass, with a largest residual of 0.000163. The earlier claim that 2024 football used a different formula was incorrect. Other 2024 sports still need their own input audit.
+
+`data/ledger-corrections.json` records the sources for these corrections, and the historical importer reapplies them. A 14–0 score alone is not sufficient evidence of a forfeit. The rating engine now uses the full sport margin cap for any flagged forfeit, including a nominal 2–0 feed score.
+
+`node scripts/check_procedure.cjs` compares consecutive archived releases across 1,152 combinations of starting values, update order, damping, intermediate rounding and stopping threshold. It reports raw errors, the mean signed error (shared scale bias), and the largest error remaining after removing that bias for diagnosis. It also selects fixed procedures across transitions and evaluates each transition using a procedure selected on the other transitions, to expose overfitting.
+
+Four complete football snapshots copied from mahsratings.com are kept separately under `data/research/mahsratings/2026/`, with provenance and the hash of the downloaded source. October 27 and 30 ratings match all 262 ratings in our existing archives exactly. October 16 and 23 have not been independently checked against historical MIAA PDFs; all four pass record, margin and opponent-equation checks. Tie counts omitted by the third-party official rows are inferred from each ledger. Supplemental results and hypothetical edits are excluded.
+
+Reproduce the research:
+
+```bash
+node scripts/import_research_snapshots.cjs
+RELEASE_DIR=data/research/mahsratings node scripts/check_consistency.cjs
+RELEASE_DIR=data/research/mahsratings node scripts/check_procedure.cjs
+```
+
+The saved results are in `data/research/mahsratings/procedure-analysis.json`. The current production projection has these errors against the copied releases:
+
+| Transition | Largest absolute error | Shared signed offset | Largest error after removing shared offset |
+| --- | ---: | ---: | ---: |
+| October 16 → 23 | 0.043659 | −0.042730 | 0.001651 |
+| October 23 → 27 | 0.055486 | −0.055072 | 0.000485 |
+| October 27 → 30 | 0.002801 | −0.002661 | 0.000156 |
+
+Removing the offset here uses the target release and is diagnostic only; it is not available to a forward projection. The common offset does not affect ranks or pairwise rating gaps. The equation matching supports the underlying formula, while these transitions show the games-weighted centering rule is an estimate rather than an established MIAA invariant. The 0.0028 result from October 27–30 is not a general absolute-error bound.
+
+No tested procedure reproduces MIAA's numbers exactly or reliably outperforms the current model on every transition. The best fixed candidate's mean error across all 786 team observations is 0.016257, but it has a worst error of 0.028333 and does worse than the current method on October 27–30. Selecting a procedure on two transitions gives held-out maximum errors of 0.063067, 0.028333 and 0.016957 on the remaining transition. Simple continuation from previous published ratings, including preserving prior opponent values while updating own margins, remains unconfirmed. Unpublished daily states and full-precision starting values are unavailable. The production calculation is unchanged by this research.
+
+Run the equation checks with `node scripts/check_consistency.cjs`; failures request investigation of the ledger, release and procedure rather than automatically claiming a different formula.
+
 ## Releasing updates
 
 The Vercel project deploys every push to `main`:

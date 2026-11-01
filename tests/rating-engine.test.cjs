@@ -105,3 +105,20 @@ test('projecting Oct 30 from the Oct 27 release lands within 0.003 of MIAA for e
   }
   assert.ok(max<0.003,'max projection error '+max);
 });
+
+test('a forfeit uses the full sport cap even when the feed supplies a nominal score',()=>{
+  for(const cap of [14,3]){
+    const games=[['2026-01-01','A','B',8,5,0],['2026-01-02','B','C',2,1,0],['2026-01-03','C','A',3,4,0]];
+    const base=calculateRatings(games,['A','B','C'],{},cap);
+    const nominal=calculateRatings([...games,['2026-01-04','A','B',2,0,1]],['A','B','C'],{},cap);
+    const awarded=calculateRatings([...games,['2026-01-04','A','B',cap,0,1]],['A','B','C'],{},cap);
+    for(const t of ['A','B','C']){
+      assert.equal(nominal.teams[t].raw,awarded.teams[t].raw);
+      assert.equal(nominal.teams[t].adjusted,base.teams[t].adjusted);
+      assert.equal(nominal.teams[t].opp,base.teams[t].opp);
+    }
+    assert.equal(nominal.teams.A.mov,(base.teams.A.mov*2+cap)/3);
+    assert.equal(nominal.teams.B.mov,(base.teams.B.mov*2-cap)/3);
+    assert.equal(nominal.teams.B.forfeitLosses,1);
+  }
+});

@@ -230,6 +230,17 @@ def scores(slug, cap, official, url, cutoff):
             games[k] = new
         resolved.append({"date": k[0], "teams": [k[1], k[2]], "candidates": [[old[3], old[4]], [new[3], new[4]]], "chosen": "second" if err[1] < err[0] else "first"})
 
+    # Older PDFs omit forfeit markers. Apply only sourced, date-and-team-specific
+    # corrections; never infer a forfeit merely from a cap-to-zero score.
+    corrections_path = ROOT / "data" / "ledger-corrections.json"
+    corrections = json.loads(corrections_path.read_text()) if corrections_path.exists() else []
+    for correction in corrections:
+        if correction["season"] != SEASON or correction["sport"] != slug:
+            continue
+        key = (correction["date"],) + tuple(sorted(correction["teams"]))
+        if key in games:
+            games[key][5] = correction["forfeit"]
+
     played = sorted(list(games.values()) + extras)
     final_counts = {}
     for g in played:
