@@ -214,7 +214,7 @@ function bracketCanvas(){
  const rows=standings(bracketDiv),seed=Object.fromEntries(rows.filter(r=>r.qualified).map(r=>[r.seed,r]));
  const order=seedOrder(FIELD),counts=[];for(let n=FIELD/2;n>=1;n/=2)counts.push(n);
  ctx.fillStyle=turf;ctx.fillRect(0,0,W,H);
- const card={x:40,y:150,w:914,h:1350};
+ const card={x:40,y:320,w:914,h:1350};
  ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(card.x,card.y,card.w,card.h,28);ctx.fill();
  const L=card.x+32,R=card.x+card.w-32;let y=card.y+44;
  ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText('PROJECTED BRACKET',L,y);
