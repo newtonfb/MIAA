@@ -98,6 +98,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-30"
         },
         "note": "Boston City League championship; Globe game report: New Mission 3, O'Bryant 2 (25-23, 24-26, 16-25, 25-23, 15-12)"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "John J. Duggan Academy",
+          "Southwick Regional",
+          0,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "MassLive",
+          "url": "https://www.masslive.com/highschoolsports/",
+          "published": "2026-11-01"
+        },
+        "note": "Southwick 3, Duggan 0 as reported on MassLive; confirmed by the site owner on November 1, 2026 (exact article URL not yet recorded)"
       }
     ],
     "girls-soccer": [
