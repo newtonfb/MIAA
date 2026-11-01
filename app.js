@@ -421,6 +421,16 @@ function renderFixtures(){
    ${line('a',r[1])}${line('b',r[2])}
  </article>`).join(''):`<div class="empty">${none}</div>`;
  updateFixtureStates();
+ renderOpenCount();
+}
+// Ratings are solved statewide, so games outside the selected division still move it.
+function renderOpenCount(){
+ const open=schedule().filter(r=>!isLocked(fixtureKey(r))),post=r=>POSTPONED_KEYS.has(fixtureKey(r))||LIVE_POSTPONED.has(fixtureKey(r));
+ const missing=open.filter(r=>r[0]<TODAY_ET&&!post(r)).length,upcoming=open.filter(r=>r[0]>=TODAY_ET&&!post(r)).length,postponed=open.filter(post).length;
+ const here=open.filter(r=>DIV[r[1]]===weekDiv||DIV[r[2]]===weekDiv).length,others=open.length-here,s=n=>n===1?'':'s';
+ if(!open.length){el('openCount').innerHTML='<strong>Every scheduled game statewide has a result.</strong>';return}
+ const parts=[missing&&`${missing} score${s(missing)} not reported`,upcoming&&`${upcoming} still to play`,postponed&&`${postponed} postponed`].filter(Boolean).join(', ');
+ el('openCount').innerHTML=`<strong>${open.length} game${s(open.length)} statewide without a result</strong>: ${parts}. ${here?`${here} involve${here===1?'s':''} Division ${weekDiv} teams${others?`; the other ${others===1?'one':others} can still shift Division ${weekDiv} ratings through common opponents`:''}.`:`None involve Division ${weekDiv} teams, but ${open.length===1?'it':'they'} can still shift Division ${weekDiv} ratings through common opponents.`}`;
 }
 function updateFixtureStates(){
  const list=el('fixtureList');if(!list)return;let n=0;

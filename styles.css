@@ -308,6 +308,8 @@ body[data-sport="volleyball"] .hero.field::before,body[data-sport="volleyball"] 
 .weekFilter.selected{background:var(--ink);border-color:var(--ink);color:var(--paper)}
 .predictionTools{display:grid;grid-template-columns:1fr auto;gap:8px}
 .predictionTools .bttn{height:38px}
+.openCount{margin:0;font-size:12px;color:var(--muted);line-height:1.45}
+.openCount strong{color:var(--ink);font-weight:650}
 .predictHelp{margin:0;font-size:12px;color:var(--muted);line-height:1.45}
 .weekMeta{padding:9px 16px;font-size:12px;font-weight:550;color:var(--muted);border-bottom:1px solid var(--line);background:var(--surface-2);flex-shrink:0}
 .fixtureList{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:10px;display:flex;flex-direction:column;gap:8px}
