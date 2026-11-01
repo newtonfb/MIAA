@@ -8,6 +8,10 @@ on:
     - cron: '15 11 * * *'   # 6:15 a.m. Eastern (7:15 a.m. while daylight time lasts)
     - cron: '45 3 * * *'    # 10:45 p.m. Eastern (11:45 p.m. while daylight time lasts)
   workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/sync_live.py'
+      - 'tests/test_sync_live.py'
 concurrency:
   group: sync-arbiter
   cancel-in-progress: false
@@ -31,6 +35,8 @@ jobs:
         run: python scripts/sync_miaa.py
       - name: Pull live results from MIAA's scoreboard
         run: python scripts/sync_live.py
+      - name: Test missing-score retention
+        run: python -m unittest discover -s tests -p 'test_sync_live.py'
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
