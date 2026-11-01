@@ -96,7 +96,12 @@ const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
 const LIVE_POSTPONED=new Set((LIVE.postponed||[]).map(r=>pairKey(r)));
 const TODAY_ET=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'});
 const awaitingOfficial=r=>r[0]<TODAY_ET&&!isLocked(fixtureKey(r))&&!LIVE_POSTPONED.has(fixtureKey(r));
-const schedule=()=>FOOTBALL?WEEK8:[...LIVE_UPCOMING,...addedFixtures.filter(f=>!LIVE_UPCOMING.some(r=>pairKey([r[0],r[1],r[2]])===pairKey([f[0],f[1],f[2]])))];
+// A locally verified final may never have appeared in Arbiter's list of scheduled games.
+// Include such matches on the Games panel rather than only in the underlying ratings.
+const REPORTED_FIXTURES=FOOTBALL?[]:REPORTED_FALL.map(x=>[x.game[0],x.game[1],x.game[2],null])
+ .filter(f=>!LIVE_UPCOMING.some(r=>pairKey(r)===pairKey(f)));
+const schedule=()=>FOOTBALL?WEEK8:[...LIVE_UPCOMING,...REPORTED_FIXTURES,
+ ...addedFixtures.filter(f=>![...LIVE_UPCOMING,...REPORTED_FIXTURES].some(r=>pairKey(r)===pairKey(f)))];
 const isAddedFixture=k=>addedFixtures.some(f=>pairKey([f[0],f[1],f[2]])===k);
 let selectedDiv=DIVISIONS[0], activePage='rankings', selectedTeam=Object.keys(DIV).sort((a,b)=>a.localeCompare(b))[0], weekDiv=DIVISIONS[0];
 let alertTimer;
