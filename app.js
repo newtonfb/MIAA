@@ -509,6 +509,23 @@ function applySportCopy(){
 }
 
 /* Admin: start a data sync (api/sync.js runs a GitHub workflow). */
+// What a finished sync changed, per sport (from scripts/sync_summary.cjs via api/sync.js).
+const syncChanged=sum=>!sum||sum.sports.some(s=>s.release!==s.previousRelease||s.officialGamesAdded||s.newResults.length||s.corrected.length);
+function renderSyncSummary(sum){
+ const box=el('adminSummary');
+ if(!sum){box.innerHTML='<p>The change summary isn\'t available for this run. Open the run log for details.</p>';box.hidden=false;return}
+ const score=g=>`${esc(g[1])} ${g[3]}–${g[4]} ${esc(g[2])}`;
+ box.innerHTML=sum.sports.map(s=>{
+  const lines=[];
+  lines.push(s.release!==s.previousRelease?`New official ratings: ${shortDate(s.release)} (was ${s.previousRelease?shortDate(s.previousRelease):'none'}), ${s.officialGamesAdded} games added`:`Official ratings unchanged (${shortDate(s.release)})`);
+  lines.push(s.newResults.length?`${s.newResults.length} new score${s.newResults.length===1?'':'s'}`:'No new scores');
+  if(s.corrected.length)lines.push(`${s.corrected.length} corrected score${s.corrected.length===1?'':'s'}`);
+  lines.push(`${s.upcoming} upcoming game${s.upcoming===1?'':'s'} listed`);
+  const games=[...s.newResults,...s.corrected],shown=games.slice(0,6);
+  return `<section><h3>${esc(SPORTS[s.sport]?.name||s.name)}</h3><p>${lines.join(' · ')}</p>${shown.length?`<ul>${shown.map(g=>`<li><span>${score(g)}</span><b>${shortDate(g[0])}</b></li>`).join('')}${games.length>shown.length?`<li class="more">+${games.length-shown.length} more</li>`:''}</ul>`:''}</section>`;
+ }).join('');
+ box.hidden=false;
+}
 function initAdmin(){
  const d=el('admin'),status=el('adminStatus');let key='',timer=0;
  const show=(text,tone)=>{status.textContent=text;status.dataset.tone=tone||''};
@@ -517,16 +534,18 @@ function initAdmin(){
  const poll=async()=>{
   try{const r=await fetch('/api/sync',{headers:{'x-admin-key':key}});const j=await r.json();
    if(!r.ok){show(j.error||'Could not read sync status.','bad');return}
-   if(j.status==='completed'){show(j.conclusion==='success'?'Sync finished. If there were new results, the site redeploys in about a minute; reload then.':'Sync failed, and nothing was published. Open the run log for details.',j.conclusion==='success'?'good':'bad');
+   if(j.status==='completed'){const ok=j.conclusion==='success';
+    show(ok?(syncChanged(j.summary)?'Sync finished. The site updates in about a minute; reload to see it.':'Sync finished. No new results since the last sync.'):'Sync failed, and nothing was published. Open the run log for details.',ok?'good':'bad');
+    if(ok)renderSyncSummary(j.summary);
     el('adminLog').href=j.url;el('adminLog').hidden=false;el('adminRun').disabled=false;return}
-   show(j.status==='queued'?'Sync queued on GitHub…':'Downloading and checking MIAA\'s newest PDFs…');el('adminLog').href=j.url||'#';el('adminLog').hidden=!j.url;
+   show(j.status==='queued'?'Sync queued…':'Downloading and checking the newest data…');el('adminLog').href=j.url||'#';el('adminLog').hidden=!j.url;
   }catch{show('Lost contact with the sync service. Try again.','bad');el('adminRun').disabled=false;return}
   timer=setTimeout(poll,8000);
  };
  el('adminOpen').addEventListener('click',()=>{releases();d.showModal()});
  el('adminClose').addEventListener('click',()=>d.close());
  el('adminForm').addEventListener('submit',async e=>{
-  e.preventDefault();key=el('adminKey').value;clearTimeout(timer);el('adminLog').hidden=true;
+  e.preventDefault();key=el('adminKey').value;clearTimeout(timer);el('adminLog').hidden=true;el('adminSummary').hidden=true;
   if(!key){show('Enter the admin key.','bad');return}
   el('adminRun').disabled=true;show('Starting sync…');
   try{const r=await fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key})});

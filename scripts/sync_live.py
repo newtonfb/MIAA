@@ -246,7 +246,7 @@ def main():
             print(f"{slug}: kept previous live data ({exc})", file=sys.stderr)
             if slug in previous:
                 sports[slug] = previous[slug]
-    OUT.write_text("// Live varsity results from MIAA's public scoreboard (Arbiter data), written by scripts/sync_live.py.\nconst LIVE_DATA=" + json.dumps({"sports": sports}, separators=(",", ":"), ensure_ascii=False) + ";\n", encoding="utf8")
+    OUT.write_text("// Live varsity results, written by scripts/sync_live.py.\nconst LIVE_DATA=" + json.dumps({"sports": sports}, separators=(",", ":"), ensure_ascii=False) + ";\n", encoding="utf8")
     print("Wrote", OUT.name)
     if len(failed) == len(SPORTS):
         sys.exit(1)

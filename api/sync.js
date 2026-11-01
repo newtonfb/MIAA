@@ -23,6 +23,17 @@ async function github(path,init={}){
     Authorization:`Bearer ${process.env.GITHUB_TOKEN}`,'User-Agent':'miaa-rankings-sync',...(init.headers||{})}});
 }
 
+// What the run changed in each sport: scripts/sync_summary.cjs prints one "SYNC_SUMMARY {json}" line to the log.
+async function runSummary(runId){
+  try{
+    const jobs=await github(`/actions/runs/${runId}/jobs`);if(!jobs.ok)return null;
+    const job=(await jobs.json()).jobs?.[0];if(!job)return null;
+    const log=await github(`/actions/jobs/${job.id}/logs`);if(!log.ok)return null;
+    const lines=(await log.text()).match(/SYNC_SUMMARY (\{.*\})\s*$/gm);
+    return lines?JSON.parse(lines.at(-1).replace(/^SYNC_SUMMARY /,'')):null;
+  }catch{return null}
+}
+
 module.exports=async(req,res)=>{
   res.setHeader('Cache-Control','no-store');
   if(!process.env.ADMIN_SYNC_KEY||!process.env.GITHUB_TOKEN){
@@ -40,7 +51,10 @@ module.exports=async(req,res)=>{
     const r=await github(`/actions/workflows/${WORKFLOW}/runs?per_page=1&event=workflow_dispatch`);
     if(!r.ok)return res.status(502).json({error:`GitHub status check failed (${r.status}).`});
     const run=(await r.json()).workflow_runs?.[0];
-    return res.status(200).json(run?{status:run.status,conclusion:run.conclusion,created:run.created_at,updated:run.updated_at,url:run.html_url}:{status:'none'});
+    if(!run)return res.status(200).json({status:'none'});
+    const out={status:run.status,conclusion:run.conclusion,created:run.created_at,updated:run.updated_at,url:run.html_url};
+    if(run.status==='completed'&&run.conclusion==='success')out.summary=await runSummary(run.id);
+    return res.status(200).json(out);
   }
   res.setHeader('Allow','GET, POST');
   return res.status(405).json({error:'Method not allowed'});

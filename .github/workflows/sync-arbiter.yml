@@ -30,7 +30,7 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install 'pdfplumber>=0.11,<0.13' 'requests>=2.31,<3'
       - name: Keep the current release for the accuracy report
-        run: mkdir -p /tmp/previous && cp data/season-2026.js data/fall-2026.js /tmp/previous/
+        run: mkdir -p /tmp/previous && cp data/season-2026.js data/fall-2026.js data/live-2026.js /tmp/previous/
       - name: Download and validate MIAA's newest release
         run: python scripts/sync_miaa.py
       - name: Pull live results from MIAA's scoreboard
@@ -42,6 +42,8 @@ jobs:
           node-version: '22'
       - name: Test the synced data
         run: node --test tests/*.test.cjs
+      - name: Summarize what changed in each sport
+        run: node scripts/sync_summary.cjs /tmp/previous
       - name: Measure our projection against any new MIAA release
         run: node scripts/accuracy_report.cjs /tmp/previous
       - name: Archive the release for formula calibration
