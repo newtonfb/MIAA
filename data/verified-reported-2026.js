@@ -114,6 +114,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-01"
         },
         "note": "Southwick 3, Duggan 0 as reported on MassLive; confirmed by the site owner on November 1, 2026 (exact article URL not yet recorded)"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Danvers",
+          "North Andover",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "Danvers volleyball Instagram",
+          "url": "https://www.instagram.com/",
+          "published": "2026-11-01"
+        },
+        "note": "Danvers 3, North Andover 1 as posted on the Danvers volleyball Instagram; confirmed by the site owner on November 1, 2026 (exact post URL not yet recorded)"
       }
     ],
     "girls-soccer": [
