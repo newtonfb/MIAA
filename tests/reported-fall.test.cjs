@@ -34,4 +34,24 @@ test('local reporting is shown separately from MIAA finals',()=>{
  assert.match(app,/REPORTED_APPLIED/);
  assert.match(app,/REPORTED FINAL/);
  assert.match(app,/source\.get\(pairKey\(x\.game\)\)===x\.game/);
+ assert.match(app,/const REPORTED_FIXTURES=/,'include games omitted from Arbiter schedule');
+ assert.match(app,/\.\.\.REPORTED_FIXTURES/,'reported fixtures must be shown');
+});
+
+test('Telegram scoreboard finals were added with exact date and score',()=>{
+ const expected={
+  'field-hockey':[['2026-10-31','Nipmuc Regional','Quaboag Regional',3,0,0]],
+  'girls-soccer':[['2026-10-30','Shawsheen Valley Tech','Montachusett RVT',0,0,0]],
+  volleyball:[['2026-10-30','Advanced Math & Science','Montachusett RVT',3,0,0]]
+ };
+ for(const [sport,rows] of Object.entries(expected)){
+  for(const game of rows){
+   const found=reported.sports[sport].find(e=>e.game[0]===game[0]&&
+     [e.game[1],e.game[2]].sort().join('|')===[game[1],game[2]].sort().join('|'));
+   assert.ok(found,sport+' result absent');
+   assert.deepEqual(found.game,game);
+   assert.equal(found.source.publisher,'Worcester Telegram & Gazette high school scoreboard');
+   assert.ok(found.source.url.includes('date='+game[0].replace(/-/g,'')));
+  }
+ }
 });
