@@ -404,22 +404,24 @@ function applySportCopy(){
  text('.js-capunit',`${CAP}-${SP.unit}`);text('.js-date',BASELINE_DATE);
  text('.js-teams',Object.keys(OFF).length);text('.js-games',SD.games.filter(g=>g[3]!==null).length.toLocaleString('en-US'));text('.js-divisions',DIVISIONS.length);
  el('capExample').textContent=FOOTBALL?'A 35–7 win is treated as +14; a 14–21 loss is −7.':SPORT==='volleyball'?'Results count in sets: a 3–0 match is +3 and a 3–2 match is +1.':'A 6–0 win is treated as +3; a 1–2 loss is −1.';
- el('headlineSub').textContent=FOOTBALL?'Use this tool to predict the power rankings after Week 8, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
+ el('headlineSub').textContent=FOOTBALL?'Enter Week 8 scores, the final week of the regular season, and see who makes each division\'s top-16 tournament field.'
   :`MIAA ratings with live scores from MIAA's scoreboard. Enter or predict the games still to be played and see who makes each division's top-32 tournament field.`;
  for(const n of document.querySelectorAll('.football-only'))n.hidden=!FOOTBALL;
  for(const n of document.querySelectorAll('.added-games-only'))n.hidden=FOOTBALL;
  el('heroPredictLabel').textContent=FOOTBALL?'Predict Week 8':'Add a game';
  el('heroPredict').style.display=FOOTBALL?'none':'';
+ el('predictWeek8').style.display=FOOTBALL?'none':'';
+ document.querySelector('.choice-predict').style.display=FOOTBALL?'none':'';
  el('weekJumpLabel').textContent=FOOTBALL?'Enter scores myself':'Predict my games';
  el('week8Tab').textContent=FOOTBALL?'Week 8':'Games';
  el('weekTitle').textContent=FOOTBALL?'Week 8 scores':'Games still to play';
- el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter remaining scores, or select <strong>Predict Week 8</strong> to estimate the rest.'
+ el('weekIntro').innerHTML=FOOTBALL?'Verified Thursday and Friday finals are already entered and locked. Enter any remaining scores.'
   :'Upcoming games come from MIAA\'s scoreboard. Type a score or select <strong>Predict all games</strong> to estimate them from ratings and common opponents, and add any game that\'s missing.';
  el('predictLabel').textContent=FOOTBALL?'Predict Week 8':'Predict all games';
- el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be predicted or edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
+ el('predictHelp').textContent=FOOTBALL?'Confirmed finals are locked for everyone. Only unplayed games can be edited.':SPORT==='volleyball'?'Volleyball scores are sets won: the winner has 3. Scores you type are never overwritten.':'Scores you type yourself are never overwritten by predictions.';
  el('introDate').textContent=`Official rankings as of ${BASELINE_DATE}`;
- el('introTitle').textContent=`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
- el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Choose how to fill in <span id="introCount">Week 8</span>.'
+ el('introTitle').textContent=FOOTBALL?`Final MIAA ${SP.name.toLowerCase()} power rankings`:`Predict the final MIAA ${SP.name.toLowerCase()} power rankings`;
+ el('introBody').innerHTML=FOOTBALL?'Week 8 is the last week before the tournament, and the top 16 in each division make the field. Type in scores for <span id="introCount">Week 8</span>.'
   :`The top 32 in each division make the tournament. The games still to be played come from MIAA's scoreboard; score them yourself or predict them, and add any that are missing.`;
  if(!FOOTBALL){const next=new Date(SD_DATE+'T12:00');next.setDate(next.getDate()+1);el('addDate').value=next.toISOString().slice(0,10);el('addDate').min=SD_DATE}
 }
