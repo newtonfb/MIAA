@@ -50,6 +50,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-30"
         },
         "note": "Boston Globe girls' volleyball scoreboard records Newton North 3, Winchester 2"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Sturgis Charter West",
+          "Monomoy",
+          1,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "Boston Globe High School Sports",
+          "url": "https://www.bostonglobe.com/sports/high-schools/scoreboard/",
+          "published": "2026-10-31"
+        },
+        "note": "Globe October 30 Cape & Islands girls volleyball scoreboard: Monomoy 3, Sturgis West 1 (independently reported; MIAA scoreboard has no final)"
       }
     ],
     "girls-soccer": [
@@ -100,6 +116,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31"
         },
         "note": "Boston City League championship; confirmed by Boston Globe October 31 game report"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Middleborough",
+          "Apponequet Regional",
+          1,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "Boston Globe High School Sports",
+          "url": "https://www.bostonglobe.com/sports/high-schools/scoreboard/",
+          "published": "2026-10-31"
+        },
+        "note": "Globe October 30 South Shore girls soccer scoreboard: Apponequet 3, Middleborough 1 (independently reported; MIAA scoreboard has no final)"
       }
     ],
     "field-hockey": [
