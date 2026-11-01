@@ -66,6 +66,38 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31"
         },
         "note": "Globe October 30 Cape & Islands girls volleyball scoreboard: Monomoy 3, Sturgis West 1 (independently reported; MIAA scoreboard has no final)"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Scituate",
+          "Cohasset",
+          1,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps",
+          "url": "https://www.maxpreps.com/news/W085XypEhkiQfRoAAtqPaA/volleyball-recap-scituate-falls-to-cohasset.htm",
+          "published": "2026-10-31T20:51:00-04:00"
+        },
+        "note": "MaxPreps recap: Cohasset 3, Scituate 1 (26-28, 25-18, 25-18, 25-5); unreported in MIAA/Arbiter feed"
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "New Mission",
+          "O'Bryant",
+          3,
+          2,
+          0
+        ],
+        "source": {
+          "publisher": "The Boston Globe",
+          "url": "https://www.bostonglobe.com/2026/10/30/sports/new-mission-obryant-girls-volleyball-boston-city-league/",
+          "published": "2026-10-30"
+        },
+        "note": "Boston City League championship; Globe game report: New Mission 3, O'Bryant 2 (25-23, 24-26, 16-25, 25-23, 15-12)"
       }
     ],
     "girls-soccer": [
