@@ -144,14 +144,14 @@
 <div class="page hidden" id="bracketPage">
  <section class="hero hero-compact field">
   <div class="hero-copy">
-   <h1 class="display">Projected <span class="js-sport-lower">football</span> brackets</h1>
+   <h1 class="display"><span id="bracketKind">Projected</span> <span class="js-sport-lower">football</span> brackets</h1>
    <p class="lede" id="bracketSub"></p>
   </div>
  </section>
  <div class="panel">
   <div class="toolbar">
    <div class="seg" id="bracketDivs" role="group" aria-label="Division"></div>
-   <span class="legend"><span class="football-only"><i class="lg-warn">!</i>Under 3 wins or 7 games so far</span></span>
+   <span class="legend"><span class="football-only"><i class="lg-warn">!</i>Under 3 wins or 7 games<span id="legendSoFar"> so far</span></span></span>
    <button class="bttn" id="bracketShare" type="button" hidden>Save for TikTok</button>
   </div>
   <div class="bracket-title" id="bracketTitle"></div>
@@ -245,7 +245,7 @@
    <span>Pick two teams and a date, then type the score or let the predictor estimate it from ratings and common opponents.</span>
   </button>
   <button class="choice" type="button" data-intro="bracket">
-   <strong>See the projected brackets</strong>
+   <strong>See the brackets</strong>
    <span>View the top-32 field for every division as the official ratings stand today.</span>
   </button>
  </div>

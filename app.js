@@ -194,7 +194,7 @@ function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody')
  const all=standings(selectedDiv),lastSeed=all.filter(r=>r.qualified).at(-1);
  let rows=all;const q=el('rankingSearch').value.trim().toLowerCase();if(q)rows=rows.filter(t=>t.team.toLowerCase().includes(q));
  const showCut=!q,cutRank=lastSeed?.rank;
- el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} in Division ${selectedDiv} · ${all.filter(r=>r.qualified).length} projected playoff seeds`;
+ el('tableMeta').textContent=`${rows.length} ${rows.length===1?'team':'teams'} in Division ${selectedDiv} · ${all.filter(r=>r.qualified).length} ${finalBracket()?'':'projected '}playoff seeds`;
  el('rankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.qualified?'playoff-zone':!r.eligible?'ineligible-row':'',move=moveTag(r.rank,baseDivRank[r.team]);
   return `${showCut&&cutRank&&r.rank===cutRank+1?'<tr class="cutrow"><td colspan="7"><div class="cutline-label"><span>Below last qualifying seed</span></div></td></tr>':''}<tr class="${zone}" data-row="${esc(r.team)}" data-rating="${r.rating.toFixed(4)}"><td class="col-rank"><span class="rank">${r.rank}</span>${move}</td><td class="col-team"><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-label"><span class="team-name">${esc(r.team)}</span>${eligibilityTag(r)}</span></button></td><td class="col-rec">${rec(r)}</td><td class="num">${signed(r.mov)}</td><td class="num">${signed(r.opp)}</td><td class="num col-rating">${signed(r.rating)}</td><td class="num">${deltaTag(r.change)}</td></tr>`}).join(''):'<tr><td colspan="7" class="empty">No teams match your search.</td></tr>';
  el('mobileRankingsBody').innerHTML=rows.length?rows.map(r=>{const zone=r.qualified?'playoff-zone':!r.eligible?'ineligible-row':'',move=moveTag(r.rank,baseDivRank[r.team]);
@@ -249,9 +249,9 @@ function bracketCanvas(){
  const card={x:40,y:320,w:914,h:1350};
  ctx.fillStyle='#fff';ctx.beginPath();ctx.roundRect(card.x,card.y,card.w,card.h,28);ctx.fill();
  const L=card.x+32,R=card.x+card.w-32;let y=card.y+44;
- ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText('PROJECTED BRACKET',L,y);
+ ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText(finalBracket()?'FINAL BRACKET':'PROJECTED BRACKET',L,y);
  ctx.fillStyle=ink;ctx.font=F(850,60);ctx.fillText(fitText(ctx,`Division ${bracketDiv} ${SP.name}`,R-L),L,y+=66);
- ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
+ ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`${finalBracket()?`MIAA final ratings, ${shortDate(SD_DATE)}`:`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}`}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
  const gap=26,firstW=470,restW=(R-L-firstW-gap*(counts.length-1))/(counts.length-1);
  const colX=i=>i?L+firstW+gap+(i-1)*(restW+gap):L,colW=i=>i?restW:firstW;
  const top=y+=74,bottom=card.y+card.h-70,area=bottom-top;
@@ -289,6 +289,8 @@ function shareBracketImage(){
 let bracketDiv=DIVISIONS[0];
 function seedOrder(n){let order=[1];while(order.length<n){const size=order.length*2;order=order.flatMap(s=>[s,size+1-s])}return order}
 const ROUND_NAMES={32:'Round of 32',16:'Round of 16',8:'Quarterfinals',4:'Semifinals',2:'State final'};
+// Football's bracket is final once MIAA's final release is loaded, unless the viewer has entered scenario scores.
+const finalBracket=()=>HAS_FOOTBALL_FINAL&&!edits.length;
 function renderBracket(){
  el('bracketDivs').innerHTML=DIVISIONS.map(d=>`<button type="button" class="${bracketDiv===d?'selected':''}" data-bdiv="${d}" aria-pressed="${bracketDiv===d}">D${d}</button>`).join('');
  const rows=standings(bracketDiv),field=rows.filter(r=>r.qualified),nextEligible=rows.filter(r=>r.eligible&&!r.qualified),seed=Object.fromEntries(field.map(r=>[r.seed,r]));
@@ -307,11 +309,12 @@ function renderBracket(){
  const moved=rows.filter(r=>!!r.qualified!==!!baseDivSeed[r.team]);
   const skipped=FOOTBALL?rows.filter(r=>!r.eligible&&r.rank<=(lastSeed?.rank||FIELD)):[];
   const skipCard=skipped.length?'<div class="bubble-col"><h3>Skipped — ineligible</h3><p>Replaced by next eligible teams</p><ol>'+skipped.map(r=>'<li><span class="bubble-rank">'+r.rank+'</span><button type="button" class="team-button" data-team="'+esc(r.team)+'"><span class="team-name">'+esc(r.team)+'</span></button><span class="bubble-gap">'+(r.w<3?r.w+' win'+(r.w===1?'':'s'):'Under 7 games')+'</span></li>').join('')+'</ol></div>':'';
- el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Eligible seeds in the projected bracket</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Next eligible teams by rating</p><ol>${out}</ol></div>${skipCard}${moved.length?`<div class="bubble-col bubble-moves"><h3>Projected field changes</h3><p>Compared with the ${BASELINE_DATE} eligible field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.qualified?'is-in':'is-out'}">${r.qualified?'Now seeded '+r.seed:'Now out'}, was ${baseDivSeed[r.team]||'not seeded'}</span></li>`).join('')}</ul></div>`:''}`;
+ el('bubble').innerHTML=`<div class="bubble-col"><h3>Last four in</h3><p>Eligible seeds in the ${finalBracket()?'final':'projected'} bracket</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Next eligible teams by rating</p><ol>${out}</ol></div>${skipCard}${moved.length?`<div class="bubble-col bubble-moves"><h3>Projected field changes</h3><p>Compared with the ${BASELINE_DATE} eligible field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.qualified?'is-in':'is-out'}">${r.qualified?'Now seeded '+r.seed:'Now out'}, was ${baseDivSeed[r.team]||'not seeded'}</span></li>`).join('')}</ul></div>`:''}`;
  // Title inside the bracket panel, so a screenshot of the bracket says what it is.
- const asOf=LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} with live scores through ${shortDate(LIVE_THROUGH)}`:`MIAA ratings as of ${shortDate(SD_DATE)}`;
- el('bracketTitle').innerHTML=`<div><h2>Division ${bracketDiv} ${esc(SP.name)}</h2><p>Projected tournament bracket. ${asOf}${edits.length?', plus your entered scores':''}. Unofficial.</p></div><p class="bracket-credit"><strong>MA High School Power Rankings</strong><span>${esc(location.host||'miaa-football-scenarios.vercel.app')}</span></p>`;
- el('bracketSub').textContent=FOOTBALL?`Division ${bracketDiv}: ${field.length} projected playoff seeds. The 16 highest-rated eligible teams (3 wins and 7 competed games minimum) are selected; ineligible teams are skipped. ${edits.length?'Includes your '+edits.length+' scenario score(s).':'Includes all entered final scores.'}`:`Division ${bracketDiv} has ${rows.length} teams and the top ${FIELD} make the projected bracket.`;
+ const final=finalBracket(),kind=final?'Final':'Projected';el('bracketKind').textContent=kind;el('legendSoFar').hidden=final;
+ const asOf=final?`MIAA final ratings, ${shortDate(SD_DATE)}`:LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} with live scores through ${shortDate(LIVE_THROUGH)}`:`MIAA ratings as of ${shortDate(SD_DATE)}`;
+ el('bracketTitle').innerHTML=`<div><h2>Division ${bracketDiv} ${esc(SP.name)}</h2><p>${kind} tournament bracket. ${asOf}${edits.length?', plus your entered scores':''}. Unofficial.</p></div><p class="bracket-credit"><strong>MA High School Power Rankings</strong><span>${esc(location.host||'miaa-football-scenarios.vercel.app')}</span></p>`;
+ el('bracketSub').textContent=FOOTBALL?`Division ${bracketDiv}: ${field.length} ${final?'':'projected '}playoff seeds. The 16 highest-rated eligible teams (3 wins and 7 competed games minimum) are selected; ineligible teams are skipped. ${edits.length?'Includes your '+edits.length+' scenario score(s).':final?'Set by MIAA\'s final power ratings.':'Includes all entered final scores.'}`:`Division ${bracketDiv} has ${rows.length} teams and the top ${FIELD} make the ${kind.toLowerCase()} bracket.`;
 }
 
 /* Matchups: football's Week 8 schedule, or the games a viewer adds for other sports. */
