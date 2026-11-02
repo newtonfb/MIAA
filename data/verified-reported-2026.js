@@ -114,22 +114,6 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-01"
         },
         "note": "Southwick 3, Duggan 0 as reported on MassLive; confirmed by the site owner on November 1, 2026 (exact article URL not yet recorded)"
-      },
-      {
-        "game": [
-          "2026-10-30",
-          "Danvers",
-          "North Andover",
-          3,
-          1,
-          0
-        ],
-        "source": {
-          "publisher": "Danvers volleyball Instagram",
-          "url": "https://www.instagram.com/",
-          "published": "2026-11-01"
-        },
-        "note": "Danvers 3, North Andover 1 as posted on the Danvers volleyball Instagram; confirmed by the site owner on November 1, 2026 (exact post URL not yet recorded)"
       }
     ],
     "girls-soccer": [
@@ -255,6 +239,20 @@ const REPORTED_FALL_FINALS={
   },
   "notCounting": {
     "volleyball": [
+      {
+        "game": [
+          "2026-10-30",
+          "Danvers",
+          "North Andover",
+          "16:00"
+        ],
+        "source": {
+          "publisher": "Arbiter (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-02"
+        },
+        "note": "Listed in Arbiter as a scrimmage with no score; replaces the Danvers Instagram 3-1 report, which does not count toward MIAA power rankings"
+      },
       {
         "game": [
           "2026-11-01",
