@@ -197,7 +197,7 @@ const REPORTED_FALL_FINALS={
           "url": "https://cm.telegram.com/highschool-scores?season=202627&type=scoreboard&date=20261031",
           "published": "2026-10-31T23:51:00-04:00"
         },
-        "note": "T&G scoreboard lists FINAL 3-0; the matchup is absent from MIAA live schedule"
+        "note": "T&G scoreboard lists FINAL 3-0; the matchup is absent from MIAA live schedule; Arbiter lists it as a counting game (checked by site owner 2026-11-02)"
       }
     ],
     "boys-soccer": [
@@ -259,6 +259,36 @@ const REPORTED_FALL_FINALS={
           "Oliver Ames",
           "East Bridgewater",
           "15:00"
+        ],
+        "source": {
+          "publisher": "Arbiter (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-02"
+        },
+        "note": "Listed in Arbiter as a scrimmage; does not count toward MIAA power rankings"
+      }
+    ],
+    "field-hockey": [
+      {
+        "game": [
+          "2026-10-31",
+          "Manchester Essex",
+          "Triton Regional",
+          "13:00"
+        ],
+        "source": {
+          "publisher": "Arbiter (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-02"
+        },
+        "note": "Canceled in Arbiter, not a forfeit; earlier reported postponed by Cape Ann Current. Does not count toward MIAA power rankings"
+      },
+      {
+        "game": [
+          "2026-11-01",
+          "Doherty Memorial",
+          "Quabbin Regional",
+          "17:00"
         ],
         "source": {
           "publisher": "Arbiter (checked by site owner)",
