@@ -97,7 +97,9 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edit
 // Bring over scenarios saved by the old separate fall-sports page.
 if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getItem('miaa-fall-2026-v1:'+SPORT)||'[]');
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
-const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2]));
+// Scheduled games confirmed not to count (e.g. listed in Arbiter as a scrimmage).
+const NOT_COUNTING=new Set(((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.notCounting?.[SPORT])||[]).map(x=>pairKey(x.game)));
+const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2])&&!NOT_COUNTING.has(pairKey(r)));
 const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
 const REPORTED_POSTPONED=new Map(
  ((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.postponed?.[SPORT])||[])

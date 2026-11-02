@@ -252,5 +252,23 @@ const REPORTED_FALL_FINALS={
         "note": "October 31 field hockey game postponed; no makeup date announced"
       }
     ]
+  },
+  "notCounting": {
+    "volleyball": [
+      {
+        "game": [
+          "2026-11-01",
+          "Oliver Ames",
+          "East Bridgewater",
+          "15:00"
+        ],
+        "source": {
+          "publisher": "Arbiter (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-02"
+        },
+        "note": "Listed in Arbiter as a scrimmage; does not count toward MIAA power rankings"
+      }
+    ]
   }
 };
