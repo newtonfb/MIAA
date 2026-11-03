@@ -114,6 +114,150 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-01"
         },
         "note": "Southwick 3, Duggan 0 as reported on MassLive; confirmed by the site owner on November 1, 2026 (exact article URL not yet recorded)"
+      },
+      {
+        "game": [
+          "2026-10-09",
+          "Monument Mountain",
+          "Libertas Academy Charter",
+          3,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-23",
+          "Advanced Math & Science",
+          "Southbridge",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-27",
+          "Bishop Stang",
+          "Middleborough",
+          0,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Advanced Math & Science",
+          "Southbridge",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Lynnfield",
+          "North Reading",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Mansfield",
+          "Stoughton",
+          3,
+          0,
+          1
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Bedford",
+          "Minuteman Regional",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Southeastern RVT",
+          "Montachusett RVT",
+          3,
+          2,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
+      },
+      {
+        "game": [
+          "2026-10-29",
+          "Arlington Catholic",
+          "Cardinal Spellman",
+          3,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "MIAA official volleyball scores — November 2 working-day report",
+          "url": "https://www.miaa.net/sites/default/files/2026-09/power-rankings-fall-2026-volleyball-scores.pdf",
+          "published": "2026-11-02"
+        },
+        "note": "Verified against MIAA's Nov 2, 4 a.m. statewide scores ledger; absent from the site's October 30 baseline and live-results feed."
       }
     ],
     "girls-soccer": [
@@ -297,6 +441,13 @@ const REPORTED_FALL_FINALS={
         },
         "note": "Listed in Arbiter as a scrimmage; does not count toward MIAA power rankings"
       }
+    ]
+  },
+  "verifiedSingleGameKeys": {
+    "volleyball": [
+      "2026-10-26|Academy of the Pacific Rim|Boston Collegiate Charter",
+      "2026-10-26|Brooke High Charter|Salem Academy Charter",
+      "2026-10-27|Boston Collegiate Charter|Prospect Hill Acad. Charter"
     ]
   }
 };
