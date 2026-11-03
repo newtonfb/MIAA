@@ -239,13 +239,17 @@ def main():
     for slug in SPORTS:
         try:
             sports[slug] = sport_live(slug, today, previous.get(slug))
+            sports[slug]['feedStatus'] = 'ok'
+            sports[slug]['feedCheckedAt'] = today.isoformat()
             s = sports[slug]
             print(f"{slug}: {len(s['results'])} live results, {len(s['upcoming'])} unresolved games ({len(s['overdue'])} past due, {len(s['unverified'])} missing from feed), {len(s['canceled'])} canceled, {s['matchedTeams']} mapped teams")
         except (requests.RequestException, ValueError) as exc:
             failed.append(slug)
             print(f"{slug}: kept previous live data ({exc})", file=sys.stderr)
             if slug in previous:
-                sports[slug] = previous[slug]
+                sports[slug] = dict(previous[slug])
+                sports[slug]['feedStatus'] = 'unavailable'
+                sports[slug]['feedCheckedAt'] = today.isoformat()
     OUT.write_text("// Live varsity results, written by scripts/sync_live.py.\nconst LIVE_DATA=" + json.dumps({"sports": sports}, separators=(",", ":"), ensure_ascii=False) + ";\n", encoding="utf8")
     print("Wrote", OUT.name)
     if len(failed) == len(SPORTS):
