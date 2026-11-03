@@ -223,6 +223,7 @@ function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody')
  el('heroReset').classList.toggle('hidden',!edits.length);
  const extraFinals=PUBLISHED_FINALS.filter(g=>{const s=SD.games.find(h=>pairKey(h)===pairKey(g));return !s||s[3]===null}).length;
  el('heroDate').textContent=HAS_FOOTBALL_FINAL?(edits.length?'Scenario versus the Nov 1 final MIAA rankings':'Official MIAA FINAL · November 1, 2026'):(!FOOTBALL&&SD.final)?(edits.length?'Scenario versus MIAA FINAL ratings':'Official MIAA FINAL ratings'):edits.length?'Projected rankings':LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} + live scores through ${shortDate(LIVE_THROUGH)}`:extraFinals?`${shortDate(SD_DATE)} MIAA baseline + ${extraFinals} verified supplemental ${extraFinals===1?'result':'results'}`:`As of ${BASELINE_DATE}`;
+ if(!FOOTBALL&&!SD.final&&LIVE.feedStatus==='unavailable')el('heroDate').textContent+=' · Live scoreboard unavailable; showing verified MIAA PDFs';
 }
 // Hero card: the teams on either side of the line in the chosen division.
 function renderHeroLine(){
