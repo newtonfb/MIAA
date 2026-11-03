@@ -14,6 +14,23 @@ const pair=g=>[g[1],g[2]].sort().join('|');
 const key=g=>g[0]+'|'+pair(g);
 const daysApart=(a,b)=>Math.abs(Date.parse(a+'T12:00:00Z')-Date.parse(b+'T12:00:00Z'))/86400000;
 const CUTOFF={'football':'2026-10-31','field-hockey':'2026-11-01','boys-soccer':'2026-11-03','girls-soccer':'2026-11-03','volleyball':'2026-11-01'};
+function parseLedgerUnscored(line,official){
+ const m=String(line).match(/^(\d{1,2})\/(\d{1,2})\s+(.+)$/);
+ if(!m)return null;
+ const date='2026-'+m[1].padStart(2,'0')+'-'+m[2].padStart(2,'0');
+ const body=m[3].trim(),names=Object.keys(official?.divisions||{}).concat('#N/A');
+ // The original two-column PDF loses its column separators for unscored games;
+ // recover both names only when they exactly reconstruct the printed row.
+ const candidates=[];
+ for(const a of names){
+  if(!body.startsWith(a+' '))continue;
+  const b=body.slice(a.length+1);
+  if(names.includes(b))candidates.push([date,a,b,null]);
+ }
+ const keys=[...new Set(candidates.map(key))];
+ if(keys.length!==1)return null;
+ return candidates[0];
+}
 function audit(sport,official,live,reported,today){
  const cutoff=CUTOFF[sport];
  if(!cutoff)throw Error('No cutoff for '+sport);
@@ -24,9 +41,16 @@ function audit(sport,official,live,reported,today){
  const canceled=new Set((live?.canceled||[]).map(key));
  const postponed=new Set((live?.postponed||[]).map(key));
  const unverified=new Set((live?.unverified||[]).map(key));
- const ignored=[],unresolved=[];
+ const ignored=[],unresolved=[],unparseableLedgerLines=[];
  const seen=new Set();
- for(const fixture of live?.upcoming||[]){
+ const fromScoreboard=new Set((live?.upcoming||[]).map(key));
+ const fixtures=(live?.upcoming||[]).slice();
+ for(const line of official?.unmatchedScoreDetails||[]){
+  const g=parseLedgerUnscored(line,official);
+  if(g)fixtures.push(g);
+  else unparseableLedgerLines.push(line);
+ }
+ for(const fixture of fixtures){
   if(fixture[0]>cutoff)continue;
   const k=key(fixture);
   if(seen.has(k))continue;
@@ -36,13 +60,14 @@ function audit(sport,official,live,reported,today){
   if(allScored.some(g=>pair(g)===pair(fixture)&&daysApart(g[0],fixture[0])<=3))continue;
   unresolved.push({date:fixture[0],teams:fixture.slice(1,3),time:fixture[3]||null,
    status:postponed.has(k)?'postponed':fixture[0]<today?'overdue':unverified.has(k)?'unverified':'scheduled',
+   source:fromScoreboard.has(k)?'MIAA scoreboard':(official?.unmatchedScoreDetails||[]).length?'MIAA published unscored ledger row':'MIAA scoreboard',
    verifiedFinal:false});
  }
  const overdue=unresolved.filter(x=>x.status==='overdue'||x.status==='postponed');
  return {cutoff,source:'MIAA public scoreboard',feedStatus:live?.feedStatus||'not-reported',
   verifiedRelease:official?.date||null,
   knownScheduledWithoutFinal:unresolved.length,overdueCount:overdue.length,
-  unresolved,ignored};
+  unparseableLedgerLines,unresolved,ignored};
 }
 function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'})){
  const fb=read('data/season-2026.js','DATA');
@@ -60,4 +85,4 @@ function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_
  return result;
 }
 if(require.main===module)run();
-module.exports={audit,run,key,CUTOFF};
+module.exports={audit,run,key,CUTOFF,parseLedgerUnscored};
