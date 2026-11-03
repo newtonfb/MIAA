@@ -67,4 +67,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Sync MIAA scores ($(date -u '+%Y-%m-%d %H:%M') UTC)"
-          git push origin HEAD:main
+          # App edits may land on main while a long PDF ingest is processing.
+          # Rebase our generated data commit onto the latest main, and retry
+          # fast-forward pushes rather than dropping a validated score release.
+          for attempt in 1 2 3; do
+            git fetch origin main
+            git rebase origin/main
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Concurrent update detected; retrying push ($attempt/3)..."
+            sleep 5
+          done
+          echo "Unable to publish the validated score release after 3 attempts." >&2
+          exit 1
