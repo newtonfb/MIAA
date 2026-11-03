@@ -1,0 +1,1571 @@
+[
+  {
+    "sport": "field-hockey",
+    "from": "2026-10-30",
+    "to": "2026-11-01",
+    "final": true,
+    "source": "https://www.miaa.net/sites/default/files/2026-11/power-rankings-fall-2026-field-hockey-scores-final.pdf",
+    "previousGames": 1695,
+    "publishedGames": 1743,
+    "ratingOrRankChanges": 197,
+    "added": [
+      {
+        "date": "2026-10-21",
+        "teams": [
+          "Gardner",
+          "Maynard"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-28",
+        "teams": [
+          "Essex North Shore",
+          "North Reading"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": true
+      },
+      {
+        "date": "2026-10-28",
+        "teams": [
+          "Joseph Case",
+          "New Bedford"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Canton",
+          "Hopedale"
+        ],
+        "scores": [
+          5,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Dracut",
+          "Malden"
+        ],
+        "scores": [
+          7,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Falmouth",
+          "Martha's Vineyard Reg."
+        ],
+        "scores": [
+          5,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Northampton",
+          "Palmer"
+        ],
+        "scores": [
+          1,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Acton-Boxborough",
+          "Somerset Berkley Reg."
+        ],
+        "scores": [
+          4,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Algonquin",
+          "Hopkinton"
+        ],
+        "scores": [
+          2,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Andover",
+          "Manchester Essex"
+        ],
+        "scores": [
+          1,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Arlington Catholic",
+          "Malden"
+        ],
+        "scores": [
+          4,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Ashland",
+          "North Attleborough"
+        ],
+        "scores": [
+          4,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Attleboro",
+          "Braintree"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Auburn",
+          "Marlborough"
+        ],
+        "scores": [
+          0,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Bay Path RVT",
+          "Blackstone Valley RVT"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Bishop Stang",
+          "Seekonk"
+        ],
+        "scores": [
+          4,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Blackstone-Millville",
+          "Oxford"
+        ],
+        "scores": [
+          5,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Bridgewater-Raynham",
+          "Wareham"
+        ],
+        "scores": [
+          4,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Central Catholic",
+          "Chelmsford"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Clinton",
+          "Shrewsbury"
+        ],
+        "scores": [
+          0,
+          8
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Concord-Carlisle",
+          "Reading Memorial"
+        ],
+        "scores": [
+          1,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Danvers",
+          "Masconomet Regional"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Dennis-Yarmouth",
+          "Scituate"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Gardner",
+          "Montachusett RVT"
+        ],
+        "scores": [
+          1,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Hanover",
+          "Norwell"
+        ],
+        "scores": [
+          2,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Hingham",
+          "Sandwich"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Lincoln-Sudbury",
+          "Wellesley"
+        ],
+        "scores": [
+          1,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Mahar Regional",
+          "Northampton"
+        ],
+        "scores": [
+          1,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Malden Catholic",
+          "Ursuline Academy"
+        ],
+        "scores": [
+          0,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Marshfield",
+          "Milton"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Minnechaug",
+          "Westfield"
+        ],
+        "scores": [
+          1,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Nantucket",
+          "Saint John Paul II"
+        ],
+        "scores": [
+          2,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Notre Dame (Worcester)",
+          "Tantasqua Regional"
+        ],
+        "scores": [
+          1,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Old Rochester Regional",
+          "Westport"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Quaboag Regional",
+          "Worcester Tech"
+        ],
+        "scores": [
+          8,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "St. Bernard's",
+          "Tahanto Regional"
+        ],
+        "scores": [
+          2,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Uxbridge",
+          "Walpole"
+        ],
+        "scores": [
+          1,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Arlington",
+          "North Reading"
+        ],
+        "scores": [
+          1,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Belchertown",
+          "South Hadley"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Belmont",
+          "Dover-Sherborn"
+        ],
+        "scores": [
+          1,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Beverly",
+          "Woburn Memorial"
+        ],
+        "scores": [
+          2,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Durfee",
+          "Mansfield"
+        ],
+        "scores": [
+          0,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "East Longmeadow",
+          "Frontier Regional"
+        ],
+        "scores": [
+          1,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Franklin County Tech",
+          "West Springfield"
+        ],
+        "scores": [
+          1,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Martha's Vineyard Reg.",
+          "Nantucket"
+        ],
+        "scores": [
+          0,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Newton North",
+          "Newton South"
+        ],
+        "scores": [
+          4,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Nipmuc Regional",
+          "Quaboag Regional"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-01",
+        "teams": [
+          "Gloucester",
+          "Swampscott"
+        ],
+        "scores": [
+          4,
+          0
+        ],
+        "forfeit": false
+      }
+    ],
+    "removed": [],
+    "scoreCorrections": [
+      {
+        "date": "2026-10-17",
+        "teams": [
+          "Cohasset",
+          "Marshfield"
+        ],
+        "from": [
+          7,
+          0
+        ],
+        "to": [
+          8,
+          0
+        ]
+      }
+    ],
+    "forfeitCorrections": []
+  },
+  {
+    "sport": "volleyball",
+    "from": "2026-10-30",
+    "to": "2026-10-31",
+    "final": true,
+    "source": "https://www.miaa.net/sites/default/files/2026-11/power-rankings-fall-2026-volleyball-scores-final.pdf",
+    "previousGames": 2832,
+    "publishedGames": 2904,
+    "ratingOrRankChanges": 309,
+    "added": [
+      {
+        "date": "2026-10-09",
+        "teams": [
+          "Libertas Academy Charter",
+          "Monument Mountain"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-23",
+        "teams": [
+          "Advanced Math & Science",
+          "Southbridge"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-27",
+        "teams": [
+          "Bishop Stang",
+          "Middleborough"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Advanced Math & Science",
+          "Southbridge"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Arlington Catholic",
+          "Cardinal Spellman"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Bedford",
+          "Minuteman Regional"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Lynnfield",
+          "North Reading"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Mansfield",
+          "Stoughton"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": true
+      },
+      {
+        "date": "2026-10-29",
+        "teams": [
+          "Montachusett RVT",
+          "Southeastern RVT"
+        ],
+        "scores": [
+          2,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Acton-Boxborough",
+          "Algonquin"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Advanced Math & Science",
+          "Montachusett RVT"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Arlington Catholic",
+          "Hudson"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Assabet Valley RVT",
+          "Blackstone Valley RVT"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Athol",
+          "Hampden Charter"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Ayer Shirley",
+          "North Middlesex Reg."
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Barnstable",
+          "Notre Dame (Hingham)"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Baystate Academy Charter",
+          "Chicopee"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Belmont",
+          "Boston Latin"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Beverly",
+          "Saugus"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Bishop Feehan",
+          "Oliver Ames"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Blue Hills RVT",
+          "Nashoba Valley Tech"
+        ],
+        "scores": [
+          2,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Brockton",
+          "Milton"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Brookline",
+          "Newton South"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Burlington",
+          "Peabody Veterans"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Burncoat",
+          "Marlborough"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Calvary Chapel Academy",
+          "Cathedral"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Canton",
+          "Quincy"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Cape Cod RVT",
+          "Nauset Regional"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Chicopee Comp.",
+          "West Springfield"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Cohasset",
+          "Scituate"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Concord-Carlisle",
+          "Lexington"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Dartmouth",
+          "Old Rochester Regional"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Dennis-Yarmouth",
+          "Westborough"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Diman RVT",
+          "Seekonk"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Douglas",
+          "Ursuline Academy"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Fairhaven",
+          "Joseph Case"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Fontbonne",
+          "Sharon"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Gloucester",
+          "Triton Regional"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Greater Lowell Tech",
+          "Notre Dame Cristo Rey"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Hanover",
+          "Rockland"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Haverhill",
+          "Lynnfield"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Holliston",
+          "Westwood"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Holyoke",
+          "Wahconah Regional"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Hopedale",
+          "Medway"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Hopkinton",
+          "Medfield"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "John J. Duggan Academy",
+          "Southwick Regional"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Lowell Catholic",
+          "Shawsheen Valley Tech"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Lowell",
+          "Malden"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Mansfield",
+          "Walpole"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Medford",
+          "Revere"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Melrose",
+          "Methuen"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Middleborough",
+          "New Bedford"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Millbury",
+          "Oxford"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Monomoy",
+          "Sturgis Charter West"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Nashoba Regional",
+          "Nipmuc Regional"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "New Mission",
+          "O'Bryant"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Newton North",
+          "Winchester"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "North High",
+          "Worcester Tech"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Norwell",
+          "Plymouth South"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Plymouth North",
+          "Weymouth"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Somerville",
+          "Watertown"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "South High Community",
+          "Sutton"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Southbridge",
+          "Tantasqua Regional"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Turners Falls",
+          "Ware"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Wakefield Memorial",
+          "Weston"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Andover",
+          "Reading Memorial"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Bristol-Plymouth RVT",
+          "Diman RVT"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "East Longmeadow",
+          "Ludlow"
+        ],
+        "scores": [
+          3,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Greater Lawrence Tech",
+          "Greater Lowell Tech"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Greater New Bedford",
+          "Shawsheen Valley Tech"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Lee",
+          "Renaissance School"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Longmeadow",
+          "Springfield Central"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Monomoy",
+          "Nantucket"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Mount Greylock Reg.",
+          "Pioneer Valley Christian"
+        ],
+        "scores": [
+          2,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Old Colony RVT",
+          "Smith Vo-Tech"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      }
+    ],
+    "removed": [
+      {
+        "date": "2026-10-26",
+        "teams": [
+          "Academy of the Pacific Rim",
+          "Boston Collegiate Charter"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-26",
+        "teams": [
+          "Brooke High Charter",
+          "Salem Academy Charter"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-27",
+        "teams": [
+          "Boston Collegiate Charter",
+          "Prospect Hill Acad. Charter"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      }
+    ],
+    "scoreCorrections": [],
+    "forfeitCorrections": [
+      {
+        "date": "2026-10-14",
+        "teams": [
+          "Collegiate Charter of Low.",
+          "Comm. Charter of Cambr."
+        ],
+        "from": false,
+        "to": true
+      }
+    ]
+  }
+]

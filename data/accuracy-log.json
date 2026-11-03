@@ -18,5 +18,215 @@
   "meanError": 0.00314,
   "within0001": 0,
   "rankMisses": 0
+ },
+ {
+  "sport": "field-hockey",
+  "from": "2026-10-30",
+  "to": "2026-11-01",
+  "teams": 197,
+  "maxError": 0.00074,
+  "meanError": 0.00055,
+  "medianError": 0.00054,
+  "p95Error": 0.00066,
+  "within0001": 197,
+  "rankMisses": 0,
+  "topN": 32,
+  "topNSelected": 128,
+  "topNExactSeeds": 128,
+  "divisions": [
+   {
+    "division": 1,
+    "teams": 43,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 2,
+    "teams": 53,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 3,
+    "teams": 53,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 4,
+    "teams": 48,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   }
+  ],
+  "largestResiduals": [
+   {
+    "team": "West Springfield",
+    "division": 2,
+    "error": 0.00074
+   },
+   {
+    "team": "Hampshire Regional",
+    "division": 4,
+    "error": 0.0007
+   },
+   {
+    "team": "Clinton",
+    "division": 4,
+    "error": 0.00069
+   },
+   {
+    "team": "Mohawk Trail Regional",
+    "division": 4,
+    "error": 0.00069
+   },
+   {
+    "team": "South High Community",
+    "division": 2,
+    "error": 0.00068
+   },
+   {
+    "team": "Smith Academy",
+    "division": 4,
+    "error": 0.00068
+   },
+   {
+    "team": "St. Bernard's",
+    "division": 3,
+    "error": 0.00068
+   },
+   {
+    "team": "Northampton",
+    "division": 2,
+    "error": 0.00067
+   },
+   {
+    "team": "Bay Path RVT",
+    "division": 3,
+    "error": 0.00066
+   },
+   {
+    "team": "Quaboag Regional",
+    "division": 4,
+    "error": 0.00066
+   }
+  ]
+ },
+ {
+  "sport": "volleyball",
+  "from": "2026-10-30",
+  "to": "2026-10-31",
+  "teams": 309,
+  "maxError": 0.00133,
+  "meanError": 0.00075,
+  "medianError": 0.00085,
+  "p95Error": 0.00097,
+  "within0001": 300,
+  "rankMisses": 2,
+  "topN": 32,
+  "topNSelected": 160,
+  "topNExactSeeds": 158,
+  "divisions": [
+   {
+    "division": 1,
+    "teams": 51,
+    "rankMisses": 2,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 30
+   },
+   {
+    "division": 2,
+    "teams": 57,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 3,
+    "teams": 68,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 4,
+    "teams": 61,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   },
+   {
+    "division": 5,
+    "teams": 72,
+    "rankMisses": 0,
+    "topN": 32,
+    "topNSelected": 32,
+    "topNExactSeeds": 32
+   }
+  ],
+  "largestResiduals": [
+   {
+    "team": "Old Colony RVT",
+    "division": 5,
+    "error": -0.00133
+   },
+   {
+    "team": "Southeastern RVT",
+    "division": 2,
+    "error": -0.00107
+   },
+   {
+    "team": "Blue Hills RVT",
+    "division": 5,
+    "error": -0.00103
+   },
+   {
+    "team": "Tri-County RVT",
+    "division": 4,
+    "error": -0.00102
+   },
+   {
+    "team": "South Shore Vo-Tech",
+    "division": 4,
+    "error": -0.00102
+   },
+   {
+    "team": "Cape Cod RVT",
+    "division": 5,
+    "error": -0.00101
+   },
+   {
+    "team": "Bristol County Agricultural",
+    "division": 5,
+    "error": -0.00101
+   },
+   {
+    "team": "Avon",
+    "division": 5,
+    "error": -0.00101
+   },
+   {
+    "team": "Diman RVT",
+    "division": 3,
+    "error": -0.001
+   },
+   {
+    "team": "Wareham",
+    "division": 4,
+    "error": -0.00099
+   }
+  ]
  }
 ]
