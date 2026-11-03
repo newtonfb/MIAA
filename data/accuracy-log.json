@@ -1,0 +1,22 @@
+[
+ {
+  "sport": "boys-soccer",
+  "from": "2026-10-30",
+  "to": "2026-11-03",
+  "teams": 332,
+  "maxError": 0.00572,
+  "meanError": 0.00492,
+  "within0001": 0,
+  "rankMisses": 0
+ },
+ {
+  "sport": "girls-soccer",
+  "from": "2026-10-30",
+  "to": "2026-11-03",
+  "teams": 319,
+  "maxError": 0.00346,
+  "meanError": 0.00314,
+  "within0001": 0,
+  "rankMisses": 0
+ }
+]
