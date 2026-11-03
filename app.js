@@ -222,7 +222,7 @@ function renderRankings(animate){if(animate===true){flipRows([el('rankingsBody')
   :(edits.length?`<strong>Your projection: ${scored} of ${total} added ${total===1?'game':'games'} scored</strong>`:'Showing official rankings');
  el('heroReset').classList.toggle('hidden',!edits.length);
  const extraFinals=PUBLISHED_FINALS.filter(g=>{const s=SD.games.find(h=>pairKey(h)===pairKey(g));return !s||s[3]===null}).length;
- el('heroDate').textContent=HAS_FOOTBALL_FINAL?(edits.length?'Scenario versus the Nov 1 final MIAA rankings':'Official MIAA FINAL · November 1, 2026'):edits.length?'Projected rankings':LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} + live scores through ${shortDate(LIVE_THROUGH)}`:extraFinals?`${shortDate(SD_DATE)} MIAA baseline + ${extraFinals} verified supplemental ${extraFinals===1?'result':'results'}`:`As of ${BASELINE_DATE}`;
+ el('heroDate').textContent=HAS_FOOTBALL_FINAL?(edits.length?'Scenario versus the Nov 1 final MIAA rankings':'Official MIAA FINAL · November 1, 2026'):(!FOOTBALL&&SD.final)?(edits.length?'Scenario versus MIAA FINAL ratings':'Official MIAA FINAL ratings'):edits.length?'Projected rankings':LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} + live scores through ${shortDate(LIVE_THROUGH)}`:extraFinals?`${shortDate(SD_DATE)} MIAA baseline + ${extraFinals} verified supplemental ${extraFinals===1?'result':'results'}`:`As of ${BASELINE_DATE}`;
 }
 // Hero card: the teams on either side of the line in the chosen division.
 function renderHeroLine(){
@@ -264,7 +264,7 @@ function bracketCanvas(){
  const L=card.x+32,R=card.x+card.w-32;let y=card.y+44;
  ctx.textBaseline='alphabetic';ctx.fillStyle=turf;ctx.font=F(800,24);ctx.fillText(finalBracket()?'FINAL BRACKET':'PROJECTED BRACKET',L,y);
  ctx.fillStyle=ink;ctx.font=F(850,60);ctx.fillText(fitText(ctx,`Division ${bracketDiv} ${SP.name}`,R-L),L,y+=66);
- ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`${finalBracket()?`MIAA final ratings, ${shortDate(SD_DATE)}`:`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}`}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
+ ctx.fillStyle=muted;ctx.font=F(500,24);ctx.fillText(fitText(ctx,`${!FOOTBALL&&SD.final?'MIAA final regular-season ratings':finalBracket()?`MIAA final ratings, ${shortDate(SD_DATE)}`:`MIAA ratings as of ${shortDate(LIVE_THROUGH||SD_DATE)}`}${edits.length?', plus entered scores':''}. Unofficial.`,R-L),L,y+=40);
  const gap=26,firstW=470,restW=(R-L-firstW-gap*(counts.length-1))/(counts.length-1);
  const colX=i=>i?L+firstW+gap+(i-1)*(restW+gap):L,colW=i=>i?restW:firstW;
  const top=y+=74,bottom=card.y+card.h-70,area=bottom-top;
@@ -303,7 +303,8 @@ let bracketDiv=DIVISIONS[0];
 function seedOrder(n){let order=[1];while(order.length<n){const size=order.length*2;order=order.flatMap(s=>[s,size+1-s])}return order}
 const ROUND_NAMES={32:'Round of 32',16:'Round of 16',8:'Quarterfinals',4:'Semifinals',2:'State final'};
 // Football's bracket is final once MIAA's final release is loaded, unless the viewer has entered scenario scores.
-const finalBracket=()=>!edits.length&&(HAS_FOOTBALL_FINAL||(!FOOTBALL&&!!SD.final));
+// Final published ratings are authoritative, but an automatically drawn bracket is still unofficial.
+const finalBracket=()=>HAS_FOOTBALL_FINAL&&!edits.length;
 function renderBracket(){
  el('bracketDivs').innerHTML=DIVISIONS.map(d=>`<button type="button" class="${bracketDiv===d?'selected':''}" data-bdiv="${d}" aria-pressed="${bracketDiv===d}">D${d}</button>`).join('');
  const rows=standings(bracketDiv),field=rows.filter(r=>r.seed!==null),prelim=FOOTBALL?[]:tournamentPreliminaries(rows,FIELD),prelimBySeed=new Map(prelim.map(p=>[p.topSeed,p])),nextEligible=rows.filter(r=>FOOTBALL?r.eligible&&!r.qualified:r.rank>FIELD),seed=Object.fromEntries(field.map(r=>[r.seed,r]));
@@ -327,7 +328,7 @@ function renderBracket(){
  el('bubble').innerHTML=prelimCard+`<div class="bubble-col"><h3>Last four in</h3><p>Eligible seeds in the ${finalBracket()?'final':'projected'} bracket</p><ol>${lastIn}</ol></div><div class="bubble-col"><h3>First four out</h3><p>Next eligible teams by rating</p><ol>${out}</ol></div>${skipCard}${moved.length?`<div class="bubble-col bubble-moves"><h3>Projected field changes</h3><p>Compared with the ${BASELINE_DATE} eligible field</p><ul>${moved.map(r=>`<li><button type="button" class="team-button" data-team="${esc(r.team)}"><span class="team-name">${esc(r.team)}</span></button><span class="move-label ${r.qualified?'is-in':'is-out'}">${r.qualified?'Now seeded '+r.seed:'Now out'}, was ${baseDivSeed[r.team]||'not seeded'}</span></li>`).join('')}</ul></div>`:''}`;
  // Title inside the bracket panel, so a screenshot of the bracket says what it is.
  const final=finalBracket(),kind=final?'Final':'Projected';el('bracketKind').textContent=kind;el('legendSoFar').hidden=final;
- const asOf=final?`MIAA final ratings, ${shortDate(SD_DATE)}`:LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} with live scores through ${shortDate(LIVE_THROUGH)}`:`MIAA ratings as of ${shortDate(SD_DATE)}`;
+ const asOf=!FOOTBALL&&SD.final?'MIAA final regular-season ratings':final?`MIAA final ratings, ${shortDate(SD_DATE)}`:LIVE_THROUGH?`MIAA ratings as of ${shortDate(SD_DATE)} with live scores through ${shortDate(LIVE_THROUGH)}`:`MIAA ratings as of ${shortDate(SD_DATE)}`;
  el('bracketTitle').innerHTML=`<div><h2>Division ${bracketDiv} ${esc(SP.name)}</h2><p>${kind} tournament bracket. ${asOf}${edits.length?', plus your entered scores':''}. Unofficial.</p></div><p class="bracket-credit"><strong>MA High School Power Rankings</strong><span>${esc(location.host||'miaa-football-scenarios.vercel.app')}</span></p>`;
  el('bracketSub').textContent=FOOTBALL?`Division ${bracketDiv}: ${field.length} ${final?'':'projected '}playoff seeds. The 16 highest-rated eligible teams (3 wins and 7 competed games minimum) are selected; ineligible teams are skipped. ${edits.length?'Includes your '+edits.length+' scenario score(s).':final?'Set by MIAA\'s final power ratings.':'Includes all entered final scores.'}`:`Division ${bracketDiv}: ${field.length} top-rated seeds plus ${rows.filter(r=>r.qualifier==='record').length} .500 qualifiers. ${prelim.length} preliminary play-in matches; winners enter the round of 32.`;
 }
