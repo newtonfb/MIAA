@@ -12,9 +12,9 @@ const SPORTS={
 const SPORT=(()=>{const s=new URLSearchParams(location.search).get('sport');return s&&SPORTS[s]&&s!=='football'&&typeof FALL_DATA!=='undefined'&&FALL_DATA.sports?.[s]?s:'football'})();
 const SP=SPORTS[SPORT],FOOTBALL=SPORT==='football',CAP=SP.cap,FIELD=SP.field;
 const SD=FOOTBALL?DATA:FALL_DATA.sports[SPORT];
-// Field hockey and fall volleyball stopped counting regular-season matches Nov 1, 2026.
-// Scores entered after that cutoff may be tournament or exhibition matches, not seeding inputs.
-const REGULAR_SEASON_CUTOFF=(SPORT==='volleyball'||SPORT==='field-hockey')?'2026-11-01':null;
+// MIAA 2026 seeding cutoffs: football Oct 31, field hockey/volleyball Nov 1, soccer Nov 3.
+// Post-cutoff matches are tournament or exhibition games and must not change seed projections.
+const REGULAR_SEASON_CUTOFF=(SPORT==='volleyball'||SPORT==='field-hockey')?'2026-11-01':(SPORT==='boys-soccer'||SPORT==='girls-soccer')?'2026-11-03':null;
 const HAS_FOOTBALL_FINAL=FOOTBALL&&typeof FOOTBALL_FINAL_2026!=='undefined'&&FOOTBALL_FINAL_2026.status==='FINAL';
 const SD_DATE=HAS_FOOTBALL_FINAL?FOOTBALL_FINAL_2026.date:(SD.date||(FOOTBALL?DATA.date:FALL_DATA.date));
 // Football keeps its original storage keys so existing visitors keep their scenarios.
