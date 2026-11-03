@@ -324,6 +324,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31"
         },
         "note": "Globe October 30 South Shore girls soccer scoreboard: Apponequet 3, Middleborough 1 (independently reported; MIAA scoreboard has no final)"
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Southeastern RVT",
+          "Greater New Bedford",
+          1,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps girls soccer (team-submitted result)",
+          "url": "https://www.maxpreps.com/news/lIeFYJhAkkeRBip3OngcIA/soccer-recap-southeastern-rvt-now-3-2-2-since-losing-4-straight--how-to-watch.htm",
+          "published": "2026-11-03"
+        },
+        "note": "Provisional third-party reported 1-1 draw; verify against MIAA final ledger before claiming official."
       }
     ],
     "field-hockey": [
@@ -360,6 +376,38 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-31"
         },
         "note": "Boston City League championship; confirmed in Boston Globe October 31 game report"
+      },
+      {
+        "game": [
+          "2026-10-31",
+          "Bishop Stang",
+          "Fairhaven",
+          2,
+          5,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps boys soccer (team-submitted result)",
+          "url": "https://www.maxpreps.com/ma/north-dartmouth/bishop-stang-spartans/soccer/",
+          "published": "2026-11-01"
+        },
+        "note": "Provisional third-party reported final: Bishop Stang 2, Fairhaven 5. MIAA Nov 3 ledger lists this fixture without a score; replace with official score when published."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Clinton",
+          "Millbury",
+          3,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps boys soccer (team-submitted result)",
+          "url": "https://www.maxpreps.com/news/4N4C_dY3PEmgwVzL2xeO2g/soccer-recap-clinton-adds-another-dominant-win-to-their-ledger--how-to-watch.htm",
+          "published": "2026-11-02"
+        },
+        "note": "Provisional third-party reported final: Clinton 3, Millbury 0. MIAA Nov 3 ledger still shows no score; replace with authoritative MIAA result when available."
       }
     ]
   },
