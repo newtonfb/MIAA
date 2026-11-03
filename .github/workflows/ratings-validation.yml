@@ -5,6 +5,9 @@ on:
     paths:
       - 'rating-engine.js'
       - 'app.js'
+      - 'tournament-rules.js'
+      - 'scripts/audit_releases.cjs'
+      - 'scripts/accuracy_report.cjs'
       - 'data/**'
       - 'tests/**'
       - '.github/workflows/ratings-validation.yml'
@@ -12,6 +15,9 @@ on:
     paths:
       - 'rating-engine.js'
       - 'app.js'
+      - 'tournament-rules.js'
+      - 'scripts/audit_releases.cjs'
+      - 'scripts/accuracy_report.cjs'
       - 'data/**'
       - 'tests/**'
       - '.github/workflows/ratings-validation.yml'
@@ -27,11 +33,7 @@ jobs:
           node-version: '22'
       - run: node --check rating-engine.js
       - run: node --check app.js
-      - run: node --test tests/rating-engine.test.cjs
-      - run: node --test tests/fall-sports.test.cjs
-      - run: node --test tests/current-data.test.cjs
-      - run: node --test tests/final-football-2026.test.cjs
-      - run: node --test tests/live-data.test.cjs
-      - run: node --test tests/reported-fall.test.cjs
-      - run: node --test tests/confirmed-friday-finals.test.cjs
-      - run: node --test tests/football-playoff-eligibility.test.cjs
+      - run: node --check tournament-rules.js
+      - run: node --check scripts/audit_releases.cjs
+      - run: node --check scripts/accuracy_report.cjs
+      - run: node --test tests/*.test.cjs
