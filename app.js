@@ -229,7 +229,7 @@ function renderHeroLine(){
  const s=standings(selectedDiv),a=s.filter(r=>r.seed!==null).at(-1),b=FOOTBALL?s.find(r=>r.eligible&&!r.qualified):s.find(r=>r.rank>FIELD);
  if(!a||!b){el('heroLine').innerHTML='';return}
  const row=(r,n,cls)=>`<button type="button" class="hl-row${cls}" data-team="${esc(r.team)}"><span class="hl-rank">${n}</span><span class="hl-name">${esc(r.team)}</span><span class="hl-rate">${signed(r.rating,2)}</span></button>`;
- el('heroLine').innerHTML=`<p class="hl-title">Division ${selectedDiv} · Last seed / next eligible team</p>${row(a,a.seed,'')}<div class="hl-chalk" aria-hidden="true"></div>${row(b,FIELD+1,' is-out')}<p class="hl-gap">${(a.rating-b.rating).toFixed(a.rating-b.rating<0.01?4:2)} rating points apart</p>`;
+ el('heroLine').innerHTML=`<p class="hl-title">Division ${selectedDiv} · ${FOOTBALL?'Last seed / next eligible team':'Top-32 automatic cutoff / next power-rating rank'}</p>${row(a,a.seed,'')}<div class="hl-chalk" aria-hidden="true"></div>${row(b,FIELD+1,' is-out')}<p class="hl-gap">${(a.rating-b.rating).toFixed(a.rating-b.rating<0.01?4:2)} rating points apart</p>`;
 }
 function renderEdits(){
  const keys=new Set(schedule().map(fixtureKey));
@@ -307,7 +307,7 @@ const ROUND_NAMES={32:'Round of 32',16:'Round of 16',8:'Quarterfinals',4:'Semifi
 const finalBracket=()=>HAS_FOOTBALL_FINAL&&!edits.length;
 function renderBracket(){
  el('bracketDivs').innerHTML=DIVISIONS.map(d=>`<button type="button" class="${bracketDiv===d?'selected':''}" data-bdiv="${d}" aria-pressed="${bracketDiv===d}">D${d}</button>`).join('');
- const rows=standings(bracketDiv),field=rows.filter(r=>r.seed!==null),prelim=FOOTBALL?[]:tournamentPreliminaries(rows,FIELD),prelimBySeed=new Map(prelim.map(p=>[p.topSeed,p])),nextEligible=rows.filter(r=>FOOTBALL?r.eligible&&!r.qualified:r.rank>FIELD),seed=Object.fromEntries(field.map(r=>[r.seed,r]));
+ const rows=standings(bracketDiv),field=rows.filter(r=>r.seed!==null),prelim=FOOTBALL?[]:tournamentPreliminaries(rows,FIELD),prelimBySeed=new Map(prelim.map(p=>[p.topSeed,p])),nextEligible=rows.filter(r=>FOOTBALL?r.eligible&&!r.qualified:r.rank>FIELD&&!r.qualified),seed=Object.fromEntries(field.map(r=>[r.seed,r]));
  const slot=(s,fav,proj)=>{const r=seed[s];if(!r)return `<div class="slot is-empty"><span class="seed">${s}</span><span class="slot-name">No eligible team</span></div>`;
   const warn=prelimBySeed.has(s)?'<small>Play-in winner</small>':'';
   const name=prelimBySeed.has(s)?'Winner #'+s+' / #'+prelimBySeed.get(s).bottomSeed:r.team;
