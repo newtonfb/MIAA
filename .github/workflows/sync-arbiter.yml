@@ -13,6 +13,7 @@ on:
       - 'scripts/sync_live.py'
       - 'scripts/sync_miaa.py'
       - 'scripts/audit_releases.cjs'
+      - 'scripts/pending_audit.cjs'
       - 'scripts/accuracy_report.cjs'
       - '.github/workflows/sync-arbiter.yml'
       - 'tests/test_sync_live.py'
@@ -46,6 +47,8 @@ jobs:
           node-version: '22'
       - name: Test the synced data
         run: node --test tests/*.test.cjs
+      - name: Write unresolved score-coverage report
+        run: node scripts/pending_audit.cjs
       - name: Summarize what changed in each sport
         run: node scripts/sync_summary.cjs /tmp/previous
       - name: Measure our projection against any new MIAA release
@@ -59,6 +62,7 @@ jobs:
           git add data/season-2026.js data/fall-2026.js data/live-2026.js
           if [ -f data/accuracy-log.json ]; then git add data/accuracy-log.json; fi
           if [ -f data/reconciliation-log.json ]; then git add data/reconciliation-log.json; fi
+          if [ -f data/unresolved-games.json ]; then git add data/unresolved-games.json; fi
           git add data/releases
           if git diff --staged --quiet; then
             echo "No new results since the last sync."
