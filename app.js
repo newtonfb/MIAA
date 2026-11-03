@@ -12,6 +12,9 @@ const SPORTS={
 const SPORT=(()=>{const s=new URLSearchParams(location.search).get('sport');return s&&SPORTS[s]&&s!=='football'&&typeof FALL_DATA!=='undefined'&&FALL_DATA.sports?.[s]?s:'football'})();
 const SP=SPORTS[SPORT],FOOTBALL=SPORT==='football',CAP=SP.cap,FIELD=SP.field;
 const SD=FOOTBALL?DATA:FALL_DATA.sports[SPORT];
+// Field hockey and fall volleyball stopped counting regular-season matches Nov 1, 2026.
+// Scores entered after that cutoff may be tournament or exhibition matches, not seeding inputs.
+const REGULAR_SEASON_CUTOFF=(SPORT==='volleyball'||SPORT==='field-hockey')?'2026-11-01':null;
 const HAS_FOOTBALL_FINAL=FOOTBALL&&typeof FOOTBALL_FINAL_2026!=='undefined'&&FOOTBALL_FINAL_2026.status==='FINAL';
 const SD_DATE=HAS_FOOTBALL_FINAL?FOOTBALL_FINAL_2026.date:(SD.date||(FOOTBALL?DATA.date:FALL_DATA.date));
 // Football keeps its original storage keys so existing visitors keep their scenarios.
@@ -65,6 +68,7 @@ const LIVE_KEYS=new Set();
 // Live results and the official ledger share the same game records, so their dates agree exactly; a live game is
 // skipped only if the ledger has that exact game. Same-day doubleheaders get a second key, as in the ledger.
 for(const g of LIVE.results){
+ if(REGULAR_SEASON_CUTOFF&&g[0]>REGULAR_SEASON_CUTOFF)continue;
  // Final football tournament ratings freeze at the Oct 31 regular-season cutoff.
  if(HAS_FOOTBALL_FINAL&&(g[0]>'2026-10-31'||FINAL_EXCLUDED_GAMES.has(pairKey(g))))continue;
  if(!TEAMS.includes(g[1])||!TEAMS.includes(g[2]))continue;
@@ -99,7 +103,7 @@ if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getIte
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
 // Scheduled games confirmed not to count (e.g. listed in Arbiter as a scrimmage).
 const NOT_COUNTING=new Set(((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.notCounting?.[SPORT])||[]).map(x=>pairKey(x.game)));
-const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>TEAMS.includes(r[1])&&TEAMS.includes(r[2])&&!NOT_COUNTING.has(pairKey(r)));
+const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>(!REGULAR_SEASON_CUTOFF||r[0]<=REGULAR_SEASON_CUTOFF)&&TEAMS.includes(r[1])&&TEAMS.includes(r[2])&&!NOT_COUNTING.has(pairKey(r)));
 const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
 const REPORTED_POSTPONED=new Map(
  ((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.postponed?.[SPORT])||[])
@@ -117,7 +121,7 @@ const isAddedFixture=k=>addedFixtures.some(f=>pairKey([f[0],f[1],f[2]])===k);
 let selectedDiv=DIVISIONS[0], activePage='rankings', selectedTeam=Object.keys(DIV).sort((a,b)=>a.localeCompare(b))[0], weekDiv=DIVISIONS[0];
 let alertTimer;
 function toast(s){const x=el('alert');x.textContent=s;x.classList.add('show');clearTimeout(alertTimer);alertTimer=setTimeout(()=>x.classList.remove('show'),3000)}
-function records(){const m=new Map(source);for(const g of edits)if(!isPublishedWeek8Game(g))m.set(pairKey(g),g);return [...m.values()]}
+function records(){const m=new Map(source);for(const g of edits)if(!isPublishedWeek8Game(g)&&(!REGULAR_SEASON_CUTOFF||g[0]<=REGULAR_SEASON_CUTOFF))m.set(pairKey(g),g);return [...m.values()]}
 function compute(games){return calculateRatings(games,TEAMS,DIV,CAP)}
 // Freeze final football at the actual regular-season results before any viewer scenarios.
 // Its team-by-team rating, records and margins are anchored to MIAA's Nov 1 verified release.
