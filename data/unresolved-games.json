@@ -58,8 +58,8 @@
       "source": "MIAA public scoreboard",
       "feedStatus": "unavailable",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 21,
-      "overdueCount": 10,
+      "knownScheduledWithoutFinal": 19,
+      "overdueCount": 8,
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -87,17 +87,6 @@
         {
           "date": "2026-10-31",
           "teams": [
-            "Bishop Stang",
-            "Fairhaven"
-          ],
-          "time": "10:00",
-          "status": "overdue",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-10-31",
-          "teams": [
             "Tewksbury Memorial",
             "Nashoba Regional"
           ],
@@ -111,17 +100,6 @@
           "teams": [
             "Chelmsford",
             "Lawrence"
-          ],
-          "time": "18:00",
-          "status": "overdue",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Clinton",
-            "Millbury"
           ],
           "time": "18:00",
           "status": "overdue",
@@ -301,8 +279,8 @@
       "source": "MIAA public scoreboard",
       "feedStatus": "unavailable",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 27,
-      "overdueCount": 12,
+      "knownScheduledWithoutFinal": 26,
+      "overdueCount": 11,
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -323,17 +301,6 @@
             "Danvers"
           ],
           "time": "16:00",
-          "status": "overdue",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Southeastern RVT",
-            "Greater New Bedford"
-          ],
-          "time": "18:00",
           "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
