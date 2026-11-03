@@ -36,3 +36,14 @@ for(const [slug,s] of Object.entries(live.sports)){
   assert.ok(s.matchedTeams>=0.9*Object.keys(o.divisions).length,'too few teams matched');
  });
 }
+
+test('Fall volleyball and field hockey seeding only count games on or before November 1',()=>{
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ assert.match(app,/const REGULAR_SEASON_CUTOFF=\(SPORT==='volleyball'\|\|SPORT==='field-hockey'\)\?'2026-11-01':null/);
+ assert.match(app,/if\(REGULAR_SEASON_CUTOFF&&g\[0\]>REGULAR_SEASON_CUTOFF\)continue/);
+ assert.match(app,/LIVE\.upcoming\.filter\(r=>\(!REGULAR_SEASON_CUTOFF\|\|r\[0\]<=REGULAR_SEASON_CUTOFF\)/);
+ assert.match(app,/if\(!isPublishedWeek8Game\(g\)&&\(!REGULAR_SEASON_CUTOFF\|\|g\[0\]<=REGULAR_SEASON_CUTOFF\)\)/);
+ const results=live.sports.volleyball.results;
+ assert.ok(results.some(g=>g[0]>'2026-11-01'),'regression fixture: post-cutoff live result should exist');
+ assert.equal(results.filter(g=>g[0]<='2026-11-01').some(g=>g[0]>'2026-11-01'),false);
+});
