@@ -249,7 +249,15 @@ def main():
     OUT.write_text("// Live varsity results, written by scripts/sync_live.py.\nconst LIVE_DATA=" + json.dumps({"sports": sports}, separators=(",", ":"), ensure_ascii=False) + ";\n", encoding="utf8")
     print("Wrote", OUT.name)
     if len(failed) == len(SPORTS):
-        sys.exit(1)
+        # The public scoreboard can return HTTP 500 for all sport queries while
+        # MIAA's authoritative score-and-ranking PDFs are still available.
+        # Preserve known live data, warn clearly, and allow the independently
+        # validated official release to publish rather than freezing every sport.
+        if len(sports) != len(SPORTS):
+            print("All scoreboard requests failed and there is no safe cached data for every sport.", file=sys.stderr)
+            sys.exit(1)
+        print("WARNING: all live scoreboard queries failed; previous live data retained. "
+              "Official MIAA PDF score and ranking sync may still publish.", file=sys.stderr)
 
 
 if __name__ == "__main__":
