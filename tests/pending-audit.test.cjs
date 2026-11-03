@@ -20,3 +20,18 @@ test('known scrimmage and explicit cancellation do not appear as missing scores'
  const y=audit('boys-soccer',{games:[]},{upcoming:[match()],canceled:[match()]},{},'2026-11-03');
  assert.equal(y.knownScheduledWithoutFinal,0);
 });
+
+test('unscored MIAA PDF game is reported even when the live scoreboard never listed it',()=>{
+ const official={date:'2026-11-03',games:[],divisions:{Clinton:3,Millbury:4},
+  unmatchedScoreDetails:['11/2 Clinton Millbury','11/2 Millbury Clinton']};
+ const out=audit('boys-soccer',official,{upcoming:[],feedStatus:'ok'},{},'2026-11-03');
+ assert.equal(out.knownScheduledWithoutFinal,1);
+ assert.equal(out.unresolved[0].source,'MIAA published unscored ledger row');
+ assert.deepEqual(out.unparseableLedgerLines,[]);
+});
+test('PDF and scoreboard fixture entries are counted only once',()=>{
+ const official={date:'2026-11-03',games:[],divisions:{A:1,B:2},unmatchedScoreDetails:['11/2 A B']};
+ const out=audit('girls-soccer',official,{upcoming:[match()]},{},'2026-11-03');
+ assert.equal(out.knownScheduledWithoutFinal,1);
+ assert.equal(out.unresolved[0].source,'MIAA scoreboard');
+});
