@@ -37,9 +37,9 @@ for(const [slug,s] of Object.entries(live.sports)){
  });
 }
 
-test('Fall volleyball and field hockey seeding only count games on or before November 1',()=>{
+test('MIAA 2026 seeding ignores volleyball/field hockey after Nov 1 and soccer after Nov 3',()=>{
  const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
- assert.match(app,/const REGULAR_SEASON_CUTOFF=\(SPORT==='volleyball'\|\|SPORT==='field-hockey'\)\?'2026-11-01':null/);
+ assert.match(app,/const REGULAR_SEASON_CUTOFF=.*SPORT==='volleyball'.*'2026-11-01'.*SPORT==='boys-soccer'.*SPORT==='girls-soccer'.*'2026-11-03'/);
  assert.match(app,/if\(REGULAR_SEASON_CUTOFF&&g\[0\]>REGULAR_SEASON_CUTOFF\)continue/);
  assert.match(app,/LIVE\.upcoming\.filter\(r=>\(!REGULAR_SEASON_CUTOFF\|\|r\[0\]<=REGULAR_SEASON_CUTOFF\)/);
  assert.match(app,/if\(!isPublishedWeek8Game\(g\)&&\(!REGULAR_SEASON_CUTOFF\|\|g\[0\]<=REGULAR_SEASON_CUTOFF\)\)/);
