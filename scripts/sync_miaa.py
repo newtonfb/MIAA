@@ -256,7 +256,7 @@ def scores(slug, cap, official, url, cutoff):
     print(f"  {slug} scores: {len(played)} games, {len(doubleheaders)} doubleheaders, {len(resolved)} resolved conflicts, {len(bad)} unscored lines")
     if record_errors or margin_errors:
         raise SyncError(f"{slug}: ledger does not reproduce MIAA's published numbers; records off for {record_errors[:5]}, margins off for {margin_errors[:5]}")
-    return played, {"scores": url, "unmatchedScoreLines": len(bad), "equivalentScoreDiscrepancies": len(equivalent), "scoreConflicts": resolved, "sameDayMultipleMatches": doubleheaders}
+    return played, {"scores": url, "unmatchedScoreLines": len(bad), "unmatchedScoreDetails": bad[:100], "equivalentScoreDiscrepancies": len(equivalent), "scoreConflicts": resolved, "sameDayMultipleMatches": doubleheaders}
 
 
 def read_js_object(path, name):
