@@ -7,6 +7,7 @@ on:
       - 'app.js'
       - 'tournament-rules.js'
       - 'scripts/audit_releases.cjs'
+      - 'scripts/pending_audit.cjs'
       - 'scripts/accuracy_report.cjs'
       - 'data/**'
       - 'tests/**'
@@ -17,6 +18,7 @@ on:
       - 'app.js'
       - 'tournament-rules.js'
       - 'scripts/audit_releases.cjs'
+      - 'scripts/pending_audit.cjs'
       - 'scripts/accuracy_report.cjs'
       - 'data/**'
       - 'tests/**'
@@ -35,5 +37,6 @@ jobs:
       - run: node --check app.js
       - run: node --check tournament-rules.js
       - run: node --check scripts/audit_releases.cjs
+      - run: node --check scripts/pending_audit.cjs
       - run: node --check scripts/accuracy_report.cjs
       - run: node --test tests/*.test.cjs
