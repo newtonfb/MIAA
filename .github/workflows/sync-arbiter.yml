@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
   push:
     paths:
+      - 'data/verified-reported-2026.js'
       - 'scripts/sync_live.py'
       - 'scripts/sync_miaa.py'
       - 'scripts/audit_releases.cjs'
