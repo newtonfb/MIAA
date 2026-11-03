@@ -51,6 +51,11 @@ function isPublishedWeek8Key(k){const parts=k.split('|');return parts.length===3
 // so both games count; scenarios only ever address the first.
 const source=new Map();
 for(const g of SD.games){let k=pairKey(g);if(source.has(k)){let i=2;while(source.has(k+'#'+i))i++;k+='#'+i}source.set(k,g)}
+// Nov 2 MIAA working-day volleyball ledger confirmed these are single games, not doubleheaders.
+// Remove only their duplicate '#2' rows; keep all genuine same-day doubleheaders intact.
+if(SPORT==='volleyball' && typeof REPORTED_FALL_FINALS!=='undefined'){
+ for(const k of REPORTED_FALL_FINALS.verifiedSingleGameKeys?.volleyball||[])source.delete(k+'#2');
+}
 // Remove outdated unplayed placeholders for games completed Thursday.
 for(const [k,g] of source)if(g[3]===null&&g[4]===null&&isPublishedWeek8Game(g))source.delete(k);
 // Order of authority: MIAA's official ledger, then the live results feed (
