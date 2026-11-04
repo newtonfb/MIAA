@@ -335,11 +335,59 @@ const REPORTED_FALL_FINALS={
           0
         ],
         "source": {
-          "publisher": "MaxPreps girls soccer (team-submitted result)",
-          "url": "https://www.maxpreps.com/news/lIeFYJhAkkeRBip3OngcIA/soccer-recap-southeastern-rvt-now-3-2-2-since-losing-4-straight--how-to-watch.htm",
+          "publisher": "SouthCoast360 Arbiter-backed girls varsity game report",
+          "url": "https://southcoast360.com/sports-scores.html",
           "published": "2026-11-03"
         },
-        "note": "Provisional third-party reported 1-1 draw; verify against MIAA final ledger before claiming official."
+        "note": "Southeastern RVT and Greater New Bedford tied 1-1 on Nov 2; SouthCoast360 reports girls varsity final from both teams' Arbiter Live schedules. Pending MIAA scored PDF."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Cardinal Spellman",
+          "Fontbonne",
+          11,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps varsity girls soccer (team-submitted final)",
+          "url": "https://www.maxpreps.com/ma/brockton/cardinal-spellman-cardinals/soccer/girls/schedule/",
+          "published": "2026-11-03"
+        },
+        "note": "Cardinal Spellman 11, Fontbonne 0 on Nov 2, separately completed varsity non-league game; sourced to dated MaxPreps result, pending MIAA scored PDF. Distinct from Sept 21 8-0 matchup."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Cohasset",
+          "Sandwich",
+          3,
+          1,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps varsity girls soccer; The Mass Pitch cross-check",
+          "url": "https://www.maxpreps.com/news/1ZzQu68Wz06UJxmvhRJoQQ/soccer-recap-sandwichs-luck-takes-a-turn-for-the-worse-on-monday.htm",
+          "published": "2026-11-03"
+        },
+        "note": "Cohasset 3, Sandwich 1 on November 2; both MaxPreps and The Mass Pitch report completed varsity match. Independent provisional final pending MIAA scored PDF. Distinct from Sept 10 3-2."
+      },
+      {
+        "game": [
+          "2026-10-27",
+          "South Shore Vo-Tech",
+          "Sturgis Charter East",
+          2,
+          7,
+          0
+        ],
+        "source": {
+          "publisher": "Cape Cod Times (Courtney Jacobs), republished by Yahoo Sports",
+          "url": "https://sports.yahoo.com/articles/sturgis-east-boys-soccer-clinches-232258506.html",
+          "published": "2026-10-27"
+        },
+        "note": "October 27 girls soccer: Sturgis East 7, South Shore Tech 2. Cape Cod Times game report also identifies Mia Mathger Jones scoring a hat trick. Provisional reported varsity final pending MIAA scored PDF; distinct from Sept 17."
       }
     ],
     "field-hockey": [
@@ -636,6 +684,50 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "November 2 Chelmsford vs Lawrence has no score in Arbiter, as checked by site owner. Leave blank; do not count as a completed game or flag as a missing score. Not confirmed to be a scrimmage."
+      }
+    ],
+    "girls-soccer": [
+      {
+        "game": [
+          "2026-11-02",
+          "Lynnfield",
+          "Danvers",
+          null
+        ],
+        "source": {
+          "publisher": "High School On SI girls varsity schedule — Game Type: Scrimmage",
+          "url": "https://www.si.com/high-school/stats/massachusetts/girls-soccer/games/6879948-danvers-vs-lynnfield",
+          "published": "2026-11-04"
+        },
+        "note": "Nov 2 girls varsity matchup explicitly labeled Game Type: Scrimmage by High School On SI, so do not count as a MIAA regular-season score."
+      },
+      {
+        "game": [
+          "2026-11-03",
+          "Winchester",
+          "Masconomet Regional",
+          null
+        ],
+        "source": {
+          "publisher": "High School On SI girls varsity schedule — Game Type: Scrimmage",
+          "url": "https://www.si.com/high-school/stats/massachusetts/girls-soccer/games/6911436-masconomet-regional-vs-winchester",
+          "published": "2026-11-04"
+        },
+        "note": "Nov 3 girls varsity matchup explicitly labeled Game Type: Scrimmage by High School On SI, so do not count toward MIAA rankings."
+      },
+      {
+        "game": [
+          "2026-11-03",
+          "Collegiate Charter of Low.",
+          "Lowell Catholic",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule checked by site owner",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "Nov 3 fixture was not scheduled/listed in Arbiter when checked by site owner; no verified final. Do not count or classify as confirmed played; no claim of cancellation or scrimmage."
       }
     ]
   },
