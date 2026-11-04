@@ -388,6 +388,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-27"
         },
         "note": "October 27 girls soccer: Sturgis East 7, South Shore Tech 2. Cape Cod Times game report also identifies Mia Mathger Jones scoring a hat trick. Provisional reported varsity final pending MIAA scored PDF; distinct from Sept 17."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Innovation Acad. Charter",
+          "Trivium School",
+          0,
+          3,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps girls varsity scoreboard; The Mass Pitch",
+          "url": "https://www.maxpreps.com/ma/soccer/girls/scores/?date=11%2F2%2F2026",
+          "published": "2026-11-04"
+        },
+        "note": "Girls varsity November 2: Trivium 3, Innovation Academy 0, independently confirmed by MaxPreps girls-only scoreboard and The Mass Pitch girls-soccer results. Do NOT use the 7-1 result from MaxPreps general soccer page: that is a BOYS game."
       }
     ],
     "field-hockey": [
