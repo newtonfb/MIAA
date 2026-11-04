@@ -35,3 +35,14 @@ test('PDF and scoreboard fixture entries are counted only once',()=>{
  assert.equal(out.knownScheduledWithoutFinal,1);
  assert.equal(out.unresolved[0].source,'MIAA scoreboard');
 });
+
+test('removed MIAA scoreboard fixture is not counted as confirmed missing result',()=>{
+ const game=match('2026-11-03');
+ const data=audit('girls-soccer',{date:'2026-11-03',games:[]},{
+  upcoming:[game],unverified:[game],overdue:[game],feedStatus:'ok'
+ },{},'2026-11-04');
+ assert.equal(data.knownScheduledWithoutFinal,1);
+ assert.equal(data.unverifiedFixtureCount,1);
+ assert.equal(data.overdueCount,0);
+ assert.equal(data.unresolved[0].status,'unverified-fixture');
+});
