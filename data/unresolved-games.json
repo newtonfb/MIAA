@@ -64,9 +64,9 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 2,
+      "knownScheduledWithoutFinal": 1,
       "overdueCount": 0,
-      "unverifiedFixtureCount": 2,
+      "unverifiedFixtureCount": 1,
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
@@ -81,17 +81,6 @@
           "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Chelmsford",
-            "Lawrence"
-          ],
-          "time": "18:00",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
         }
       ],
       "ignored": [
@@ -102,6 +91,14 @@
             "Nashoba Regional"
           ],
           "reason": "no reported final"
+        },
+        {
+          "date": "2026-11-02",
+          "teams": [
+            "Chelmsford",
+            "Lawrence"
+          ],
+          "reason": "explicitly excluded"
         },
         {
           "date": "2026-11-03",
