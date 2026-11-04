@@ -13,6 +13,8 @@
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
+      "unidentifiedOpponentCount": 0,
+      "unidentifiedOpponentFixtures": [],
       "unresolved": [
         {
           "date": "2026-10-31",
@@ -39,6 +41,8 @@
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
+      "unidentifiedOpponentCount": 0,
+      "unidentifiedOpponentFixtures": [],
       "unresolved": [],
       "ignored": [
         {
@@ -70,6 +74,8 @@
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
+      "unidentifiedOpponentCount": 0,
+      "unidentifiedOpponentFixtures": [],
       "unresolved": [],
       "ignored": [
         {
@@ -135,12 +141,23 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 8,
-      "overdueCount": 5,
+      "knownScheduledWithoutFinal": 7,
+      "overdueCount": 4,
       "unverifiedFixtureCount": 2,
       "awaitingNextReleaseCount": 1,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
+      "unidentifiedOpponentCount": 1,
+      "unidentifiedOpponentFixtures": [
+        {
+          "date": "2026-11-02",
+          "teams": [
+            "Northampton",
+            "#N/A"
+          ],
+          "reason": "MIAA PDF has an unknown opponent (#N/A); cannot treat as a verified fixture"
+        }
+      ],
       "unresolved": [
         {
           "date": "2026-11-02",
@@ -209,17 +226,6 @@
           "verifiedFinal": false
         },
         {
-          "date": "2026-11-02",
-          "teams": [
-            "Northampton",
-            "#N/A"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        },
-        {
           "date": "2026-10-03",
           "teams": [
             "Weymouth",
@@ -238,7 +244,7 @@
             "Lynnfield",
             "Danvers"
           ],
-          "reason": "explicitly excluded"
+          "reason": "scrimmage"
         },
         {
           "date": "2026-11-03",
@@ -254,7 +260,7 @@
             "Winchester",
             "Masconomet Regional"
           ],
-          "reason": "explicitly excluded"
+          "reason": "scrimmage"
         }
       ]
     },
@@ -269,6 +275,8 @@
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
+      "unidentifiedOpponentCount": 0,
+      "unidentifiedOpponentFixtures": [],
       "unresolved": [],
       "ignored": [
         {
