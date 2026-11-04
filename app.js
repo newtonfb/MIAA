@@ -37,6 +37,8 @@ const BASELINE_DATE=new Date(SD_DATE+'T12:00').toLocaleDateString('en-US',{month
 // Shared by all visitors, unlike locally saved what-if scenarios. MIAA's own ledger wins
 // whenever it already has a score for the same game.
 const REPORTED_FALL=FOOTBALL?[]:(typeof REPORTED_FALL_FINALS!=='undefined'?REPORTED_FALL_FINALS.sports?.[SPORT]||[]:[]);
+// A schedule-only no-score fixture or verified scrimmage must not enter the model as a result.
+const NOT_COUNTING=new Set(((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.notCounting?.[SPORT])||[]).map(x=>pairKey(x.game)));
 // These are verified local-news finals, separate from MIAA's official data.
 const PUBLISHED_FINALS=FOOTBALL?[["2026-10-29","Lee","Ware",46,14,0],["2026-10-29","Hoosac Valley","Holyoke",8,27,0],["2026-10-29","Quaboag Regional","Smith Vo-Tech",0,36,0],["2026-10-29","Lynn English","Medford",48,21,0],["2026-10-29","Chelsea","Minuteman Regional",23,22,0],["2026-10-29","Upper Cape Cod RVT","South Shore Vo-Tech",8,45,0],["2026-10-29","Winthrop","Salem",42,22,0],["2026-10-29","Cathedral","Archbishop Williams",26,47,0],["2026-10-29","Haverhill","Central Catholic",36,43,0],["2026-10-29","Quincy","Pembroke",41,14,0],["2026-10-29","Blue Hills RVT","Tri-County RVT",30,7,0],["2026-10-29","Milton","Weymouth",27,20,0],["2026-10-29","McCann Tech","Belchertown",0,54,0],["2026-10-29","Springfield Int'l Charter","HS of Commerce",49,6,0],...(typeof CONFIRMED_FINALS!=='undefined'?CONFIRMED_FINALS.games:[]),...HISTORICAL_FINALS]:REPORTED_FALL.map(x=>x.game);
 // Football Week 8 schedule (date, home, away, kickoff).
@@ -73,6 +75,7 @@ const LIVE_KEYS=new Set();
 // Live results and the official ledger share the same game records, so their dates agree exactly; a live game is
 // skipped only if the ledger has that exact game. Same-day doubleheaders get a second key, as in the ledger.
 for(const g of LIVE.results){
+ if(NOT_COUNTING.has(pairKey(g)))continue;
  if(REGULAR_SEASON_CUTOFF&&g[0]>REGULAR_SEASON_CUTOFF)continue;
  // Final football tournament ratings freeze at the Oct 31 regular-season cutoff.
  if(HAS_FOOTBALL_FINAL&&(g[0]>'2026-10-31'||FINAL_EXCLUDED_GAMES.has(pairKey(g))))continue;
@@ -84,7 +87,7 @@ for(const g of LIVE.results){
  if(LIVE_KEYS.has(k)){let i=2;while(source.has(k+'#'+i))i++;k+='#'+i}
  source.set(k,r);LIVE_KEYS.add(k);notePlayed(r);
 }
-for(const g of PUBLISHED_FINALS){if(HAS_FOOTBALL_FINAL&&FINAL_EXCLUDED_GAMES.has(pairKey(g)))continue;const cur=source.get(pairKey(g));if((!cur||cur[3]===null)&&!playedNear(g))source.set(pairKey(g),g)}
+for(const g of PUBLISHED_FINALS){if(NOT_COUNTING.has(pairKey(g)))continue;if(HAS_FOOTBALL_FINAL&&FINAL_EXCLUDED_GAMES.has(pairKey(g)))continue;const cur=source.get(pairKey(g));if((!cur||cur[3]===null)&&!playedNear(g))source.set(pairKey(g),g)}
 const REPORTED_APPLIED=new Map(REPORTED_FALL.filter(x=>source.get(pairKey(x.game))===x.game).map(x=>[pairKey(x.game),x.source]));
 // A scheduled game logged under a different date is attached to its schedule card, so the card shows the
 // final and a prediction can't count the same game twice.
@@ -106,8 +109,7 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(s))edit
 // Bring over scenarios saved by the old separate fall-sports page.
 if(!FOOTBALL&&!addedFixtures.length)try{const old=JSON.parse(localStorage.getItem('miaa-fall-2026-v1:'+SPORT)||'[]');
  if(Array.isArray(old)&&old.length){for(const g of old)if(Array.isArray(g)&&TEAMS.includes(g[1])&&TEAMS.includes(g[2])){addedFixtures.push([g[0],g[1],g[2],null]);edits.push(g)}localStorage.removeItem('miaa-fall-2026-v1:'+SPORT)}}catch{}
-// Scheduled games confirmed not to count (e.g. listed in Arbiter as a scrimmage).
-const NOT_COUNTING=new Set(((typeof REPORTED_FALL_FINALS!=='undefined'&&REPORTED_FALL_FINALS.notCounting?.[SPORT])||[]).map(x=>pairKey(x.game)));
+// Exclude confirmed scrimmages and unscored fixtures from the schedule.
 const LIVE_UPCOMING=FOOTBALL?[]:LIVE.upcoming.filter(r=>(!REGULAR_SEASON_CUTOFF||r[0]<=REGULAR_SEASON_CUTOFF)&&TEAMS.includes(r[1])&&TEAMS.includes(r[2])&&!NOT_COUNTING.has(pairKey(r)));
 const LIVE_UNVERIFIED=new Set((LIVE.unverified||[]).map(r=>pairKey(r)));
 const REPORTED_POSTPONED=new Map(
