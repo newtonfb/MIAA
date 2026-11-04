@@ -143,3 +143,17 @@ test('Oct 26 KIPP Academy vs Lynn English 2-2 draw is distinct from Oct 19 final
  assert.equal(official.length,1);
  assert.deepEqual(official[0].slice(3,5),[0,3]);
 });
+
+
+test('West Boylston vs Southbridge Oct 30 10-0 counted separately from Oct 21 14-0 final',()=>{
+ const games=reported.sports['boys-soccer'];
+ const match=games.filter(x=>x.game[0]==='2026-10-30' &&
+  [x.game[1],x.game[2]].sort().join('|')==='Southbridge|West Boylston');
+ assert.equal(match.length,1,'Oct 30 West Boylston game must be entered exactly once');
+ assert.deepEqual(match[0].game,['2026-10-30','West Boylston','Southbridge',10,0,0]);
+ assert.match(match[0].source.publisher,/Arbiter/);
+ const older=fall.sports['boys-soccer'].games.filter(g=>g[0]==='2026-10-21' &&
+  [g[1],g[2]].sort().join('|')==='Southbridge|West Boylston');
+ assert.equal(older.length,1,'Preserve earlier match');
+ assert.deepEqual(older[0].slice(3,5),[0,14]);
+});
