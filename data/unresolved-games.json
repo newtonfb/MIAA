@@ -161,38 +161,6 @@
       "unresolved": [],
       "ignored": [
         {
-          "date": "2026-10-03",
-          "teams": [
-            "Weymouth",
-            "Whitman-Hanson Reg."
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-27",
-          "teams": [
-            "Atlantis Charter",
-            "New Heights Charter"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-28",
-          "teams": [
-            "Barnstable",
-            "Carver"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Apponequet Regional",
-            "Old Rochester Regional"
-          ],
-          "reason": "no reported final"
-        },
-        {
           "date": "2026-11-02",
           "teams": [
             "Lynnfield",
@@ -231,6 +199,38 @@
             "Masconomet Regional"
           ],
           "reason": "scrimmage"
+        },
+        {
+          "date": "2026-11-02",
+          "teams": [
+            "Apponequet Regional",
+            "Old Rochester Regional"
+          ],
+          "reason": "no reported final"
+        },
+        {
+          "date": "2026-10-27",
+          "teams": [
+            "Atlantis Charter",
+            "New Heights Charter"
+          ],
+          "reason": "no reported final"
+        },
+        {
+          "date": "2026-10-28",
+          "teams": [
+            "Barnstable",
+            "Carver"
+          ],
+          "reason": "no reported final"
+        },
+        {
+          "date": "2026-10-03",
+          "teams": [
+            "Weymouth",
+            "Whitman-Hanson Reg."
+          ],
+          "reason": "no reported final"
         }
       ]
     },
