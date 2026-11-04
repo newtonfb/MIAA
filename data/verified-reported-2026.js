@@ -424,6 +424,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "October 30 varsity 0-0 draw confirmed by site owner November 4 and listed as Final on MaxPreps. Provisional until MIAA scored ledger includes it."
+      },
+      {
+        "game": [
+          "2026-10-26",
+          "KIPP Academy Lynn Coll.",
+          "Lynn English",
+          2,
+          2,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps varsity boys soccer recap (team-submitted game result)",
+          "url": "https://www.maxpreps.com/news/FR21L4fh10SMIrCeeyCMFg/soccer-recap-kipp-academy-lynn-collegiates-losing-streak-snapped-at-10-games.htm",
+          "published": "2026-10-26"
+        },
+        "note": "2-2 draw on October 26. Confirmed by site owner November 4; MaxPreps 2026-10-26 recap and High School On SI independently display 2-2. Provisional score until included in MIAA's published scored ledger. Distinct from the October 19 Lynn English 3-0 win already in official data."
       }
     ]
   },
