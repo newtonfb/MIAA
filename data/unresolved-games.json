@@ -64,25 +64,13 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 1,
+      "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
-      "unverifiedFixtureCount": 1,
+      "unverifiedFixtureCount": 0,
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
-      "unresolved": [
-        {
-          "date": "2026-10-30",
-          "teams": [
-            "West Boylston",
-            "Southbridge"
-          ],
-          "time": "15:30",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        }
-      ],
+      "unresolved": [],
       "ignored": [
         {
           "date": "2026-10-31",
