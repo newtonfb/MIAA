@@ -60,3 +60,17 @@ test('genuinely unscored game earlier than last MIAA release stays overdue',()=>
  assert.equal(x.awaitingNextReleaseCount,0);
  assert.equal(x.overdueCount,1);
 });
+
+test('explicitly unscored Parker Charter fixtures are ignored without treating them as scrimmages',()=>{
+ const a=['2026-10-26','Parker Charter','Trivium School',null],b=['2026-10-27','Parker Charter','Southbridge',null];
+ const official={date:'2026-11-03',games:[],divisions:{'Parker Charter':1,'Trivium School':2,'Southbridge':3},
+  unmatchedScoreDetails:['10/26 Parker Charter Trivium School','10/27 Parker Charter Southbridge']};
+ const reported={notCounting:{'boys-soccer':[
+  {game:a,note:'No final score in Arbiter. Not verified to be a scrimmage.'},
+  {game:b,note:'No final score in Arbiter. Not verified to be a scrimmage.'}
+ ]}};
+ const result=audit('boys-soccer',official,{upcoming:[]},reported,'2026-11-04');
+ assert.equal(result.knownScheduledWithoutFinal,0);
+ assert.equal(result.overdueCount,0);
+ assert.deepEqual(result.ignored.map(x=>x.reason),['no reported final','no reported final']);
+});
