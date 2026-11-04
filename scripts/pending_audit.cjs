@@ -41,7 +41,7 @@ function audit(sport,official,live,reported,today){
  const canceled=new Set((live?.canceled||[]).map(key));
  const postponed=new Set((live?.postponed||[]).map(key));
  const unverified=new Set((live?.unverified||[]).map(key));
- const ignored=[],unresolved=[],unparseableLedgerLines=[];
+ const ignored=[],unresolved=[],unparseableLedgerLines=[],unidentifiedOpponentFixtures=[];
  const seen=new Set();
  const fromScoreboard=new Set((live?.upcoming||[]).map(key));
  const fixtures=(live?.upcoming||[]).slice();
@@ -55,8 +55,11 @@ function audit(sport,official,live,reported,today){
   const k=key(fixture);
   if(seen.has(k))continue;
   seen.add(k);
+  if(fixture[1]==='#N/A'||fixture[2]==='#N/A'){
+   unidentifiedOpponentFixtures.push({date:fixture[0],teams:fixture.slice(1,3),reason:'MIAA PDF has an unknown opponent (#N/A); cannot treat as a verified fixture'});continue
+  }
   if(notCounting.has(k)){
-   const entry=notCounting.get(k),reason=/(?:scrimmage confirmed|listed in arbiter as a scrimmage)/i.test(entry?.note||'')?'scrimmage':/no (?:verified )?final|no final score/i.test(entry?.note||'')?'no reported final':'explicitly excluded';
+   const entry=notCounting.get(k),reason=/(?:scrimmage confirmed|listed in arbiter as a scrimmage|game type:\s*scrimmage)/i.test(entry?.note||'')?'scrimmage':/no (?:verified )?final|no final score/i.test(entry?.note||'')?'no reported final':'explicitly excluded';
    ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason});continue
   }
   if(canceled.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'canceled'});continue}
@@ -74,7 +77,7 @@ function audit(sport,official,live,reported,today){
   knownScheduledWithoutFinal:unresolved.length,overdueCount:overdue.length,
   unverifiedFixtureCount:unverifiedFixtures.length,awaitingNextReleaseCount:awaitingNextRelease.length,
   note:'Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.',
-  unparseableLedgerLines,unresolved,ignored};
+  unparseableLedgerLines,unidentifiedOpponentCount:unidentifiedOpponentFixtures.length,unidentifiedOpponentFixtures,unresolved,ignored};
 }
 function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'})){
  const fb=read('data/season-2026.js','DATA');
