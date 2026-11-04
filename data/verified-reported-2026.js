@@ -606,6 +606,20 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "No final score for Parker Charter vs Southbridge on 2026-10-27 in Arbiter, confirmed by site owner November 4. Leave score blank, do not count toward power rankings or flag as a missing final. Not verified to be a scrimmage."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Chelmsford",
+          "Lawrence",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "November 2 Chelmsford vs Lawrence has no score in Arbiter, as checked by site owner. Leave blank; do not count as a completed game or flag as a missing score. Not confirmed to be a scrimmage."
       }
     ]
   },
