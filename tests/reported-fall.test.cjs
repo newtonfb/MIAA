@@ -100,3 +100,29 @@ test('confirmed postponement does not count as an unreported final',()=>{
  assert.match(app,/\.\.\.REPORTED_POSTPONED\.keys\(\)/);
  assert.match(app,/!LIVE_POSTPONED\.has\(fixtureKey\(r\)\)/);
 });
+
+
+test('November 4 boys soccer corrections: tie counted, scrimmages and no-score excluded',()=>{
+ const boys=reported.sports['boys-soccer'];
+ const key=g=>g[0]+'|'+[g[1],g[2]].sort().join('|');
+ const match=(date,a,b)=>boys.find(x=>key(x.game)===key([date,a,b]));
+ const tie=match('2026-10-30','Weymouth','Braintree');
+ assert.ok(tie,'Weymouth-Braintree 0-0 result is missing');
+ assert.deepEqual(tie.game,['2026-10-30','Weymouth','Braintree',0,0,0]);
+ assert.match(tie.source.url,/maxpreps\.com\/ma\/soccer\/scores/);
+ assert.deepEqual(match('2026-10-31','Bishop Stang','Fairhaven').game.slice(3,5),[2,5]);
+ assert.deepEqual(match('2026-11-02','Clinton','Millbury').game.slice(3,5),[3,0]);
+ const ex=reported.notCounting['boys-soccer'];
+ for(const [date,a,b,type] of [
+  ['2026-10-31','Tewksbury Memorial','Nashoba Regional','No final'],
+  ['2026-11-03','Chicopee','Westfield','Scrimmage'],
+  ['2026-11-03','Hingham','Cohasset','Scrimmage'],
+ ]){
+  const entry=ex.find(x=>key(x.game)===key([date,a,b]));
+  assert.ok(entry,'Missing non-counting fixture: '+a+' - '+b);
+  assert.match(entry.note,new RegExp(type,'i'));
+ }
+ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
+ assert.match(app,/for\(const g of LIVE\.results\)\{\s*if\(NOT_COUNTING\.has\(pairKey\(g\)\)\)continue;/);
+ assert.match(app,/for\(const g of PUBLISHED_FINALS\)\{if\(NOT_COUNTING\.has\(pairKey\(g\)\)\)continue;/);
+});
