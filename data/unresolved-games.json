@@ -141,10 +141,10 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 6,
-      "overdueCount": 4,
-      "unverifiedFixtureCount": 1,
-      "awaitingNextReleaseCount": 1,
+      "knownScheduledWithoutFinal": 0,
+      "overdueCount": 0,
+      "unverifiedFixtureCount": 0,
+      "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unidentifiedOpponentCount": 1,
@@ -158,39 +158,15 @@
           "reason": "MIAA PDF has an unknown opponent (#N/A); cannot treat as a verified fixture"
         }
       ],
-      "unresolved": [
+      "unresolved": [],
+      "ignored": [
         {
-          "date": "2026-11-02",
+          "date": "2026-10-03",
           "teams": [
-            "Tyngsborough",
-            "Billerica Memorial"
+            "Weymouth",
+            "Whitman-Hanson Reg."
           ],
-          "time": "16:30",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Chicopee",
-            "Pittsfield"
-          ],
-          "time": "18:00",
-          "status": "awaiting-next-release",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Apponequet Regional",
-            "Old Rochester Regional"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
+          "reason": "no reported final"
         },
         {
           "date": "2026-10-27",
@@ -198,10 +174,7 @@
             "Atlantis Charter",
             "New Heights Charter"
           ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
+          "reason": "no reported final"
         },
         {
           "date": "2026-10-28",
@@ -209,29 +182,37 @@
             "Barnstable",
             "Carver"
           ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
+          "reason": "no reported final"
         },
         {
-          "date": "2026-10-03",
+          "date": "2026-11-02",
           "teams": [
-            "Weymouth",
-            "Whitman-Hanson Reg."
+            "Apponequet Regional",
+            "Old Rochester Regional"
           ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        }
-      ],
-      "ignored": [
+          "reason": "no reported final"
+        },
         {
           "date": "2026-11-02",
           "teams": [
             "Lynnfield",
             "Danvers"
+          ],
+          "reason": "scrimmage"
+        },
+        {
+          "date": "2026-11-02",
+          "teams": [
+            "Tyngsborough",
+            "Billerica Memorial"
+          ],
+          "reason": "scrimmage"
+        },
+        {
+          "date": "2026-11-03",
+          "teams": [
+            "Chicopee",
+            "Pittsfield"
           ],
           "reason": "scrimmage"
         },

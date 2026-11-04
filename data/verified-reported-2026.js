@@ -744,6 +744,90 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "Nov 3 fixture was not scheduled/listed in Arbiter when checked by site owner; no verified final. Do not count or classify as confirmed played; no claim of cancellation or scrimmage."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Tyngsborough",
+          "Billerica Memorial",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "Scrimmage confirmed by site owner November 4, 2026. Exclude from MIAA rankings, regardless of fixture listing."
+      },
+      {
+        "game": [
+          "2026-11-03",
+          "Chicopee",
+          "Pittsfield",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "Scrimmage confirmed by site owner November 4, 2026. Exclude from MIAA rankings, regardless of fixture listing."
+      },
+      {
+        "game": [
+          "2026-11-02",
+          "Apponequet Regional",
+          "Old Rochester Regional",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score posted for November 2 in Arbiter, confirmed by site owner November 4, 2026. Leave unscored; do not treat as played or calculate a result."
+      },
+      {
+        "game": [
+          "2026-10-27",
+          "Atlantis Charter",
+          "New Heights Charter",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score posted for October 27 in Arbiter, confirmed by site owner November 4, 2026. Leave unscored; do not treat as played or calculate a result."
+      },
+      {
+        "game": [
+          "2026-10-28",
+          "Barnstable",
+          "Carver",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score posted for October 28 in Arbiter, confirmed by site owner November 4, 2026. Leave unscored; do not treat as played or calculate a result."
+      },
+      {
+        "game": [
+          "2026-10-03",
+          "Weymouth",
+          "Whitman-Hanson Reg.",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter schedule classification/status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score for the October 3 listing. The September 26 postponed matchup appears to have been played October 24, when Whitman-Hanson beat Weymouth 1-0; that October 24 final is already present in the official MIAA score ledger. Do not add another game from the unscored October 3 listing."
       }
     ]
   },
