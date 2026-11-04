@@ -157,3 +157,30 @@ test('West Boylston vs Southbridge Oct 30 10-0 counted separately from Oct 21 14
  assert.equal(older.length,1,'Preserve earlier match');
  assert.deepEqual(older[0].slice(3,5),[0,14]);
 });
+
+
+test('girls soccer independently verified finals and scrimmage flags remain consistent',()=>{
+ const norm=g=>g[0]+'|'+[g[1],g[2]].sort().join('|');
+ const girls=reported.sports['girls-soccer'],excluded=reported.notCounting['girls-soccer'];
+ const expected=[
+  ['2026-11-02','Cardinal Spellman','Fontbonne',11,0,0],
+  ['2026-11-02','Cohasset','Sandwich',3,1,0],
+  ['2026-10-27','South Shore Vo-Tech','Sturgis Charter East',2,7,0],
+  ['2026-11-02','Innovation Acad. Charter','Trivium School',0,3,0]
+ ];
+ for(const g of expected){
+  const found=girls.filter(x=>norm(x.game)===norm(g));
+  assert.equal(found.length,1,'Missing/duplicate girls score '+g.join(' '));
+  assert.deepEqual(found[0].game,g);
+  assert.ok(found[0].source?.url.startsWith('https://'));
+ }
+ for(const [date,a,b] of [
+  ['2026-11-02','Lynnfield','Danvers'],
+  ['2026-11-03','Winchester','Masconomet Regional'],
+  ['2026-11-03','Collegiate Charter of Low.','Lowell Catholic']
+ ]){
+  assert.ok(excluded.some(x=>norm(x.game)===norm([date,a,b])),'Missing girls fixture exclusion '+date+' '+a+' '+b);
+ }
+ // Do not accidentally import a 7-1 BOYS result for Innovation Academy vs Trivium.
+ assert.deepEqual(girls.find(x=>norm(x.game)==='2026-11-02|Innovation Acad. Charter|Trivium School').game.slice(3,5),[0,3]);
+});
