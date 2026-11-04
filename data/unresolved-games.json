@@ -47,7 +47,7 @@
             "Manchester Essex",
             "Triton Regional"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "explicitly excluded"
         },
         {
           "date": "2026-11-01",
@@ -55,7 +55,7 @@
             "Doherty Memorial",
             "Quabbin Regional"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "scrimmage"
         }
       ]
     },
@@ -101,7 +101,7 @@
             "Tewksbury Memorial",
             "Nashoba Regional"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "no reported final"
         },
         {
           "date": "2026-11-03",
@@ -109,7 +109,7 @@
             "Chicopee",
             "Westfield"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "scrimmage"
         },
         {
           "date": "2026-11-03",
@@ -117,7 +117,7 @@
             "Hingham",
             "Cohasset"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "scrimmage"
         },
         {
           "date": "2026-09-17",
@@ -125,7 +125,7 @@
             "KIPP Academy Lynn Coll.",
             "Salem"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "no reported final"
         },
         {
           "date": "2026-10-26",
@@ -133,7 +133,7 @@
             "Parker Charter",
             "Trivium School"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "no reported final"
         },
         {
           "date": "2026-10-27",
@@ -141,7 +141,7 @@
             "Parker Charter",
             "Southbridge"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "no reported final"
         }
       ]
     },
@@ -333,7 +333,7 @@
             "Danvers",
             "North Andover"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "scrimmage"
         },
         {
           "date": "2026-11-01",
@@ -341,7 +341,7 @@
             "Oliver Ames",
             "East Bridgewater"
           ],
-          "reason": "excluded exhibition/scrimmage"
+          "reason": "scrimmage"
         }
       ]
     }
