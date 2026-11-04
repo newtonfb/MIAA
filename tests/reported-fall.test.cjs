@@ -115,6 +115,7 @@ test('November 4 boys soccer corrections: tie counted, scrimmages and no-score e
  const ex=reported.notCounting['boys-soccer'];
  for(const [date,a,b,type] of [
   ['2026-09-17','KIPP Academy Lynn Coll.','Salem','No verified final'],
+  ['2026-11-02','Chelmsford','Lawrence','no score in Arbiter'],
   ['2026-10-26','Parker Charter','Trivium School','No final score'],
   ['2026-10-27','Parker Charter','Southbridge','No final score'],
   ['2026-10-31','Tewksbury Memorial','Nashoba Regional','No final'],
