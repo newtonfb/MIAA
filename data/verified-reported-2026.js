@@ -548,6 +548,20 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "Scrimmage confirmed by site owner November 4. Excluded from MIAA regular-season ratings."
+      },
+      {
+        "game": [
+          "2026-09-17",
+          "KIPP Academy Lynn Coll.",
+          "Salem",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "September 17 KIPP Academy Lynn Collegiate vs Salem shows no score in Arbiter, as checked by site owner November 4. No verified final; do not count as a completed match or flag as a missing score. Not claimed to be a scrimmage."
       }
     ]
   },
