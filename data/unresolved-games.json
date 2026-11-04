@@ -135,10 +135,10 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 14,
-      "overdueCount": 8,
-      "unverifiedFixtureCount": 4,
-      "awaitingNextReleaseCount": 2,
+      "knownScheduledWithoutFinal": 8,
+      "overdueCount": 5,
+      "unverifiedFixtureCount": 2,
+      "awaitingNextReleaseCount": 1,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [
@@ -147,17 +147,6 @@
           "teams": [
             "Innovation Acad. Charter",
             "Trivium School"
-          ],
-          "time": "16:00",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Lynnfield",
-            "Danvers"
           ],
           "time": "16:00",
           "status": "unverified-fixture",
@@ -182,28 +171,6 @@
             "Pittsfield"
           ],
           "time": "18:00",
-          "status": "awaiting-next-release",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Collegiate Charter of Low.",
-            "Lowell Catholic"
-          ],
-          "time": "17:30",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Winchester",
-            "Masconomet Regional"
-          ],
-          "time": "16:00",
           "status": "awaiting-next-release",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
@@ -244,41 +211,8 @@
         {
           "date": "2026-11-02",
           "teams": [
-            "Cardinal Spellman",
-            "Fontbonne"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Cohasset",
-            "Sandwich"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
             "Northampton",
             "#N/A"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-10-27",
-          "teams": [
-            "South Shore Vo-Tech",
-            "Sturgis Charter East"
           ],
           "time": null,
           "status": "overdue",
@@ -297,7 +231,32 @@
           "verifiedFinal": false
         }
       ],
-      "ignored": []
+      "ignored": [
+        {
+          "date": "2026-11-02",
+          "teams": [
+            "Lynnfield",
+            "Danvers"
+          ],
+          "reason": "explicitly excluded"
+        },
+        {
+          "date": "2026-11-03",
+          "teams": [
+            "Collegiate Charter of Low.",
+            "Lowell Catholic"
+          ],
+          "reason": "no reported final"
+        },
+        {
+          "date": "2026-11-03",
+          "teams": [
+            "Winchester",
+            "Masconomet Regional"
+          ],
+          "reason": "explicitly excluded"
+        }
+      ]
     },
     "volleyball": {
       "cutoff": "2026-11-01",
