@@ -10,7 +10,8 @@
       "knownScheduledWithoutFinal": 1,
       "overdueCount": 1,
       "unverifiedFixtureCount": 0,
-      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
+      "awaitingNextReleaseCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -35,7 +36,8 @@
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
       "unverifiedFixtureCount": 0,
-      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
+      "awaitingNextReleaseCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [],
       "ignored": [
@@ -63,9 +65,10 @@
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
       "knownScheduledWithoutFinal": 10,
-      "overdueCount": 6,
+      "overdueCount": 4,
       "unverifiedFixtureCount": 4,
-      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
+      "awaitingNextReleaseCount": 2,
+      "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -119,7 +122,7 @@
             "Westfield"
           ],
           "time": "16:00",
-          "status": "overdue",
+          "status": "awaiting-next-release",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -130,7 +133,7 @@
             "Cohasset"
           ],
           "time": "16:45",
-          "status": "overdue",
+          "status": "awaiting-next-release",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -186,10 +189,11 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 15,
-      "overdueCount": 11,
+      "knownScheduledWithoutFinal": 14,
+      "overdueCount": 8,
       "unverifiedFixtureCount": 4,
-      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
+      "awaitingNextReleaseCount": 2,
+      "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -232,7 +236,7 @@
             "Pittsfield"
           ],
           "time": "18:00",
-          "status": "overdue",
+          "status": "awaiting-next-release",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -250,22 +254,11 @@
         {
           "date": "2026-11-03",
           "teams": [
-            "Maimonides School",
-            "Cathedral"
-          ],
-          "time": "17:30",
-          "status": "overdue",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
             "Winchester",
             "Masconomet Regional"
           ],
           "time": "16:00",
-          "status": "overdue",
+          "status": "awaiting-next-release",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -368,7 +361,8 @@
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
       "unverifiedFixtureCount": 0,
-      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
+      "awaitingNextReleaseCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
       "unresolved": [],
       "ignored": [
