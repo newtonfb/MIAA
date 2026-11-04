@@ -114,6 +114,7 @@ test('November 4 boys soccer corrections: tie counted, scrimmages and no-score e
  assert.deepEqual(match('2026-11-02','Clinton','Millbury').game.slice(3,5),[3,0]);
  const ex=reported.notCounting['boys-soccer'];
  for(const [date,a,b,type] of [
+  ['2026-09-17','KIPP Academy Lynn Coll.','Salem','No verified final'],
   ['2026-10-31','Tewksbury Memorial','Nashoba Regional','No final'],
   ['2026-11-03','Chicopee','Westfield','Scrimmage'],
   ['2026-11-03','Hingham','Cohasset','Scrimmage'],
