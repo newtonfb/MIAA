@@ -74,3 +74,26 @@ test('explicitly unscored Parker Charter fixtures are ignored without treating t
  assert.equal(result.overdueCount,0);
  assert.deepEqual(result.ignored.map(x=>x.reason),['no reported final','no reported final']);
 });
+
+
+test('MIAA unknown-opponent #N/A PDF placeholder is not counted as missing game',()=>{
+ const official={date:'2026-11-03',games:[],divisions:{Northampton:2},
+  unmatchedScoreDetails:['11/2 Northampton #N/A','11/2 #N/A Northampton']};
+ const x=audit('girls-soccer',official,{upcoming:[]},{},'2026-11-04');
+ assert.equal(x.knownScheduledWithoutFinal,0);
+ assert.equal(x.unidentifiedOpponentCount,1);
+ assert.equal(x.unresolved.length,0);
+});
+test('girls soccer actual scrimmages are separated from unscheduled, no-score fixture',()=>{
+ const a=['2026-11-02','Lynnfield','Danvers',null],
+  b=['2026-11-03','Winchester','Masconomet Regional',null],
+  c=['2026-11-03','Collegiate Charter of Low.','Lowell Catholic',null];
+ const reported={notCounting:{'girls-soccer':[
+  {game:a,note:'Game Type: Scrimmage'},
+  {game:b,note:'Game Type: Scrimmage'},
+  {game:c,note:'No verified final, absent from Arbiter schedule. Not a confirmed scrimmage.'}
+ ]}};
+ const x=audit('girls-soccer',{games:[]},{upcoming:[a,b,c]},reported,'2026-11-04');
+ assert.equal(x.knownScheduledWithoutFinal,0);
+ assert.deepEqual(x.ignored.map(r=>r.reason),['scrimmage','scrimmage','no reported final']);
+});
