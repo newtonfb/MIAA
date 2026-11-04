@@ -59,17 +59,18 @@ function audit(sport,official,live,reported,today){
   if(canceled.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'canceled'});continue}
   if(allScored.some(g=>pair(g)===pair(fixture)&&daysApart(g[0],fixture[0])<=3))continue;
   unresolved.push({date:fixture[0],teams:fixture.slice(1,3),time:fixture[3]||null,
-   status:postponed.has(k)?'postponed':unverified.has(k)?'unverified-fixture':fixture[0]<today?'overdue':'scheduled',
+   status:postponed.has(k)?'postponed':unverified.has(k)?'unverified-fixture':(!official?.final&&official?.date&&fixture[0]>=official.date)?'awaiting-next-release':fixture[0]<today?'overdue':'scheduled',
    source:fromScoreboard.has(k)?'MIAA scoreboard':(official?.unmatchedScoreDetails||[]).length?'MIAA published unscored ledger row':'MIAA scoreboard',
    verifiedFinal:false});
  }
  const overdue=unresolved.filter(x=>x.status==='overdue'||x.status==='postponed');
  const unverifiedFixtures=unresolved.filter(x=>x.status==='unverified-fixture');
+ const awaitingNextRelease=unresolved.filter(x=>x.status==='awaiting-next-release');
  return {cutoff,source:'MIAA scoreboard plus official unscored ledger',feedStatus:live?.feedStatus||'not-reported',
   verifiedRelease:official?.date||null,
   knownScheduledWithoutFinal:unresolved.length,overdueCount:overdue.length,
-  unverifiedFixtureCount:unverifiedFixtures.length,
-  note:'Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.',
+  unverifiedFixtureCount:unverifiedFixtures.length,awaitingNextReleaseCount:awaitingNextRelease.length,
+  note:'Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.',
   unparseableLedgerLines,unresolved,ignored};
 }
 function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'})){
