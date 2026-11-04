@@ -56,7 +56,7 @@ function audit(sport,official,live,reported,today){
   if(seen.has(k))continue;
   seen.add(k);
   if(notCounting.has(k)){
-   const entry=notCounting.get(k),reason=/scrimmage/i.test(entry?.note||'')?'scrimmage':/no (?:verified )?final|no final score/i.test(entry?.note||'')?'no reported final':'explicitly excluded';
+   const entry=notCounting.get(k),reason=/(?:scrimmage confirmed|listed in arbiter as a scrimmage)/i.test(entry?.note||'')?'scrimmage':/no (?:verified )?final|no final score/i.test(entry?.note||'')?'no reported final':'explicitly excluded';
    ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason});continue
   }
   if(canceled.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'canceled'});continue}
