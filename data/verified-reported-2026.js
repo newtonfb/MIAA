@@ -408,6 +408,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-02"
         },
         "note": "Provisional third-party reported final: Clinton 3, Millbury 0. MIAA Nov 3 ledger still shows no score; replace with authoritative MIAA result when available."
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "Weymouth",
+          "Braintree",
+          0,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "MaxPreps Massachusetts varsity boys soccer scoreboard",
+          "url": "https://www.maxpreps.com/ma/soccer/scores/?date=10%2F30%2F2026",
+          "published": "2026-11-04"
+        },
+        "note": "October 30 varsity 0-0 draw confirmed by site owner November 4 and listed as Final on MaxPreps. Provisional until MIAA scored ledger includes it."
       }
     ]
   },
@@ -488,6 +504,50 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-02"
         },
         "note": "Listed in Arbiter as a scrimmage; does not count toward MIAA power rankings"
+      }
+    ],
+    "boys-soccer": [
+      {
+        "game": [
+          "2026-10-31",
+          "Tewksbury Memorial",
+          "Nashoba Regional",
+          "11:00"
+        ],
+        "source": {
+          "publisher": "Arbiter status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score in Arbiter as checked by site owner November 4. Not a verified scored varsity result; keep out of model. Do not assert that it was a scrimmage or canceled."
+      },
+      {
+        "game": [
+          "2026-11-03",
+          "Chicopee",
+          "Westfield",
+          "16:00"
+        ],
+        "source": {
+          "publisher": "Arbiter game classification (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "Scrimmage confirmed by site owner November 4. Excluded from MIAA regular-season ratings."
+      },
+      {
+        "game": [
+          "2026-11-03",
+          "Hingham",
+          "Cohasset",
+          "16:45"
+        ],
+        "source": {
+          "publisher": "Arbiter game classification (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "Scrimmage confirmed by site owner November 4. Excluded from MIAA regular-season ratings."
       }
     ]
   },
