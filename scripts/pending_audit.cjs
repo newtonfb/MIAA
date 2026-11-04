@@ -37,7 +37,7 @@ function audit(sport,official,live,reported,today){
  const scored=(official?.games||[]).filter(g=>g[3]!==null&&g[4]!==null);
  const known=reported?.sports?.[sport]||[];
  const allScored=scored.concat(known.map(x=>x.game));
- const notCounting=new Set((reported?.notCounting?.[sport]||[]).map(x=>key(x.game)));
+ const notCounting=new Map((reported?.notCounting?.[sport]||[]).map(x=>[key(x.game),x]));
  const canceled=new Set((live?.canceled||[]).map(key));
  const postponed=new Set((live?.postponed||[]).map(key));
  const unverified=new Set((live?.unverified||[]).map(key));
@@ -55,7 +55,10 @@ function audit(sport,official,live,reported,today){
   const k=key(fixture);
   if(seen.has(k))continue;
   seen.add(k);
-  if(notCounting.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'excluded exhibition/scrimmage'});continue}
+  if(notCounting.has(k)){
+   const entry=notCounting.get(k),reason=/scrimmage/i.test(entry?.note||'')?'scrimmage':/no (?:verified )?final|no final score/i.test(entry?.note||'')?'no reported final':'explicitly excluded';
+   ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason});continue
+  }
   if(canceled.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'canceled'});continue}
   if(allScored.some(g=>pair(g)===pair(fixture)&&daysApart(g[0],fixture[0])<=3))continue;
   unresolved.push({date:fixture[0],teams:fixture.slice(1,3),time:fixture[3]||null,
