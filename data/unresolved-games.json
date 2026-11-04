@@ -141,9 +141,9 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 7,
+      "knownScheduledWithoutFinal": 6,
       "overdueCount": 4,
-      "unverifiedFixtureCount": 2,
+      "unverifiedFixtureCount": 1,
       "awaitingNextReleaseCount": 1,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
@@ -159,17 +159,6 @@
         }
       ],
       "unresolved": [
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Innovation Acad. Charter",
-            "Trivium School"
-          ],
-          "time": "16:00",
-          "status": "unverified-fixture",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
         {
           "date": "2026-11-02",
           "teams": [
