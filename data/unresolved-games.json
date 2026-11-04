@@ -1,11 +1,11 @@
 {
-  "asOf": "2026-11-03",
+  "asOf": "2026-11-04",
   "note": "Known scoreboard fixtures only; no claim of complete statewide schedule or game verification.",
   "sports": {
     "football": {
       "cutoff": "2026-10-31",
       "source": "MIAA public scoreboard",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 1,
       "overdueCount": 1,
@@ -28,7 +28,7 @@
     "field-hockey": {
       "cutoff": "2026-11-01",
       "source": "MIAA public scoreboard",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-01",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
@@ -56,10 +56,10 @@
     "boys-soccer": {
       "cutoff": "2026-11-03",
       "source": "MIAA public scoreboard",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 19,
-      "overdueCount": 8,
+      "knownScheduledWithoutFinal": 10,
+      "overdueCount": 10,
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -109,66 +109,11 @@
         {
           "date": "2026-11-03",
           "teams": [
-            "Academy of the Pacific Rim",
-            "New Heights Charter"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Advanced Math & Science",
-            "Assabet Valley RVT"
-          ],
-          "time": "15:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Bishop Fenwick",
-            "Masconomet Regional"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Boston College High",
-            "Brookline"
-          ],
-          "time": "18:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
             "Chicopee",
             "Westfield"
           ],
           "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Greater Lawrence Tech",
-            "Diman RVT"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -179,51 +124,7 @@
             "Cohasset"
           ],
           "time": "16:45",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Joseph Case",
-            "West Bridgewater"
-          ],
-          "time": "15:45",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Nauset Regional",
-            "Martha's Vineyard Reg."
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Rockland",
-            "Cardinal Spellman"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "St. Bernard's",
-            "Trivium School"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -277,10 +178,10 @@
     "girls-soccer": {
       "cutoff": "2026-11-03",
       "source": "MIAA public scoreboard",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 26,
-      "overdueCount": 11,
+      "knownScheduledWithoutFinal": 15,
+      "overdueCount": 15,
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -319,33 +220,11 @@
         {
           "date": "2026-11-03",
           "teams": [
-            "Apponequet Regional",
-            "East Bridgewater"
-          ],
-          "time": "15:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Bishop Fenwick",
-            "Wilmington"
-          ],
-          "time": "18:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
             "Chicopee",
             "Pittsfield"
           ],
           "time": "18:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -356,51 +235,7 @@
             "Lowell Catholic"
           ],
           "time": "17:30",
-          "status": "unverified",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Dartmouth",
-            "North Attleborough"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Fontbonne",
-            "O'Bryant"
-          ],
-          "time": "15:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Groton-Dunstable",
-            "Ayer Shirley"
-          ],
-          "time": "18:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Littleton",
-            "Tewksbury Memorial"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -411,62 +246,7 @@
             "Cathedral"
           ],
           "time": "17:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Manchester Essex",
-            "Triton Regional"
-          ],
-          "time": "18:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Minuteman Regional",
-            "Bristol County Agricultural"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Pioneer Char. Of Science I",
-            "Boston Collegiate Charter"
-          ],
-          "time": "18:30",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "South Hadley",
-            "Wahconah Regional"
-          ],
-          "time": "16:00",
-          "status": "scheduled",
-          "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-11-03",
-          "teams": [
-            "Sturgis Charter West",
-            "Nantucket"
-          ],
-          "time": "15:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -477,7 +257,7 @@
             "Masconomet Regional"
           ],
           "time": "16:00",
-          "status": "scheduled",
+          "status": "overdue",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -575,7 +355,7 @@
     "volleyball": {
       "cutoff": "2026-11-01",
       "source": "MIAA public scoreboard",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
