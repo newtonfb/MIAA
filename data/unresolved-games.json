@@ -64,8 +64,8 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 4,
-      "overdueCount": 2,
+      "knownScheduledWithoutFinal": 2,
+      "overdueCount": 0,
       "unverifiedFixtureCount": 2,
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
@@ -91,28 +91,6 @@
           "time": "18:00",
           "status": "unverified-fixture",
           "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-10-26",
-          "teams": [
-            "Parker Charter",
-            "Trivium School"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-10-27",
-          "teams": [
-            "Parker Charter",
-            "Southbridge"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
           "verifiedFinal": false
         }
       ],
@@ -146,6 +124,22 @@
           "teams": [
             "KIPP Academy Lynn Coll.",
             "Salem"
+          ],
+          "reason": "excluded exhibition/scrimmage"
+        },
+        {
+          "date": "2026-10-26",
+          "teams": [
+            "Parker Charter",
+            "Trivium School"
+          ],
+          "reason": "excluded exhibition/scrimmage"
+        },
+        {
+          "date": "2026-10-27",
+          "teams": [
+            "Parker Charter",
+            "Southbridge"
           ],
           "reason": "excluded exhibition/scrimmage"
         }
