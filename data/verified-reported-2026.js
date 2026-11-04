@@ -578,6 +578,34 @@ const REPORTED_FALL_FINALS={
           "published": "2026-11-04"
         },
         "note": "September 17 KIPP Academy Lynn Collegiate vs Salem shows no score in Arbiter, as checked by site owner November 4. No verified final; do not count as a completed match or flag as a missing score. Not claimed to be a scrimmage."
+      },
+      {
+        "game": [
+          "2026-10-26",
+          "Parker Charter",
+          "Trivium School",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score for Parker Charter vs Trivium School on 2026-10-26 in Arbiter, confirmed by site owner November 4. Leave score blank, do not count toward power rankings or flag as a missing final. Not verified to be a scrimmage."
+      },
+      {
+        "game": [
+          "2026-10-27",
+          "Parker Charter",
+          "Southbridge",
+          null
+        ],
+        "source": {
+          "publisher": "Arbiter status (checked by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "No final score for Parker Charter vs Southbridge on 2026-10-27 in Arbiter, confirmed by site owner November 4. Leave score blank, do not count toward power rankings or flag as a missing final. Not verified to be a scrimmage."
       }
     ]
   },
