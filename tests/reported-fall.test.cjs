@@ -127,3 +127,16 @@ test('November 4 boys soccer corrections: tie counted, scrimmages and no-score e
  assert.match(app,/for\(const g of LIVE\.results\)\{\s*if\(NOT_COUNTING\.has\(pairKey\(g\)\)\)continue;/);
  assert.match(app,/for\(const g of PUBLISHED_FINALS\)\{if\(NOT_COUNTING\.has\(pairKey\(g\)\)\)continue;/);
 });
+
+
+test('Oct 26 KIPP Academy vs Lynn English 2-2 draw is distinct from Oct 19 final',()=>{
+ const match=reported.sports['boys-soccer'].filter(x=>x.game[0]==='2026-10-26'&&
+  [x.game[1],x.game[2]].sort().join('|')==='KIPP Academy Lynn Coll.|Lynn English');
+ assert.equal(match.length,1,'Expected exactly one Oct 26 reported draw');
+ assert.deepEqual(match[0].game,['2026-10-26','KIPP Academy Lynn Coll.','Lynn English',2,2,0]);
+ assert.match(match[0].source.url,/maxpreps\.com\/news/);
+ const official=fall.sports['boys-soccer'].games.filter(g=>g[0]==='2026-10-19' &&
+  [g[1],g[2]].sort().join('|')==='KIPP Academy Lynn Coll.|Lynn English');
+ assert.equal(official.length,1);
+ assert.deepEqual(official[0].slice(3,5),[0,3]);
+});
