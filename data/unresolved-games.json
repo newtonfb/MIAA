@@ -64,8 +64,8 @@
       "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
-      "knownScheduledWithoutFinal": 5,
-      "overdueCount": 3,
+      "knownScheduledWithoutFinal": 4,
+      "overdueCount": 2,
       "unverifiedFixtureCount": 2,
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
@@ -91,17 +91,6 @@
           "time": "18:00",
           "status": "unverified-fixture",
           "source": "MIAA scoreboard",
-          "verifiedFinal": false
-        },
-        {
-          "date": "2026-10-26",
-          "teams": [
-            "KIPP Academy Lynn Coll.",
-            "Lynn English"
-          ],
-          "time": null,
-          "status": "overdue",
-          "source": "MIAA published unscored ledger row",
           "verifiedFinal": false
         },
         {
