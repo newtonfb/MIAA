@@ -440,6 +440,22 @@ const REPORTED_FALL_FINALS={
           "published": "2026-10-26"
         },
         "note": "2-2 draw on October 26. Confirmed by site owner November 4; MaxPreps 2026-10-26 recap and High School On SI independently display 2-2. Provisional score until included in MIAA's published scored ledger. Distinct from the October 19 Lynn English 3-0 win already in official data."
+      },
+      {
+        "game": [
+          "2026-10-30",
+          "West Boylston",
+          "Southbridge",
+          10,
+          0,
+          0
+        ],
+        "source": {
+          "publisher": "Arbiter final (confirmed by site owner)",
+          "url": "https://www.arbitersports.com/",
+          "published": "2026-11-04"
+        },
+        "note": "West Boylston 10, Southbridge 0 on October 30; final confirmed in Arbiter by site owner November 4, 2026. Distinct from the October 21 West Boylston 14-0 win already in the MIAA official ledger. Locally confirmed, pending appearance in MIAA scored PDF."
       }
     ]
   },
