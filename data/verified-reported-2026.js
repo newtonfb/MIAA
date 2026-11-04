@@ -355,7 +355,7 @@ const REPORTED_FALL_FINALS={
           "url": "https://www.maxpreps.com/ma/brockton/cardinal-spellman-cardinals/soccer/girls/schedule/",
           "published": "2026-11-03"
         },
-        "note": "Cardinal Spellman 11, Fontbonne 0 on Nov 2, separately completed varsity non-league game; sourced to dated MaxPreps result, pending MIAA scored PDF. Distinct from Sept 21 8-0 matchup."
+        "note": "Cardinal Spellman 11, Fontbonne 0 on Nov 2, separately completed varsity non-league game; sourced to dated MaxPreps result, pending MIAA scored PDF. Distinct from Sept 21 8-0 matchup. Score 11–0 confirmed independently by site owner November 4, 2026."
       },
       {
         "game": [
@@ -371,7 +371,7 @@ const REPORTED_FALL_FINALS={
           "url": "https://www.maxpreps.com/news/1ZzQu68Wz06UJxmvhRJoQQ/soccer-recap-sandwichs-luck-takes-a-turn-for-the-worse-on-monday.htm",
           "published": "2026-11-03"
         },
-        "note": "Cohasset 3, Sandwich 1 on November 2; both MaxPreps and The Mass Pitch report completed varsity match. Independent provisional final pending MIAA scored PDF. Distinct from Sept 10 3-2."
+        "note": "Cohasset 3, Sandwich 1 on November 2; both MaxPreps and The Mass Pitch report completed varsity match. Independent provisional final pending MIAA scored PDF. Distinct from Sept 10 3-2. Score 3–1 confirmed independently by site owner November 4, 2026."
       },
       {
         "game": [
