@@ -59,14 +59,17 @@ function audit(sport,official,live,reported,today){
   if(canceled.has(k)){ignored.push({date:fixture[0],teams:fixture.slice(1,3),reason:'canceled'});continue}
   if(allScored.some(g=>pair(g)===pair(fixture)&&daysApart(g[0],fixture[0])<=3))continue;
   unresolved.push({date:fixture[0],teams:fixture.slice(1,3),time:fixture[3]||null,
-   status:postponed.has(k)?'postponed':fixture[0]<today?'overdue':unverified.has(k)?'unverified':'scheduled',
+   status:postponed.has(k)?'postponed':unverified.has(k)?'unverified-fixture':fixture[0]<today?'overdue':'scheduled',
    source:fromScoreboard.has(k)?'MIAA scoreboard':(official?.unmatchedScoreDetails||[]).length?'MIAA published unscored ledger row':'MIAA scoreboard',
    verifiedFinal:false});
  }
  const overdue=unresolved.filter(x=>x.status==='overdue'||x.status==='postponed');
- return {cutoff,source:'MIAA public scoreboard',feedStatus:live?.feedStatus||'not-reported',
+ const unverifiedFixtures=unresolved.filter(x=>x.status==='unverified-fixture');
+ return {cutoff,source:'MIAA scoreboard plus official unscored ledger',feedStatus:live?.feedStatus||'not-reported',
   verifiedRelease:official?.date||null,
   knownScheduledWithoutFinal:unresolved.length,overdueCount:overdue.length,
+  unverifiedFixtureCount:unverifiedFixtures.length,
+  note:'Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.',
   unparseableLedgerLines,unresolved,ignored};
 }
 function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_York'})){
@@ -75,7 +78,7 @@ function run(today=new Date().toLocaleDateString('sv-SE',{timeZone:'America/New_
  const live=read('data/live-2026.js','LIVE_DATA').sports;
  const reported=read('data/verified-reported-2026.js','REPORTED_FALL_FINALS');
  const official={football:fb,...fall.sports};
- const result={asOf:today,note:'Known scoreboard fixtures only; no claim of complete statewide schedule or game verification.',sports:{}};
+ const result={asOf:today,note:'Known MIAA scoreboard fixtures and PDF unscored rows only; unverified fixtures may never have been played. No claim of complete statewide schedule.',sports:{}};
  for(const sport of Object.keys(CUTOFF)){
   result.sports[sport]=audit(sport,official[sport],live[sport],reported,today);
   const x=result.sports[sport];
