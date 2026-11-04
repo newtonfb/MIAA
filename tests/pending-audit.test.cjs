@@ -46,3 +46,17 @@ test('removed MIAA scoreboard fixture is not counted as confirmed missing result
  assert.equal(data.overdueCount,0);
  assert.equal(data.unresolved[0].status,'unverified-fixture');
 });
+
+test('same-day scheduled game after 4 a.m. official PDF snapshot is awaiting next report, not overdue',()=>{
+ const fixture=match('2026-11-03');
+ const x=audit('boys-soccer',{date:'2026-11-03',games:[],final:false},{upcoming:[fixture],feedStatus:'ok'},{},'2026-11-04');
+ assert.equal(x.knownScheduledWithoutFinal,1);
+ assert.equal(x.overdueCount,0);
+ assert.equal(x.awaitingNextReleaseCount,1);
+ assert.equal(x.unresolved[0].status,'awaiting-next-release');
+});
+test('genuinely unscored game earlier than last MIAA release stays overdue',()=>{
+ const x=audit('boys-soccer',{date:'2026-11-03',games:[],final:false},{upcoming:[match('2026-11-02')]},{},'2026-11-04');
+ assert.equal(x.awaitingNextReleaseCount,0);
+ assert.equal(x.overdueCount,1);
+});
