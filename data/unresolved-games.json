@@ -1,14 +1,16 @@
 {
   "asOf": "2026-11-04",
-  "note": "Known scoreboard fixtures only; no claim of complete statewide schedule or game verification.",
+  "note": "Known MIAA scoreboard fixtures and PDF unscored rows only; unverified fixtures may never have been played. No claim of complete statewide schedule.",
   "sports": {
     "football": {
       "cutoff": "2026-10-31",
-      "source": "MIAA public scoreboard",
+      "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 1,
       "overdueCount": 1,
+      "unverifiedFixtureCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -27,11 +29,13 @@
     },
     "field-hockey": {
       "cutoff": "2026-11-01",
-      "source": "MIAA public scoreboard",
+      "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-01",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
+      "unverifiedFixtureCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
       "unparseableLedgerLines": [],
       "unresolved": [],
       "ignored": [
@@ -55,11 +59,13 @@
     },
     "boys-soccer": {
       "cutoff": "2026-11-03",
-      "source": "MIAA public scoreboard",
+      "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
       "knownScheduledWithoutFinal": 10,
-      "overdueCount": 10,
+      "overdueCount": 6,
+      "unverifiedFixtureCount": 4,
+      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -69,7 +75,7 @@
             "Southbridge"
           ],
           "time": "15:30",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -80,7 +86,7 @@
             "Braintree"
           ],
           "time": "17:30",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -91,7 +97,7 @@
             "Nashoba Regional"
           ],
           "time": "11:00",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -102,7 +108,7 @@
             "Lawrence"
           ],
           "time": "18:00",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -177,11 +183,13 @@
     },
     "girls-soccer": {
       "cutoff": "2026-11-03",
-      "source": "MIAA public scoreboard",
+      "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
       "knownScheduledWithoutFinal": 15,
-      "overdueCount": 15,
+      "overdueCount": 11,
+      "unverifiedFixtureCount": 4,
+      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
       "unparseableLedgerLines": [],
       "unresolved": [
         {
@@ -191,7 +199,7 @@
             "Trivium School"
           ],
           "time": "16:00",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -202,7 +210,7 @@
             "Danvers"
           ],
           "time": "16:00",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -213,7 +221,7 @@
             "Billerica Memorial"
           ],
           "time": "16:30",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -235,7 +243,7 @@
             "Lowell Catholic"
           ],
           "time": "17:30",
-          "status": "overdue",
+          "status": "unverified-fixture",
           "source": "MIAA scoreboard",
           "verifiedFinal": false
         },
@@ -354,11 +362,13 @@
     },
     "volleyball": {
       "cutoff": "2026-11-01",
-      "source": "MIAA public scoreboard",
+      "source": "MIAA scoreboard plus official unscored ledger",
       "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
+      "unverifiedFixtureCount": 0,
+      "note": "Unverified fixtures disappeared from the live scoreboard; they are NOT confirmed games missing scores.",
       "unparseableLedgerLines": [],
       "unresolved": [],
       "ignored": [
