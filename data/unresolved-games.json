@@ -87,14 +87,6 @@
           "reason": "no reported final"
         },
         {
-          "date": "2026-11-02",
-          "teams": [
-            "Chelmsford",
-            "Lawrence"
-          ],
-          "reason": "explicitly excluded"
-        },
-        {
           "date": "2026-11-03",
           "teams": [
             "Chicopee",
@@ -109,30 +101,6 @@
             "Cohasset"
           ],
           "reason": "scrimmage"
-        },
-        {
-          "date": "2026-09-17",
-          "teams": [
-            "KIPP Academy Lynn Coll.",
-            "Salem"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-26",
-          "teams": [
-            "Parker Charter",
-            "Trivium School"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-27",
-          "teams": [
-            "Parker Charter",
-            "Southbridge"
-          ],
-          "reason": "no reported final"
         }
       ]
     },
@@ -147,17 +115,8 @@
       "awaitingNextReleaseCount": 0,
       "note": "Unverified fixtures disappeared from the live scoreboard; games scheduled on or after a 4 a.m. MIAA snapshot are awaiting the next release. Neither is a confirmed missing score.",
       "unparseableLedgerLines": [],
-      "unidentifiedOpponentCount": 1,
-      "unidentifiedOpponentFixtures": [
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Northampton",
-            "#N/A"
-          ],
-          "reason": "MIAA PDF has an unknown opponent (#N/A); cannot treat as a verified fixture"
-        }
-      ],
+      "unidentifiedOpponentCount": 0,
+      "unidentifiedOpponentFixtures": [],
       "unresolved": [],
       "ignored": [
         {
@@ -199,38 +158,6 @@
             "Masconomet Regional"
           ],
           "reason": "scrimmage"
-        },
-        {
-          "date": "2026-11-02",
-          "teams": [
-            "Apponequet Regional",
-            "Old Rochester Regional"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-27",
-          "teams": [
-            "Atlantis Charter",
-            "New Heights Charter"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-28",
-          "teams": [
-            "Barnstable",
-            "Carver"
-          ],
-          "reason": "no reported final"
-        },
-        {
-          "date": "2026-10-03",
-          "teams": [
-            "Weymouth",
-            "Whitman-Hanson Reg."
-          ],
-          "reason": "no reported final"
         }
       ]
     },

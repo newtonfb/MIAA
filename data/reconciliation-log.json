@@ -1567,5 +1567,586 @@
         "to": true
       }
     ]
+  },
+  {
+    "sport": "boys-soccer",
+    "from": "2026-11-03",
+    "to": "2026-11-03",
+    "final": true,
+    "source": "https://www.miaa.net/sites/default/files/2026-11/power-rankings-fall-2026-boys-soccer-scores-final.pdf",
+    "previousGames": 2863,
+    "publishedGames": 2880,
+    "ratingOrRankChanges": 331,
+    "added": [
+      {
+        "date": "2026-10-14",
+        "teams": [
+          "Durfee",
+          "Mount Hope (R.I.)"
+        ],
+        "scores": [
+          4,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-26",
+        "teams": [
+          "KIPP Academy Lynn Coll.",
+          "Lynn English"
+        ],
+        "scores": [
+          2,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-26",
+        "teams": [
+          "Parker Charter",
+          "Trivium School"
+        ],
+        "scores": [
+          1,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-27",
+        "teams": [
+          "Parker Charter",
+          "Southbridge"
+        ],
+        "scores": [
+          8,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Braintree",
+          "Weymouth"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-30",
+        "teams": [
+          "Southbridge",
+          "West Boylston"
+        ],
+        "scores": [
+          0,
+          10
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-31",
+        "teams": [
+          "Bishop Stang",
+          "Fairhaven"
+        ],
+        "scores": [
+          2,
+          5
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Chelmsford",
+          "Lawrence"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": true
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Clinton",
+          "Millbury"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Academy of the Pacific Rim",
+          "New Heights Charter"
+        ],
+        "scores": [
+          2,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Advanced Math & Science",
+          "Assabet Valley RVT"
+        ],
+        "scores": [
+          4,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Bishop Fenwick",
+          "Masconomet Regional"
+        ],
+        "scores": [
+          0,
+          7
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Boston College High",
+          "Brookline"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Cardinal Spellman",
+          "Rockland"
+        ],
+        "scores": [
+          1,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Diman RVT",
+          "Greater Lawrence Tech"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Joseph Case",
+          "West Bridgewater"
+        ],
+        "scores": [
+          0,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Martha's Vineyard Reg.",
+          "Nauset Regional"
+        ],
+        "scores": [
+          0,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "St. Bernard's",
+          "Trivium School"
+        ],
+        "scores": [
+          8,
+          2
+        ],
+        "forfeit": false
+      }
+    ],
+    "removed": [
+      {
+        "date": "2026-10-14",
+        "teams": [
+          "#N/A",
+          "Durfee"
+        ],
+        "scores": [
+          0,
+          4
+        ],
+        "forfeit": false
+      }
+    ],
+    "scoreCorrections": [
+      {
+        "date": "2026-10-21",
+        "teams": [
+          "Belmont",
+          "Melrose"
+        ],
+        "from": [
+          2,
+          3
+        ],
+        "to": [
+          1,
+          2
+        ]
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Martha's Vineyard Reg.",
+          "Sandwich"
+        ],
+        "from": [
+          7,
+          0
+        ],
+        "to": [
+          8,
+          0
+        ]
+      }
+    ],
+    "forfeitCorrections": []
+  },
+  {
+    "sport": "girls-soccer",
+    "from": "2026-11-03",
+    "to": "2026-11-03",
+    "final": true,
+    "source": "https://www.miaa.net/sites/default/files/2026-11/power-rankings-fall-2026-girls-soccer-scores-final.pdf",
+    "previousGames": 2739,
+    "publishedGames": 2759,
+    "ratingOrRankChanges": 316,
+    "added": [
+      {
+        "date": "2026-10-10",
+        "teams": [
+          "Pope Francis",
+          "Ramsey (N.J.)"
+        ],
+        "scores": [
+          1,
+          4
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-27",
+        "teams": [
+          "Atlantis Charter",
+          "New Heights Charter"
+        ],
+        "scores": [
+          8,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-27",
+        "teams": [
+          "South Shore Vo-Tech",
+          "Sturgis Charter East"
+        ],
+        "scores": [
+          2,
+          5
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-10-28",
+        "teams": [
+          "Barnstable",
+          "Carver"
+        ],
+        "scores": [
+          0,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-01",
+        "teams": [
+          "Fontbonne",
+          "Stoughton"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": true
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Cardinal Spellman",
+          "Fontbonne"
+        ],
+        "scores": [
+          11,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Cohasset",
+          "Sandwich"
+        ],
+        "scores": [
+          3,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Greater New Bedford",
+          "Southeastern RVT"
+        ],
+        "scores": [
+          1,
+          1
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Innovation Acad. Charter",
+          "Trivium School"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Apponequet Regional",
+          "East Bridgewater"
+        ],
+        "scores": [
+          0,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Ayer Shirley",
+          "Groton-Dunstable"
+        ],
+        "scores": [
+          1,
+          5
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Bishop Fenwick",
+          "Wilmington"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Boston Collegiate Charter",
+          "Pioneer Char. Of Science I"
+        ],
+        "scores": [
+          2,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Bristol County Agricultural",
+          "Minuteman Regional"
+        ],
+        "scores": [
+          3,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Cathedral",
+          "Maimonides School"
+        ],
+        "scores": [
+          9,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Dartmouth",
+          "North Attleborough"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Fontbonne",
+          "O'Bryant"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Littleton",
+          "Tewksbury Memorial"
+        ],
+        "scores": [
+          1,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Manchester Essex",
+          "Triton Regional"
+        ],
+        "scores": [
+          0,
+          0
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "Nantucket",
+          "Sturgis Charter West"
+        ],
+        "scores": [
+          2,
+          2
+        ],
+        "forfeit": false
+      },
+      {
+        "date": "2026-11-03",
+        "teams": [
+          "South Hadley",
+          "Wahconah Regional"
+        ],
+        "scores": [
+          1,
+          3
+        ],
+        "forfeit": false
+      }
+    ],
+    "removed": [
+      {
+        "date": "2026-10-10",
+        "teams": [
+          "#N/A",
+          "Pope Francis"
+        ],
+        "scores": [
+          4,
+          1
+        ],
+        "forfeit": false
+      }
+    ],
+    "scoreCorrections": [
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Drury",
+          "Monson"
+        ],
+        "from": [
+          0,
+          1
+        ],
+        "to": [
+          0,
+          3
+        ]
+      }
+    ],
+    "forfeitCorrections": [
+      {
+        "date": "2026-11-02",
+        "teams": [
+          "Drury",
+          "Monson"
+        ],
+        "from": false,
+        "to": true
+      }
+    ]
   }
 ]
