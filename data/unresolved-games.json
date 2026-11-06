@@ -5,7 +5,7 @@
     "football": {
       "cutoff": "2026-10-31",
       "source": "MIAA scoreboard plus official unscored ledger",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 1,
       "overdueCount": 1,
@@ -33,7 +33,7 @@
     "field-hockey": {
       "cutoff": "2026-11-01",
       "source": "MIAA scoreboard plus official unscored ledger",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-01",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
@@ -66,7 +66,7 @@
     "boys-soccer": {
       "cutoff": "2026-11-03",
       "source": "MIAA scoreboard plus official unscored ledger",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
@@ -107,7 +107,7 @@
     "girls-soccer": {
       "cutoff": "2026-11-03",
       "source": "MIAA scoreboard plus official unscored ledger",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-11-03",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
@@ -164,7 +164,7 @@
     "volleyball": {
       "cutoff": "2026-11-01",
       "source": "MIAA scoreboard plus official unscored ledger",
-      "feedStatus": "unavailable",
+      "feedStatus": "ok",
       "verifiedRelease": "2026-10-31",
       "knownScheduledWithoutFinal": 0,
       "overdueCount": 0,
