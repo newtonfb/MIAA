@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-11-16",
+  "asOf": "2026-11-17",
   "note": "Known MIAA scoreboard fixtures and PDF unscored rows only; unverified fixtures may never have been played. No claim of complete statewide schedule.",
   "sports": {
     "football": {
@@ -19,8 +19,8 @@
         {
           "date": "2026-10-31",
           "teams": [
-            "Millis",
-            "Southeastern RVT"
+            "Southeastern RVT",
+            "Millis"
           ],
           "time": "00:01",
           "status": "overdue",
